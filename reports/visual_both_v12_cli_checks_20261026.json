@@ -1,0 +1,28 @@
+[
+  {
+    "arguments": [
+      "--visual-place",
+      "--no-release-primitive"
+    ],
+    "returncode": 2,
+    "expected_error": "visual-place requires release-primitive"
+  },
+  {
+    "arguments": [
+      "--visual-pick",
+      "--visual-close-s",
+      "0"
+    ],
+    "returncode": 2,
+    "expected_error": "visual-pick requires close-s"
+  },
+  {
+    "arguments": [
+      "--visual-pick",
+      "--grip-gate-r",
+      ".04"
+    ],
+    "returncode": 2,
+    "expected_error": "privileged grip-gate diagnostics"
+  }
+]

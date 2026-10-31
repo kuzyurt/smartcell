@@ -1,0 +1,80 @@
+<mujoco model="conveyor section (adapted from MuJoCo showcase carousel)">
+<!--
+  Conveyor belt section, adapted from the official MuJoCo showcase model
+  "Luggage carousel":  model/surfacevel/carousel.xml
+  Source : https://github.com/google-deepmind/mujoco (Apache-2.0)
+  Vendored: assets/_upstream_mujoco_carousel.xml (untouched copy for comparison)
+  Feature: geom/surfacevel, added upstream in commit 4787c80 (MuJoCo 3.9+).
+           A static belt with a surface velocity is transported by friction, so
+           the belt needs no joints, no actuators and no teleporting slats.
+
+  The five geoms below keep the upstream structure and the upstream velocity
+  relationship exactly:
+      belt   : box, surfacevel = (v, 0, 0)
+      rail x2: box, side guides standing proud of the belt surface
+      roller x2 : cylinder about +Y, surfacevel angular = -(v / r)
+  Upstream: v = 0.7 m/s, r = 0.06 m  ->  -11.667 rad/s.
+  Here:    v = 0.10 m/s, r = 0.025 m ->  -4.0 rad/s.  That is a normal
+           indexing / pick-and-place line speed: the part has to stay inside
+           the arm's 160 mm grasp window for the whole pick cycle.
+
+  Changes, all forced by the SO-101's size (a 0.35 m reach arm):
+    * belt  0.60 m wide -> 0.096 m wide.  A 600 mm belt reaches 0.3 m to either
+      side of its centre line, so at the only reachable lane offset for this
+      arm (0.245 m) the belt would sit on top of the robot's own table.
+    * rails moved from y = +/-0.33 to y = +/-0.07 so the clear lane is 140 mm.
+      That number is set by the gripper, not by taste: the jaw tips sit 27.7 mm
+      either side of the grasp point and the finger pads are 15 mm half-width,
+      so a lane narrower than about 120 mm stops the arm dead on its way down,
+      and a part more than 20 mm off the centre line cannot be reached without
+      a finger hitting a rail.
+    * the rails are in two segments with an opening at the pick station
+      (x = -0.02 .. +0.22), exactly like a real conveyor.  The arm can only be
+      square to the belt below z = 0.68 m, and with a continuous rail whose top
+      is at 0.685 m there is no height at which the wrist can rotate out of a
+      transit pose into a top-down grasp without a finger sweeping into it.
+    * roller r 0.06 -> 0.025 so the roller crown stays flush with the belt
+      surface (as upstream), and 5 mm short of the rails.
+    * belt ends tangent to the rollers instead of inside them: a part rides to
+      the crown of the head roller and drops off it, which is how a real
+      conveyor discharges.
+    * rail top 0.08 m above the belt surface -> 0.06 m, so a 50 mm part is
+      guided without hiding it from the camera.
+    * belt speed 0.7 -> 0.10 m/s, a normal indexing line speed.
+    * LENGTHENED at the TAIL ONLY, by 200 mm: the tail roller moved from
+      x = -0.74 to x = -0.94, the belt from 1.43 m to 1.63 m long.  The head
+      end is untouched, so the discharge point, the bin, the drive and the
+      whole verified pick window keep their measured coordinates and only the
+      infeed run got longer.  The tail is where a longer line is free: the arm
+      cannot reach x < -0.2 anyway, so nothing about the pick cycle changes.
+      Measured after the change: the belt spans x -0.915 .. +0.715, i.e. 1.63 m
+      between the roller crowns, 1.68 m between the roller centres.
+-->
+  <asset>
+    <material name="belt" rgba="0.20 0.22 0.26 1"/>
+    <material name="rail" rgba="0.62 0.64 0.67 1"/>
+  </asset>
+
+  <worldbody>
+    <frame name="conveyor">
+      <geom name="belt" type="box" size="0.815 0.048 0.025" pos="-0.10 0 0"
+            material="belt" surfacevel="0.10 0 0  0 0 0"
+            friction="1.0 0.005 0.0001" priority="1"/>
+      <geom name="rail_tail" type="box" size="0.46 0.005 0.09" pos="-0.48 -0.07 -0.005"
+            material="rail" friction="0.4 0.005 0.0001"/>
+      <geom name="rail_head" type="box" size="0.26 0.005 0.09" pos="0.48 0.07 -0.005"
+            material="rail" friction="0.4 0.005 0.0001"/>
+      <geom name="rail_tail_far" type="box" size="0.46 0.005 0.09" pos="-0.48 0.07 -0.005"
+            material="rail" friction="0.4 0.005 0.0001"/>
+      <geom name="rail_head_far" type="box" size="0.26 0.005 0.09" pos="0.48 -0.07 -0.005"
+            material="rail" friction="0.4 0.005 0.0001"/>
+      <geom name="roller_tail" type="cylinder" size="0.025 0.045" pos="-0.94 0 0"
+            euler="90 0 0" material="rail" surfacevel="0 0 0  0 0 -4"/>
+      <geom name="roller_head" type="cylinder" size="0.025 0.045" pos="0.74 0 0"
+            euler="90 0 0" material="rail" surfacevel="0 0 0  0 0 -4"/>
+    </frame>
+  </worldbody>
+</mujoco>
+
+
+

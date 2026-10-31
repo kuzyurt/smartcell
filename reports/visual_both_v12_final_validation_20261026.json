@@ -1,0 +1,148 @@
+{
+  "goal": "more than 95% pick AND released-settled place in every existing condition",
+  "achieved_on_measured_tests": true,
+  "fresh_seed_base": 27102601,
+  "n_per_condition": 200,
+  "conditions": {
+    "nominal": {
+      "n": 200,
+      "picks": 199,
+      "places": 198,
+      "pick_rate": 0.995,
+      "place_rate": 0.99,
+      "pick_wilson95": [
+        0.9722262956021069,
+        0.9991168312843989
+      ],
+      "place_wilson95": [
+        0.9642782382838231,
+        0.9972533418664555
+      ],
+      "median_place_s": 13.520000000000838
+    },
+    "tierB": {
+      "n": 200,
+      "picks": 198,
+      "places": 195,
+      "pick_rate": 0.99,
+      "place_rate": 0.975,
+      "pick_wilson95": [
+        0.9642782382838231,
+        0.9972533418664555
+      ],
+      "place_wilson95": [
+        0.942821659593358,
+        0.9892752803482386
+      ],
+      "median_place_s": 13.680000000000863
+    },
+    "boxX": {
+      "n": 200,
+      "picks": 199,
+      "places": 199,
+      "pick_rate": 0.995,
+      "place_rate": 0.995,
+      "pick_wilson95": [
+        0.9722262956021069,
+        0.9991168312843989
+      ],
+      "place_wilson95": [
+        0.9722262956021069,
+        0.9991168312843989
+      ],
+      "median_place_s": 13.60000000000085,
+      "corners": {
+        "+0.075,-0.075": {
+          "n": 67,
+          "picks": 67,
+          "places": 67
+        },
+        "-0.075,-0.075": {
+          "n": 67,
+          "picks": 66,
+          "places": 66
+        },
+        "+0.075,+0.025": {
+          "n": 66,
+          "picks": 66,
+          "places": 66
+        }
+      }
+    }
+  },
+  "matched": {
+    "nominal": {
+      "n": 100,
+      "baseline_picks": 91,
+      "baseline_places": 81,
+      "picks": 99,
+      "places": 99,
+      "place_wilson95": [
+        0.9455138038212946,
+        0.9982325679358593
+      ],
+      "recovered": 19,
+      "regressed": 1,
+      "paired_exact_p": 4.00543212890625e-05
+    },
+    "tierB": {
+      "n": 100,
+      "baseline_picks": 90,
+      "baseline_places": 76,
+      "picks": 98,
+      "places": 96,
+      "place_wilson95": [
+        0.9016292856411208,
+        0.9843366960084523
+      ],
+      "recovered": 23,
+      "regressed": 3,
+      "paired_exact_p": 8.797645568847656e-05
+    },
+    "boxX": {
+      "n": 100,
+      "baseline_picks": 91,
+      "baseline_places": 75,
+      "picks": 99,
+      "places": 99,
+      "place_wilson95": [
+        0.9455138038212946,
+        0.9982325679358593
+      ],
+      "recovered": 24,
+      "regressed": 0,
+      "paired_exact_p": 1.1920928955078125e-07
+    }
+  },
+  "controller_sha256": "0a0296eb42a999b2662592d3980ea0833a8d7aeb568104b81dc13083b052c4b6",
+  "checkpoint_sha256": "9d5430c20649bc3029e896b2d96976367c9dd0cc7faa4629c73ec91e24b87dad",
+  "reports": {
+    "nominal": "reports\\visual_both_v12_nominal_fresh_20261026.json",
+    "tierB": "reports\\visual_both_v12_tierB_fresh_20261026.json",
+    "boxX": "reports\\visual_both_v12_boxX_fresh_20261026.json"
+  },
+  "seed_audit": "reports/visual_both_v12_fresh_seed_audit_20261026.json",
+  "default_profile": {
+    "dwell_mode": "decision",
+    "place_settle_s": 0.4,
+    "release_primitive": true,
+    "visual_pick": true,
+    "visual_place": true,
+    "visual_close_s": 0.4,
+    "visual_takeover_z": 0.81
+  },
+  "runtime_verification": {
+    "default_regression_trials": 12,
+    "exact_outcomes_and_times": true,
+    "viewer_policy_stacks_verified": 160,
+    "viewer": "reports/visual_default_viewer_20261026.json",
+    "tests": "reports/visual_default_tests_20261026.log",
+    "cli_checks": "reports/visual_both_v12_cli_checks_20261026.json"
+  },
+  "scope": "Existing fixed-part MuJoCo conditions; RGB wrist camera and joint feedback only.",
+  "limitations": [
+    "Nominal and boxX share object seeds; aggregate counts are descriptive.",
+    "Stock mount ignores legacy back/deg/azim jitter; physical camera displacement was not tested.",
+    "These measured simulation rates are not a guarantee for arbitrary parts or hardware."
+  ]
+}

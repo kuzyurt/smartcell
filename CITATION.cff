@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "smartcell: a SO-101 conveyor pick-and-place research artifact"
+abstract: >-
+  A MuJoCo work cell where a SO-101 arm picks a 32 mm part from a
+  continuously running conveyor and places it in a tote. The controller is a
+  frozen grayscale behaviour-cloning policy plus a classical RGB wrist visual
+  servo and a proprioceptive release primitive. Includes a zero-shot
+  benchmark in a Blender-dressed scene.
+authors:
+  - family-names: "kuzyurt"
+version: "1.0.0"
+date-released: "2026-10-31"
+license: MIT
+keywords:
+  - robotics
+  - mujoco
+  - behaviour cloning
+  - visual servoing
+  - manipulation
+  - conveyor

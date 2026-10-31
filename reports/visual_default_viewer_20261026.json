@@ -1,0 +1,22 @@
+{
+  "profile": "default",
+  "visual_pick": true,
+  "visual_place": true,
+  "visual_close_s": 0.4,
+  "visual_takeover_z": 0.81,
+  "running_line": true,
+  "belt_speed": 0.08,
+  "hard_ram_cap": true,
+  "ram_cap_gb": 5.0,
+  "pick": true,
+  "place": true,
+  "final_t": 12.8,
+  "decisions_verified": 160,
+  "stack_frames": 8,
+  "hashes": {
+    "watch.py": "9aebba5c9fdd782ad49a3039c8719474a0379b0f4034f29e196b2df617398f74",
+    "evaluate.py": "b1f241ab682c47094870bb24f1fbf11417ef06de34c657f11564eb53aaa3bd8a",
+    "wrist_vision.py": "0a0296eb42a999b2662592d3980ea0833a8d7aeb568104b81dc13083b052c4b6",
+    "current.py": "816f5c6438b3ec8c16e1a817fc5dcf3bb1ec50f7c063b1b4bd8178929e925f1b"
+  }
+}

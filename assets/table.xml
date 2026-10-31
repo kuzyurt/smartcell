@@ -1,0 +1,41 @@
+<mujoco model="work table (from furniture_sim, joints fixed)">
+<!--
+  Work table, from Vikash Kumar's furniture_sim:
+      https://github.com/vikashplus/furniture_sim  (Apache-2.0, see
+      assets/LICENSE_furniture_sim.txt)
+  Vendored: assets/_upstream_simpleTable.xml plus the body definition it
+  includes (simpleWoodTable_body.xml).  Dimensions are unchanged: a
+  1.20 x 0.75 m table, 0.625 m to the top surface.
+
+  Three joint fixes, because upstream the table is not physically consistent
+  and this project forbids floating or interpenetrating parts:
+    * upstream top   : 0.575 .. 0.625      (unchanged)
+    * upstream apron : 0.450 .. 0.550      ->  0.525 .. 0.575
+      (upstream left a 25 mm gap, i.e. the top floated)
+    * upstream legs  : 0.000 .. 0.500      ->  0.000 .. 0.525
+      (upstream legs were buried 50 mm inside the apron)
+  Result: legs carry the apron, the apron carries the top, all joints butt.
+-->
+  <default>
+    <default class="table">
+      <geom type="box" rgba="0.55 0.42 0.28 1"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <body name="table">
+      <geom class="table" name="table_top" size="0.6 0.375 0.025" pos="0 0 0.6"
+            mass="30"/>
+      <geom class="table" name="table_apron" size="0.59 0.26 0.025" pos="0 0 0.55"
+            rgba="0.30 0.30 0.33 1"/>
+      <geom class="table" name="table_leg_nw" size="0.025 0.025 0.2625"
+            pos="-0.565 0.235 0.2625" rgba="0.30 0.30 0.33 1"/>
+      <geom class="table" name="table_leg_sw" size="0.025 0.025 0.2625"
+            pos="-0.565 -0.235 0.2625" rgba="0.30 0.30 0.33 1"/>
+      <geom class="table" name="table_leg_ne" size="0.025 0.025 0.2625"
+            pos="0.565 0.235 0.2625" rgba="0.30 0.30 0.33 1"/>
+      <geom class="table" name="table_leg_se" size="0.025 0.025 0.2625"
+            pos="0.565 -0.235 0.2625" rgba="0.30 0.30 0.33 1"/>
+    </body>
+  </worldbody>
+</mujoco>

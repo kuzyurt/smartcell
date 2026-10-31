@@ -1,0 +1,64 @@
+{
+  "args": {
+    "baseline": [
+      "reports/wakeup_c_fresh_release_20261026.times.json"
+    ],
+    "candidate": [
+      "reports/visual_both_v12_nominal_gate_20261026.json",
+      "reports/visual_both_v12_nominal_remaining_20261026.json",
+      "reports/visual_both_v12_shifted_matched_20261026.json"
+    ],
+    "out": "reports/visual_both_v12_matched_comparison_20261026.json"
+  },
+  "conditions": {
+    "nominal": {
+      "n": 100,
+      "baseline_picks": 91,
+      "baseline_places": 81,
+      "picks": 99,
+      "places": 99,
+      "place_wilson95": [
+        0.9455138038212946,
+        0.9982325679358593
+      ],
+      "recovered": 19,
+      "regressed": 1,
+      "paired_exact_p": 4.00543212890625e-05
+    },
+    "tierB": {
+      "n": 100,
+      "baseline_picks": 90,
+      "baseline_places": 76,
+      "picks": 98,
+      "places": 96,
+      "place_wilson95": [
+        0.9016292856411208,
+        0.9843366960084523
+      ],
+      "recovered": 23,
+      "regressed": 3,
+      "paired_exact_p": 8.797645568847656e-05
+    },
+    "boxX": {
+      "n": 100,
+      "baseline_picks": 91,
+      "baseline_places": 75,
+      "picks": 99,
+      "places": 99,
+      "place_wilson95": [
+        0.9455138038212946,
+        0.9982325679358593
+      ],
+      "recovered": 24,
+      "regressed": 0,
+      "paired_exact_p": 1.1920928955078125e-07
+    }
+  },
+  "input_sha256": {
+    "reports/wakeup_c_fresh_release_20261026.times.json": "0ec9b09c398d5b56ae70d2315b37bca23dbc3f9ff43bfddab57340d56f87c880",
+    "reports/visual_both_v12_nominal_gate_20261026.json": "68db7f037bac1f361b5063fe595a263f10e879c19820c1fe3e069bc61a2529c1",
+    "reports/visual_both_v12_nominal_remaining_20261026.json": "27e5f9dcb8fcf95a27e1300b54b46a9d70c2cec56906aee2ff7513804dd09db1",
+    "reports/visual_both_v12_shifted_matched_20261026.json": "a3210ae82bed2ec957342955ee9b8525ef1277083c4e8a11aaa249f93e84fbaa"
+  },
+  "note": "Nominal and boxX reuse object seeds; do not treat their aggregate as independent trials."
+}

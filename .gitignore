@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# local data / caches (the dataset is not shipped)
+ds_*/*.npz
+ds_*/imgs/
+cache_*/
+takes/
+frames/
+
+# local run output
+*.log
+_*.log
+preview_*.mp4
+_bench_*.json
+_clean_tests.log
+eval_times_*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

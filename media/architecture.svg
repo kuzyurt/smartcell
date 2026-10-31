@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="700" viewBox="0 0 1080 700" role="img" aria-labelledby="t d">
+  <title id="t">Hybrid control architecture: frozen policy, visual servo, release primitive</title>
+  <desc id="d">Three horizontal lanes feed one SO-101 arm. The learned policy runs at 25 Hz on wrist history and proprioception. The visual servo back-projects RGB pixels onto the work plane and fits the tote. The release primitive uses gripper tracking, lift height and the known tote plane.</desc>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M 1 2 L 7.5 5 L 1 8 Z" fill="#8b949e"/>
+    </marker>
+    <marker id="arr-blue" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M 1 2 L 7.5 5 L 1 8 Z" fill="#388bfd"/>
+    </marker>
+    <marker id="arr-amber" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M 1 2 L 7.5 5 L 1 8 Z" fill="#f0883e"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto">
+      <path d="M 1 2 L 7.5 5 L 1 8 Z" fill="#3fb950"/>
+    </marker>
+    <style>
+      .bg { fill: #0d1117; }
+      .title { fill: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 650; }
+      .sub { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12.5px; }
+      .hdr { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .6px; }
+      .hdr-dim { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.5px; }
+      .box { fill: #161b22; stroke: #30363d; stroke-width: 1.1; }
+      .box-blue { fill: #0d1b2e; stroke: #388bfd; stroke-width: 1.2; }
+      .box-amber { fill: #1c1917; stroke: #f0883e; stroke-width: 1.2; }
+      .box-green { fill: #0f1f14; stroke: #3fb950; stroke-width: 1.2; }
+      .h1 { fill: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12.8px; font-weight: 650; }
+      .body { fill: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11.2px; }
+      .dim { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.4px; }
+      .mono { fill: #79c0ff; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 10.4px; }
+      .mono-amber { fill: #ffa657; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 10.4px; }
+      .mono-green { fill: #56d364; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 10.4px; }
+      .wire { stroke: #8b949e; stroke-width: 1.4; fill: none; }
+      .note { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.8px; }
+    </style>
+  </defs>
+  <rect width="1080" height="700" class="bg"/>
+
+  <text x="40" y="38" class="title">Hybrid control: policy, servo, release</text>
+  <text x="40" y="58" class="sub">A frozen policy proposes, a geometric servo corrects, and a proprioceptive primitive releases.</text>
+  <text x="40" y="96" class="hdr" fill="#79c0ff">1 · LEARNED POLICY</text>
+  <text x="173" y="96" class="hdr-dim">frozen checkpoint · 25 Hz decisions</text>
+  <rect x="40" y="116" width="160" height="60" rx="4" class="box"/>
+  <text x="54" y="138" class="h1">Wrist history</text>
+  <text x="54" y="156" class="mono">8 × 96 × 96 gray</text>
+  <text x="54" y="170" class="dim">280 ms lookback</text>
+  <rect x="40" y="184" width="160" height="60" rx="4" class="box"/>
+  <text x="54" y="206" class="h1">Proprioception</text>
+  <text x="54" y="224" class="mono">12-d: q, q*</text>
+  <text x="54" y="238" class="dim">measured + commanded</text>
+  <rect x="225" y="116" width="175" height="60" rx="4" class="box-blue"/>
+  <text x="239" y="138" class="h1">Vision encoder</text>
+  <text x="239" y="156" class="mono">8→48→72→128→192</text>
+  <text x="239" y="170" class="dim">stride 2 · BN · ReLU · GAP</text>
+  <rect x="225" y="184" width="175" height="60" rx="4" class="box-blue"/>
+  <text x="239" y="206" class="h1">Proprio MLP</text>
+  <text x="239" y="224" class="mono">Linear 12→128→128</text>
+  <text x="239" y="238" class="dim">ReLU between layers</text>
+  <rect x="425" y="116" width="185" height="128" rx="4" class="box-blue"/>
+  <text x="439" y="140" class="h1">Fusion head</text>
+  <text x="439" y="162" class="body">concat 320 → 256</text>
+  <text x="439" y="180" class="body">ReLU → 48 → tanh</text>
+  <text x="439" y="202" class="mono">8 × 6 action chunk</text>
+  <text x="439" y="222" class="dim">8 entries = 320 ms</text>
+  <rect x="635" y="116" width="170" height="128" rx="4" class="box"/>
+  <text x="649" y="140" class="h1">Chunked execution</text>
+  <text x="649" y="162" class="body">2 entries = 80 ms</text>
+  <text x="649" y="180" class="body">25 Hz decisions</text>
+  <text x="649" y="202" class="dim">normalized joint targets</text>
+  <text x="649" y="222" class="dim">open loop between decisions</text>
+  <path d="M 200 146 H 223" class="wire" marker-end="url(#arr)"/>
+  <path d="M 200 214 H 223" class="wire" marker-end="url(#arr)"/>
+  <path d="M 400 146 H 423" class="wire" marker-end="url(#arr)"/>
+  <path d="M 400 214 H 423" class="wire" marker-end="url(#arr)"/>
+  <path d="M 610 180 H 633" class="wire" marker-end="url(#arr)"/>
+  <path d="M 805 180 H 850" class="wire" marker-end="url(#arr-blue)"/>
+  <text x="40" y="280" class="hdr" fill="#ffa657">2 · VISUAL SERVO</text>
+  <text x="158" y="280" class="hdr-dim">classical · same wrist RGB · no learned weights</text>
+  <rect x="40" y="308" width="160" height="60" rx="4" class="box"/>
+  <text x="54" y="330" class="h1">Wrist RGB</text>
+  <text x="54" y="348" class="mono-amber">128 × 128 @ 25 Hz</text>
+  <text x="54" y="362" class="dim">eye-in-hand</text>
+  <rect x="40" y="376" width="160" height="60" rx="4" class="box"/>
+  <text x="54" y="398" class="h1">Forward kinematics</text>
+  <text x="54" y="416" class="mono-amber">joint angles q</text>
+  <text x="54" y="430" class="dim">camera pose</text>
+  <rect x="225" y="308" width="175" height="128" rx="4" class="box-amber"/>
+  <text x="239" y="332" class="h1">Ray–plane projection</text>
+  <text x="239" y="354" class="body">pixel → calibrated ray</text>
+  <text x="239" y="372" class="body">intersect work plane</text>
+  <text x="239" y="394" class="body">part top + yaw</text>
+  <text x="239" y="412" class="body">tote silhouette fit</text>
+  <rect x="425" y="308" width="185" height="128" rx="4" class="box-amber"/>
+  <text x="439" y="332" class="h1">Terminal correction</text>
+  <text x="439" y="354" class="body">pick: lead 0.25 s</text>
+  <text x="439" y="372" class="body">pre-grasp XY + yaw</text>
+  <text x="439" y="394" class="body">place: tote-centre fit</text>
+  <text x="439" y="412" class="body">stall-aware handoff</text>
+  <rect x="635" y="308" width="170" height="128" rx="4" class="box"/>
+  <text x="649" y="332" class="h1">Pose offset</text>
+  <text x="649" y="354" class="mono-amber">Δx, Δy, Δz, Δyaw</text>
+  <text x="649" y="372" class="mono-amber">±2–5 cm</text>
+  <text x="649" y="394" class="dim">applied to arm target</text>
+  <text x="649" y="412" class="dim">damped-least-squares IK</text>
+  <path d="M 200 338 H 223" class="wire" marker-end="url(#arr)"/>
+  <path d="M 200 406 H 223" class="wire" marker-end="url(#arr)"/>
+  <path d="M 400 372 H 423" class="wire" marker-end="url(#arr)"/>
+  <path d="M 610 372 H 633" class="wire" marker-end="url(#arr)"/>
+  <path d="M 805 372 H 850" class="wire" marker-end="url(#arr-amber)"/>
+  <text x="40" y="472" class="hdr" fill="#56d364">3 · RELEASE PRIMITIVE</text>
+  <text x="195" y="472" class="hdr-dim">proprioceptive · camera-free · no object state</text>
+  <rect x="40" y="500" width="160" height="60" rx="4" class="box"/>
+  <text x="54" y="522" class="h1">Gripper tracking</text>
+  <text x="54" y="540" class="dim">commanded vs measured</text>
+  <text x="54" y="554" class="dim">blocked-jaw signal</text>
+  <rect x="40" y="568" width="160" height="60" rx="4" class="box"/>
+  <text x="54" y="590" class="h1">Lift &amp; tote state</text>
+  <text x="54" y="608" class="dim">grasp-site height</text>
+  <text x="54" y="622" class="dim">known tote plane</text>
+  <rect x="225" y="500" width="175" height="128" rx="4" class="box-green"/>
+  <text x="239" y="524" class="h1">Grasp verification</text>
+  <text x="239" y="546" class="body">close stalls 0.16 s</text>
+  <text x="239" y="564" class="body">lift clears belt</text>
+  <text x="239" y="586" class="body">part retained</text>
+  <text x="239" y="604" class="body">empty close rejected</text>
+  <rect x="425" y="500" width="185" height="128" rx="4" class="box-green"/>
+  <text x="439" y="524" class="h1">Release gate</text>
+  <text x="439" y="546" class="body">descend into tote</text>
+  <text x="439" y="564" class="body">open jaws</text>
+  <text x="439" y="586" class="body">settle 0.4 s</text>
+  <text x="439" y="604" class="body">hold arm 0.8 s</text>
+  <rect x="635" y="500" width="170" height="128" rx="4" class="box"/>
+  <text x="649" y="524" class="h1">Gripper command</text>
+  <text x="649" y="546" class="mono-green">open / close</text>
+  <text x="649" y="564" class="dim">no camera</text>
+  <text x="649" y="586" class="dim">proprioception only</text>
+  <text x="649" y="604" class="dim">overrides policy grip</text>
+  <path d="M 200 530 H 223" class="wire" marker-end="url(#arr)"/>
+  <path d="M 200 598 H 223" class="wire" marker-end="url(#arr)"/>
+  <path d="M 400 564 H 423" class="wire" marker-end="url(#arr)"/>
+  <path d="M 610 564 H 633" class="wire" marker-end="url(#arr)"/>
+  <path d="M 805 564 H 850" class="wire" marker-end="url(#arr-green)"/>
+  <path d="M 850 564 V 180" class="wire"/>
+  <path d="M 850 180 H 868" class="wire" marker-end="url(#arr)"/>
+  <circle cx="850" cy="180" r="2.6" fill="#8b949e"/>
+  <circle cx="850" cy="372" r="2.6" fill="#8b949e"/>
+  <circle cx="850" cy="564" r="2.6" fill="#8b949e"/>
+  <rect x="870" y="116" width="170" height="128" rx="4" class="box"/>
+  <text x="955" y="138" class="h1" font-size="15" text-anchor="middle">SO-101</text>
+  <text x="955" y="158" class="dim" text-anchor="middle">6-DoF arm + gripper</text>
+  <line x1="890" y1="174" x2="1020" y2="174" stroke="#30363d" stroke-width="1"/>
+  <text x="955" y="196" class="body" text-anchor="middle">200 Hz physics</text>
+  <text x="955" y="216" class="body" text-anchor="middle">25 Hz control</text>
+  <text x="955" y="236" class="body" text-anchor="middle">one wrist camera</text>
+
+  <!-- footnotes -->
+  <text x="40" y="660" class="note">The checkpoint is frozen; the servo adds no learned parameters.</text>
+  <text x="40" y="678" class="note">Only RGB, joint angles, forward kinematics and actuator commands are used — no simulator object state.</text>
+</svg>

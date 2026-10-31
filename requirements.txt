@@ -1,0 +1,6 @@
+mujoco==3.14.0
+mujoco-menagerie>=2026.9
+numpy>=1.26,<3
+opencv-python>=4.9
+torch>=2.4,<3
+Pillow>=10

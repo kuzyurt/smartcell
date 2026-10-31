@@ -1,0 +1,590 @@
+[
+ {
+  "name": "Barrel_01",
+  "mesh": "Barrel_01",
+  "file": "p000_Barrel_01.obj",
+  "rgba": [
+   0.1559,
+   0.0166,
+   0.0126,
+   1.0
+  ],
+  "material": "Barrel_01.001"
+ },
+ {
+  "name": "WetFloorSign_01",
+  "mesh": "WetFloorSign_01",
+  "file": "p001_WetFloorSign_01.obj",
+  "rgba": [
+   0.594,
+   0.499,
+   0.0287,
+   1.0
+  ],
+  "material": "WetFloorSign_01.001"
+ },
+ {
+  "name": "barrel_03",
+  "mesh": "barrel_03",
+  "file": "p002_barrel_03.obj",
+  "rgba": [
+   0.0595,
+   0.095,
+   0.1495,
+   1.0
+  ],
+  "material": "barrel_03.001"
+ },
+ {
+  "name": "caged_hanging_light",
+  "mesh": "caged_hanging_light",
+  "file": "p003_caged_hanging_light.obj",
+  "rgba": [
+   0.0441,
+   0.0439,
+   0.0301,
+   1.0
+  ],
+  "material": "caged_hanging_light.001"
+ },
+ {
+  "name": "cardboard_box_01",
+  "mesh": "cardboard_box_01",
+  "file": "p004_cardboard_box_01.obj",
+  "rgba": [
+   0.3437,
+   0.2595,
+   0.1314,
+   1.0
+  ],
+  "material": "cardboard_box_01.001"
+ },
+ {
+  "name": "cardboard_box_01.001",
+  "mesh": "cardboard_box_01.001",
+  "file": "p005_cardboard_box_01_001.obj",
+  "rgba": [
+   0.3437,
+   0.2595,
+   0.1314,
+   1.0
+  ],
+  "material": "cardboard_box_01.002"
+ },
+ {
+  "name": "fire_alarm",
+  "mesh": "fire_alarm",
+  "file": "p006_fire_alarm.obj",
+  "rgba": [
+   0.3351,
+   0.1051,
+   0.1006,
+   1.0
+  ],
+  "material": "fire_alarm.001"
+ },
+ {
+  "name": "fire_alarm_lever",
+  "mesh": "fire_alarm_lever",
+  "file": "p007_fire_alarm_lever.obj",
+  "rgba": [
+   0.3351,
+   0.1051,
+   0.1006,
+   1.0
+  ],
+  "material": "fire_alarm.001"
+ },
+ {
+  "name": "hand_truck",
+  "mesh": "hand_truck",
+  "file": "p008_hand_truck.obj",
+  "rgba": [
+   0.1426,
+   0.0689,
+   0.0572,
+   1.0
+  ],
+  "material": "hand_truck.001"
+ },
+ {
+  "name": "industrial_pastic_container",
+  "mesh": "industrial_pastic_container",
+  "file": "p009_industrial_pastic_container.obj",
+  "rgba": [
+   0.0132,
+   0.0395,
+   0.3849,
+   1.0
+  ],
+  "material": "industrial_pastic_container.001"
+ },
+ {
+  "name": "industrial_pastic_container_lid_a",
+  "mesh": "industrial_pastic_container_lid_a",
+  "file": "p010_industrial_pastic_container_lid_a.obj",
+  "rgba": [
+   0.0132,
+   0.0395,
+   0.3849,
+   1.0
+  ],
+  "material": "industrial_pastic_container.001"
+ },
+ {
+  "name": "industrial_pastic_container_lid_b",
+  "mesh": "industrial_pastic_container_lid_b",
+  "file": "p011_industrial_pastic_container_lid_b.obj",
+  "rgba": [
+   0.0132,
+   0.0395,
+   0.3849,
+   1.0
+  ],
+  "material": "industrial_pastic_container.001"
+ },
+ {
+  "name": "korean_fire_extinguisher_01",
+  "mesh": "korean_fire_extinguisher_01",
+  "file": "p012_korean_fire_extinguisher_01.obj",
+  "rgba": [
+   0.0585,
+   0.0073,
+   0.0057,
+   1.0
+  ],
+  "material": "korean_fire_extinguisher_01_body.001"
+ },
+ {
+  "name": "metal_stool_01",
+  "mesh": "metal_stool_01",
+  "file": "p013_metal_stool_01.obj",
+  "rgba": [
+   0.0694,
+   0.0375,
+   0.0234,
+   1.0
+  ],
+  "material": "metal_stool_01.001"
+ },
+ {
+  "name": "metal_tool_chest",
+  "mesh": "metal_tool_chest",
+  "file": "p014_metal_tool_chest.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "metal_tool_chest_handle_left",
+  "mesh": "metal_tool_chest_handle_left",
+  "file": "p015_metal_tool_chest_handle_left.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "metal_tool_chest_handle_right",
+  "mesh": "metal_tool_chest_handle_right",
+  "file": "p016_metal_tool_chest_handle_right.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "metal_tool_chest_hinge_chest",
+  "mesh": "metal_tool_chest_hinge_chest",
+  "file": "p017_metal_tool_chest_hinge_chest.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "metal_tool_chest_hinge_lid",
+  "mesh": "metal_tool_chest_hinge_lid",
+  "file": "p018_metal_tool_chest_hinge_lid.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "metal_tool_chest_lid",
+  "mesh": "metal_tool_chest_lid",
+  "file": "p019_metal_tool_chest_lid.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "metal_tool_chest_lock",
+  "mesh": "metal_tool_chest_lock",
+  "file": "p020_metal_tool_chest_lock.obj",
+  "rgba": [
+   0.1826,
+   0.0463,
+   0.0416,
+   1.0
+  ],
+  "material": "metal_tool_chest.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_a",
+  "mesh": "mounted_fluorescent_lights_a",
+  "file": "p021_mounted_fluorescent_lights_a.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_b",
+  "mesh": "mounted_fluorescent_lights_b",
+  "file": "p022_mounted_fluorescent_lights_b.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_c",
+  "mesh": "mounted_fluorescent_lights_c",
+  "file": "p023_mounted_fluorescent_lights_c.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_d",
+  "mesh": "mounted_fluorescent_lights_d",
+  "file": "p024_mounted_fluorescent_lights_d.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_e",
+  "mesh": "mounted_fluorescent_lights_e",
+  "file": "p025_mounted_fluorescent_lights_e.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_f",
+  "mesh": "mounted_fluorescent_lights_f",
+  "file": "p026_mounted_fluorescent_lights_f.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "mounted_fluorescent_lights_g",
+  "mesh": "mounted_fluorescent_lights_g",
+  "file": "p027_mounted_fluorescent_lights_g.obj",
+  "rgba": [
+   0.4293,
+   0.4179,
+   0.4242,
+   1.0
+  ],
+  "material": "mounted_fluorescent_lights.001"
+ },
+ {
+  "name": "old_military_crate_a",
+  "mesh": "old_military_crate_a",
+  "file": "p028_old_military_crate_a.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_b",
+  "mesh": "old_military_crate_b",
+  "file": "p029_old_military_crate_b.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_cloth_a",
+  "mesh": "old_military_crate_cloth_a",
+  "file": "p030_old_military_crate_cloth_a.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_cloth_b",
+  "mesh": "old_military_crate_cloth_b",
+  "file": "p031_old_military_crate_cloth_b.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_latch_a",
+  "mesh": "old_military_crate_latch_a",
+  "file": "p032_old_military_crate_latch_a.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_latch_b",
+  "mesh": "old_military_crate_latch_b",
+  "file": "p033_old_military_crate_latch_b.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_lid_a",
+  "mesh": "old_military_crate_lid_a",
+  "file": "p034_old_military_crate_lid_a.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_lid_b",
+  "mesh": "old_military_crate_lid_b",
+  "file": "p035_old_military_crate_lid_b.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_loop_a",
+  "mesh": "old_military_crate_loop_a",
+  "file": "p036_old_military_crate_loop_a.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "old_military_crate_loop_b",
+  "mesh": "old_military_crate_loop_b",
+  "file": "p037_old_military_crate_loop_b.obj",
+  "rgba": [
+   0.1575,
+   0.1157,
+   0.0596,
+   1.0
+  ],
+  "material": "military_crate_m_01.002"
+ },
+ {
+  "name": "plastic_crate_02",
+  "mesh": "plastic_crate_02",
+  "file": "p038_plastic_crate_02.obj",
+  "rgba": [
+   0.2434,
+   0.2235,
+   0.2207,
+   1.0
+  ],
+  "material": "plastic_crate_02.001"
+ },
+ {
+  "name": "plastic_crate_02.001",
+  "mesh": "plastic_crate_02.001",
+  "file": "p039_plastic_crate_02_001.obj",
+  "rgba": [
+   0.2434,
+   0.2235,
+   0.2207,
+   1.0
+  ],
+  "material": "plastic_crate_02.002"
+ },
+ {
+  "name": "plastic_crate_02.002",
+  "mesh": "plastic_crate_02.002",
+  "file": "p040_plastic_crate_02_002.obj",
+  "rgba": [
+   0.2434,
+   0.2235,
+   0.2207,
+   1.0
+  ],
+  "material": "plastic_crate_02.003"
+ },
+ {
+  "name": "portable_welding_cart",
+  "mesh": "portable_welding_cart",
+  "file": "p041_portable_welding_cart.obj",
+  "rgba": [
+   0.0991,
+   0.086,
+   0.054,
+   1.0
+  ],
+  "material": "portable_welding_cart.001"
+ },
+ {
+  "name": "steel_frame_shelves_01",
+  "mesh": "steel_frame_shelves_01",
+  "file": "p042_steel_frame_shelves_01.obj",
+  "rgba": [
+   0.2315,
+   0.1425,
+   0.0753,
+   1.0
+  ],
+  "material": "steel_frame_shelves_01.001"
+ },
+ {
+  "name": "steel_frame_shelves_03",
+  "mesh": "steel_frame_shelves_03",
+  "file": "p043_steel_frame_shelves_03.obj",
+  "rgba": [
+   0.0421,
+   0.0308,
+   0.023,
+   1.0
+  ],
+  "material": "steel_frame_shelves_03.001"
+ },
+ {
+  "name": "steel_frame_shelves_03_drawer_01",
+  "mesh": "steel_frame_shelves_03_drawer_01",
+  "file": "p044_steel_frame_shelves_03_drawer_01.obj",
+  "rgba": [
+   0.0242,
+   0.0072,
+   0.0026,
+   1.0
+  ],
+  "material": "steel_frame_shelves_03_drawers.001"
+ },
+ {
+  "name": "steel_frame_shelves_03_drawer_02",
+  "mesh": "steel_frame_shelves_03_drawer_02",
+  "file": "p045_steel_frame_shelves_03_drawer_02.obj",
+  "rgba": [
+   0.0242,
+   0.0072,
+   0.0026,
+   1.0
+  ],
+  "material": "steel_frame_shelves_03_drawers.001"
+ },
+ {
+  "name": "steel_frame_shelves_03_drawer_03",
+  "mesh": "steel_frame_shelves_03_drawer_03",
+  "file": "p046_steel_frame_shelves_03_drawer_03.obj",
+  "rgba": [
+   0.0242,
+   0.0072,
+   0.0026,
+   1.0
+  ],
+  "material": "steel_frame_shelves_03_drawers.001"
+ },
+ {
+  "name": "tool_cart",
+  "mesh": "tool_cart",
+  "file": "p047_tool_cart.obj",
+  "rgba": [
+   0.0614,
+   0.0915,
+   0.0563,
+   1.0
+  ],
+  "material": "tool_cart.001"
+ },
+ {
+  "name": "worn_metal_rack",
+  "mesh": "worn_metal_rack",
+  "file": "p048_worn_metal_rack.obj",
+  "rgba": [
+   0.1475,
+   0.1266,
+   0.0994,
+   1.0
+  ],
+  "material": "worn_metal_rack.001"
+ }
+]
