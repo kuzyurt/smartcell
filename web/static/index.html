@@ -139,6 +139,18 @@ python web/server.py</pre>
 </section>
 
 <footer><div class="wrap fgrid"><div><b style="color:#fff;letter-spacing:.2em">SMARTCELL</b><br><span data-i18n="ft.t">A SO-101 conveyor pick-and-place research artifact.</span></div><div><a href="https://github.com/kuzyurt/smartcell">GitHub</a> · MIT</div></div></footer>
+<template id="offline">
+  <div class="screen"><video src="media/policy.mp4" poster="media/hero_poster.jpg" autoplay muted loop playsinline controls></video></div>
+  <aside class="panel">
+    <h4 data-i18n="of.h">Run it on your computer</h4>
+    <p style="margin:0 0 14px;color:#b9c9ce;font-size:15px" data-i18n="of.p">This page is a static copy. The live simulation, with every setting in the video, runs locally in one command.</p>
+    <pre>git clone https://github.com/kuzyurt/smartcell
+cd smartcell
+pip install -r requirements.txt
+python web/server.py</pre>
+    <div class="btns" style="margin-top:16px"><a class="btn primary" href="https://github.com/kuzyurt/smartcell" style="grid-column:1/3;background:var(--accent);color:#fff;justify-content:center;padding:12px;font-size:15px">GitHub</a></div>
+  </aside>
+</template>
 <script src="app.js"></script>
 </body>
 </html>

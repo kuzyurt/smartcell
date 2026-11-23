@@ -25,3 +25,7 @@ eval_times_*
 Thumbs.db
 .idea/
 .vscode/
+
+# build output and local working files
+dist/
+_scratch/

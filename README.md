@@ -114,7 +114,7 @@ the validated protocol stays the default.
 CPU-only run. That is a small sample next to the 200-trial protocol above and
 is not a replacement for it. A stronger variant that also low-pass filtered the
 command was calmer but placed only 16/20, because the added lag costs grasps,
-so it was dropped. Measurement code: [`tools/measure_smoothing.py`](tools/measure_smoothing.py).
+so it was dropped. Measurement code: [`tools/measure_smoothing.py`](tools/measure_smoothing.py); per-episode results: [`reports/smoothing_validation_20261123.json`](reports/smoothing_validation_20261123.json).
 
 ## The data
 
@@ -155,7 +155,7 @@ pip install -r requirements.txt
 python web/server.py          # opens http://127.0.0.1:8800
 ```
 
-With a GPU it runs near real time; on CPU only it is much slower
+The same page can be hosted statically, see [`docs/deploy.md`](docs/deploy.md). With a GPU the live version runs near real time; on CPU only it is much slower
 (`SMARTCELL_ALLOW_CPU=1`). On headless Linux set `MUJOCO_GL=egl`.
 
 ## Run it
@@ -191,14 +191,14 @@ without content changes, except one documented path fix in `evaluate.py`.
 | **Scene** | `factory_hall.py` · `line_frame.py` · `scene_look.py` · `make_textures.py` · `blender_props.py` |
 | **Data** | `expert.py` · `demo_pick.py` · `collect_state.py` · `dagger_collect.py` · `collect_carry_corrections.py` · `render_dataset.py` · `build_cache.py` · `dataset.py` |
 | **Smooth motion** | `smoothing.py` (same folder) |
-| **Web demo** | `web/` (server, engine, page) · `tools/` (media rendering, smoothness measurement) |
+| **Web demo** | `web/` (server, engine, page) · `tools/` (`measure_smoothing.py`, `build_site.py`) |
 | **Training** | `train.py` · `gpu_guard.py` · `ramcap.py` (memory cap) |
 
 | Folder | Contents |
 |---|---|
 | `smartcell/` | all Python code (flat modules) and `assets/` (robot/table/conveyor XML, textures, 49 visual-only props) |
 | `web/` | local web demo: `server.py`, `engine.py`, `static/` page |
-| `tools/` | media rendering and smoothness measurement |
+| `tools/` | smoothness measurement and static-site build |
 | `ckpt/` | the validated checkpoint `policy_0041c.pt` |
 | `docs/` | validation, model card, dataset, design, provenance |
 | `reports/` | raw validation and benchmark JSON |

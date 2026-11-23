@@ -21,6 +21,7 @@ const I18N = {
     "rs.c":"Bedingung","rs.tb":"tierB — Licht, Tönung, Montage-Jitter","rs.bx":"boxX — Kistenecken außerhalb des Trainings","rs.bl":"Blender-Halle, Zero-Shot (200 Versuche)","rs.no":"Blender-Halle, visueller Servo aus (Kontrolle)",
     "rs.note":"Nur Simulation, ein 32-mm-Teil, ein SO-101, ein Förderband. Das Glättungsprofil ist neu und separat ausgewertet; die obigen Zahlen gelten für das eingefrorene Originalprotokoll.",
     "run.k":"Starten","run.h":"Ein Befehl.","run.sub":"Einmal die Requirements installieren, dann diese Seite starten. Sie öffnet sich im Browser und simuliert lokal.",
+    "of.h":"Auf deinem Rechner starten","of.p":"Diese Seite ist eine statische Kopie. Die Live-Simulation mit allen Einstellungen aus dem Video läuft lokal mit einem Befehl.",
     "ft.t":"Ein SO-101-Förderband-Pick-and-Place-Forschungsartefakt."
   }
 };
@@ -100,7 +101,7 @@ function render(st) {
   $("#screen").classList.toggle("orbit", st.cfg.camera === "orbit");
   $("#log").innerHTML = s.log.map(l => `<span class="dot ${l.place ? "ok" : "bad"}" title="episode ${l.ep}: pick ${l.pick}, place ${l.place}">${l.place ? "✓" : "✗"}</span>`).join("");
 }
-async function poll() { try { render(await api("/api/state")); } catch (e) {} setTimeout(poll, 400); }
+async function poll() { if (!polling) return; try { render(await api("/api/state")); } catch (e) {} setTimeout(poll, 400); }
 
 /* orbit camera: drag + wheel */
 (() => {
@@ -113,7 +114,18 @@ async function poll() { try { render(await api("/api/state")); } catch (e) {} se
 })();
 
 setLang(store.get("lang") === "de" ? "de" : "en");
-api("/api/state").then(st => { render(st); connect(); }).catch(() => {
-  $("#overlay").innerHTML = '<div style="max-width:420px">The live simulation needs the local server:<br><code style="background:#12303d;color:#fff">python web/server.py</code></div>';
-});
+/* static hosting (e.g. Cloudflare Pages): no simulation server, show the recording and the commands */
+let polling = true;
+function offlineMode() {
+  polling = false;
+  const sub = $("#play .sub");
+  sub.dataset.i18n = "of.sub";
+  EN["of.sub"] = "A recorded run in the Blender-dressed hall. Scene, lighting, tote position, motion mode, visual servo and camera are all adjustable in the live version, which you start locally.";
+  I18N.de["of.sub"] = "Ein aufgezeichneter Lauf in der Blender-Halle. Szene, Licht, Kistenposition, Bewegungsmodus, visueller Servo und Kamera sind in der Live-Version einstellbar, die du lokal startest.";
+  const play = $(".play");
+  play.replaceChildren($("#offline").content.cloneNode(true));
+  $$("[data-i18n]", play).forEach(el => { EN[el.dataset.i18n] = EN[el.dataset.i18n] || el.innerHTML; });
+  setLang(document.documentElement.lang);
+}
+api("/api/state").then(st => { render(st); connect(); }).catch(offlineMode);
 poll();

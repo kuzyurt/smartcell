@@ -1,55 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="312" viewBox="0 0 1100 312" role="img" aria-label="Control pipeline: policy, visual servo and release primitive in series, each reading sensors, driving the SO-101">
+<svg xmlns="http://www.w3.org/2000/svg" width="1028" height="324" viewBox="0 0 1028 324" role="img" aria-label="Control pipeline: policy, visual servo and release primitive in series, each reading sensors, driving the SO-101">
 <title>Control pipeline: policy, visual servo and release primitive in series, each reading sensors, driving the SO-101</title>
 <style>
-:root{--ink:#1f2328;--line:#d1d9e0;--acc:#0b7a75;--on:#ffffff}
-@media (prefers-color-scheme:dark){:root{--ink:#e6edf3;--line:#3d444d;--acc:#3dbdb2;--on:#0d1117}}
-text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;fill:var(--ink);font-size:13px}
-.h{font-size:16px;font-weight:650}
-.l{font-size:12.5px}
-.t{font-size:12px;opacity:.7}
-.box{fill:none;stroke:var(--ink);stroke-width:1.25}
-.fill{fill:var(--acc);stroke:none}
-.on{fill:var(--on)}
-.ar{fill:none;stroke:var(--ink);stroke-width:1.5}
-.hair{stroke:var(--line);stroke-width:1;fill:none}
-.head{fill:var(--ink)}
-.ptp{stroke:var(--ink);stroke-width:2;fill:none}
-.pl{fill:var(--acc)}
-.ph{fill:var(--ink)}
-.dot{fill:var(--acc)}
-.cic{fill:var(--acc)}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;fill:#1f2328;font-size:14px}
+.h{font-size:17px;font-weight:650}.l{font-size:13.5px}.t{font-size:13px;fill:#59636e}.w{fill:#fff}
+.box{fill:#fff;stroke:#1f2328;stroke-width:1.4}.fill{fill:#0b7a75}.ar{fill:none;stroke:#1f2328;stroke-width:1.6}
+.hair{stroke:#e1e6ea;stroke-width:1;fill:none}.acc{fill:#0b7a75}
 </style>
-<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M1 1.5L8.5 5L1 8.5z"/></marker></defs>
-<rect class="box" x="20" y="40" width="190" height="80" rx="8"/>
-<text class="h" x="115.0" y="76" text-anchor="middle">Policy</text>
-<text class="" x="115.0" y="98" text-anchor="middle">learned, frozen</text>
-<rect class="box" x="310" y="40" width="190" height="80" rx="8"/>
-<text class="h" x="405.0" y="76" text-anchor="middle">Visual servo</text>
-<text class="" x="405.0" y="98" text-anchor="middle">geometry, no learning</text>
-<rect class="box" x="600" y="40" width="190" height="80" rx="8"/>
-<text class="h" x="695.0" y="76" text-anchor="middle">Release primitive</text>
-<text class="" x="695.0" y="98" text-anchor="middle">rules on joint state</text>
-<rect class="fill" x="890" y="40" width="190" height="80" rx="8"/>
-<text class="h on" x="985.0" y="76" text-anchor="middle">SO-101</text>
-<text class="on" x="985.0" y="98" text-anchor="middle">6 joints + gripper</text>
-<path class="ar" d="M213 80H306" marker-end="url(#a)"/>
-<text class="l" x="260.0" y="56" text-anchor="middle">arm + grip</text>
-<text class="l" x="260.0" y="71" text-anchor="middle">target</text>
-<path class="ar" d="M503 80H596" marker-end="url(#a)"/>
-<text class="l" x="550.0" y="56" text-anchor="middle">corrected</text>
-<text class="l" x="550.0" y="71" text-anchor="middle">target</text>
-<path class="ar" d="M793 80H886" marker-end="url(#a)"/>
-<text class="l" x="840.0" y="56" text-anchor="middle">arm + grip</text>
-<text class="l" x="840.0" y="71" text-anchor="middle">command</text>
-<rect class="box" x="20" y="232" width="770" height="56" rx="8"/>
-<text class="h" x="40" y="266">Sensors</text>
-<text x="128" y="265">wrist camera  ·  joint angles, measured and commanded</text>
-<path class="ar" d="M115 229V124" marker-end="url(#a)"/>
-<text class="l" x="125" y="182">8 gray frames + joints</text>
-<path class="ar" d="M405 229V124" marker-end="url(#a)"/>
-<text class="l" x="415" y="182">RGB frame</text>
-<path class="ar" d="M695 229V124" marker-end="url(#a)"/>
-<text class="l" x="705" y="182">gripper error, lift height</text>
-<path class="ar" d="M985 124V260H794" marker-end="url(#a)"/>
-<text class="l" x="803" y="250">25 Hz</text>
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path fill="#1f2328" d="M1 1.5L8.5 5L1 8.5z"/></marker></defs>
+<rect x=".5" y=".5" width="1027" height="323" rx="10" fill="#fff" stroke="#d1d9e0"/>
+<rect class="box" x="28" y="36" width="170" height="90" rx="8"/>
+<text class="h" x="113.0" y="76" text-anchor="middle">Policy</text>
+<text class="" x="113.0" y="100" text-anchor="middle">learned, frozen</text>
+<rect class="box" x="298" y="36" width="170" height="90" rx="8"/>
+<text class="h" x="383.0" y="76" text-anchor="middle">Visual servo</text>
+<text class="" x="383.0" y="100" text-anchor="middle">geometry, no learning</text>
+<rect class="box" x="568" y="36" width="170" height="90" rx="8"/>
+<text class="h" x="653.0" y="76" text-anchor="middle">Release primitive</text>
+<text class="" x="653.0" y="100" text-anchor="middle">rules on joint state</text>
+<rect class="fill" x="838" y="36" width="170" height="90" rx="8"/>
+<text class="h w" x="923.0" y="76" text-anchor="middle">SO-101</text>
+<text class="w" x="923.0" y="100" text-anchor="middle">6 joints + gripper</text>
+<path class="ar" d="M202 92H293" marker-end="url(#a)"/>
+<text class="l" x="248.0" y="68" text-anchor="middle">arm + grip</text><text class="l" x="248.0" y="84" text-anchor="middle">target</text>
+<path class="ar" d="M472 92H563" marker-end="url(#a)"/>
+<text class="l" x="518.0" y="68" text-anchor="middle">corrected</text><text class="l" x="518.0" y="84" text-anchor="middle">target</text>
+<path class="ar" d="M742 92H833" marker-end="url(#a)"/>
+<text class="l" x="788.0" y="68" text-anchor="middle">arm + grip</text><text class="l" x="788.0" y="84" text-anchor="middle">command</text>
+<rect class="box" x="28" y="236" width="740" height="60" rx="8"/><text class="h" x="50" y="272">Sensors</text>
+<text x="140" y="271">wrist camera  ·  joint angles, measured and commanded</text>
+<path class="ar" d="M113 233V130" marker-end="url(#a)"/><text class="l" x="123" y="188">8 gray frames + joints</text>
+<path class="ar" d="M383 233V130" marker-end="url(#a)"/><text class="l" x="393" y="188">RGB frame</text>
+<path class="ar" d="M653 233V130" marker-end="url(#a)"/><text class="l" x="663" y="188">gripper error, lift height</text>
+<path class="ar" d="M923 130V266H772" marker-end="url(#a)"/><text class="l" x="782" y="256">25 Hz</text>
 </svg>

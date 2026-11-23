@@ -99,6 +99,8 @@ h2{font-size:clamp(28px,3.6vw,44px);line-height:1.1;letter-spacing:-.02em;margin
 .dot{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font:700 11px var(--mono);background:#1b3340;color:#b9c9ce}
 .dot.ok{background:var(--accent);color:#fff}.dot.bad{background:var(--warn);color:#fff}
 .hint{display:none}
+.screen video{width:100%;height:100%;object-fit:cover;display:block}
+.panel pre{font-size:12px;margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
 /* results table */
 table{width:100%;border-collapse:collapse;font-size:16px}
 th,td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line)}th{font:600 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#5b6f7a}
