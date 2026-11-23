@@ -7,6 +7,7 @@ wrist-image policy, and no boxX positions or evaluation seeds train.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -127,7 +128,7 @@ def main():
                     oracle_controls_robot=False, boxX_used=False,
                     episodes=episodes,
                     hashes={p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
-                            for p in (__file__, "carry_policy.py", "evaluate.py")})
+                            for p in (__file__, os.path.join(os.path.dirname(os.path.abspath(__file__)), "carry_policy.py"), os.path.join(os.path.dirname(os.path.abspath(__file__)), "evaluate.py"))})
     np.savez_compressed(out, features=np.stack(features), targets=np.stack(targets),
                         split=np.asarray(splits), seeds=np.asarray(seeds),
                         ik_error=np.asarray(errors), metadata=json.dumps(metadata))

@@ -3,7 +3,7 @@
 Physics is untouched: every imported geom is contype=0/conaffinity=0, and the
 robot, cubes, belt, tote and bin still come from build_cell.
 
-Run: python evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 5 --conds nominal
+Run: python smartcell/evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 5 --conds nominal
 """
 import runpy
 import sys
@@ -26,4 +26,6 @@ def build_model():
 
 C.build_model = build_model
 
-runpy.run_path("evaluate.py", run_name="__main__")
+import os
+runpy.run_path(os.path.join(os.path.dirname(os.path.abspath(__file__)), "evaluate.py"),
+               run_name="__main__")

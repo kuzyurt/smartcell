@@ -164,13 +164,13 @@ With a GPU it runs near real time; on CPU only it is much slower
 pip install -r requirements.txt
 
 # 20 nominal trials in the stock cell
-python evaluate.py --ckpt ckpt/policy_0041c.pt --n 20
+python smartcell/evaluate.py --ckpt ckpt/policy_0041c.pt --n 20
 
 # live viewer: overhead + wrist RGB + the exact tensor the policy sees
-python watch.py --ckpt ckpt/policy_0041c.pt
+python smartcell/watch.py --ckpt ckpt/policy_0041c.pt
 
 # zero-shot in the Blender-dressed cell
-python evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 20 --conds nominal
+python smartcell/evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 20 --conds nominal
 
 # contract tests
 python -m unittest discover -s tests -v
@@ -178,9 +178,10 @@ python -m unittest discover -s tests -v
 
 ## Code map
 
-The code is a flat set of modules on purpose: the files listed in
-[`docs/provenance.md`](docs/provenance.md) are pinned by SHA-256 and produced
-the published numbers, so they were not moved or rewritten for tidiness.
+All Python code lives in [`smartcell/`](smartcell/) as flat modules, run from
+the repository root (`python smartcell/evaluate.py ...`). Files listed in
+[`docs/provenance.md`](docs/provenance.md) are pinned by SHA-256 and were moved
+without content changes, except one documented path fix in `evaluate.py`.
 
 | Role | Files |
 |---|---|
@@ -189,14 +190,16 @@ the published numbers, so they were not moved or rewritten for tidiness.
 | **Simulation** | `build_cell.py` · `conveyor_env.py` · `conveyor_drive.py` · `arm_ik.py` · `cam_variant.py` · `mjbox.py` |
 | **Scene** | `factory_hall.py` · `line_frame.py` · `scene_look.py` · `make_textures.py` · `blender_props.py` |
 | **Data** | `expert.py` · `demo_pick.py` · `collect_state.py` · `dagger_collect.py` · `collect_carry_corrections.py` · `render_dataset.py` · `build_cache.py` · `dataset.py` |
-| **Smooth motion** | `smoothing.py` |
+| **Smooth motion** | `smoothing.py` (same folder) |
 | **Web demo** | `web/` (server, engine, page) · `tools/` (media rendering, smoothness measurement) |
 | **Training** | `train.py` · `gpu_guard.py` · `ramcap.py` (memory cap) |
 
 | Folder | Contents |
 |---|---|
+| `smartcell/` | all Python code (flat modules) and `assets/` (robot/table/conveyor XML, textures, 49 visual-only props) |
+| `web/` | local web demo: `server.py`, `engine.py`, `static/` page |
+| `tools/` | media rendering and smoothness measurement |
 | `ckpt/` | the validated checkpoint `policy_0041c.pt` |
-| `assets/` | vendored robot/table/conveyor XML, textures, 49 visual-only props |
 | `docs/` | validation, model card, dataset, design, provenance |
 | `reports/` | raw validation and benchmark JSON |
 | `media/` | GIFs, videos and figures used here |

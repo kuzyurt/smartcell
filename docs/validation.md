@@ -113,20 +113,20 @@ Seed base `31102601`, fresh stream. Source reports in `reports/blender_zero_shot
 ```bash
 pip install -r requirements.txt
 
-python evaluate.py --ckpt ckpt/policy_0041c.pt \
+python smartcell/evaluate.py --ckpt ckpt/policy_0041c.pt \
   --n 200 --conds nominal --seed-base 27102601 \
   --out reports/repro_nominal.json
 
-python evaluate.py --ckpt ckpt/policy_0041c.pt \
+python smartcell/evaluate.py --ckpt ckpt/policy_0041c.pt \
   --n 200 --conds tierB --seed-base 27102601 \
   --out reports/repro_tierB.json
 
-python evaluate.py --ckpt ckpt/policy_0041c.pt \
+python smartcell/evaluate.py --ckpt ckpt/policy_0041c.pt \
   --n 200 --conds boxX --seed-base 27102601 \
   --out reports/repro_boxX.json
 
 # dressed-scene zero-shot
-python evaluate_imported.py --ckpt ckpt/policy_0041c.pt \
+python smartcell/evaluate_imported.py --ckpt ckpt/policy_0041c.pt \
   --n 100 --conds nominal --seed-base 31102601 \
   --out reports/repro_dressed_nominal.json
 ```

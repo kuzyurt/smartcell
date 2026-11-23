@@ -1,5 +1,9 @@
 """Contract checks: camera parity and executed (not predicted) grip edges."""
+import os
+import sys
 import unittest
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "smartcell"))
 import numpy as np
 import torch
 import torch.nn.functional as F

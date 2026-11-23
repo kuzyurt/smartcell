@@ -65,20 +65,20 @@ The pipeline is included but not runnable without a GPU and time:
 
 ```bash
 # expert rollouts (successful episodes only are kept)
-python collect_state.py --target 300 --workers 4 --out ds_0011
+python smartcell/collect_state.py --target 300 --workers 4 --out ds_0011
 
 # 128x128 RGB wrist frames, 25 Hz
-python render_dataset.py --all --ds ds_0011
+python smartcell/render_dataset.py --all --ds ds_0011
 
 # align frames, joints and commands into the training cache
-python build_cache.py --ds ds_0011 --fps 25 --entry 0.04 --out cache_0011
+python smartcell/build_cache.py --ds ds_0011 --fps 25 --entry 0.04 --out cache_0011
 
 # one correction round; the validated run used 12 rounds (d16..d27)
 # plus two visual-domain rounds (ds_0016_look, ds_0017_look)
-python dagger_collect.py --n 64 --out ds_0011_d16 --ds ds_0011 --base-seed 100000
+python smartcell/dagger_collect.py --n 64 --out ds_0011_d16 --ds ds_0011 --base-seed 100000
 
 # train with every correction round as extra data
-python train.py --epochs 40 \
+python smartcell/train.py --epochs 40 \
   --extra-ds ds_0011_d16,...,ds_0011_d27,ds_0016_look,ds_0017_look \
   --extra-cache cache_0011_d16,...,cache_0011_d27,cache_0016_look,cache_0017_look
 ```

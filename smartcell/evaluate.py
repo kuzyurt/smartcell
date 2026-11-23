@@ -659,14 +659,17 @@ def main():
     def sha256(path):
         with open(path, "rb") as src:
             return hashlib.file_digest(src, "sha256").hexdigest()
+    _here = _os.path.dirname(_os.path.abspath(__file__))
+    def _src(name):                      # modules live next to this file
+        return _os.path.join(_here, name)
     run_hashes = {p: sha256(p) for p in
-                  (args.ckpt, __file__, "policy_runtime.py", "model.py",
-                   "collect_state.py", "build_cell.py", "conveyor_env.py", "current.py",
-                   "arm_ik.py", "cam_variant.py", "render_dataset.py", "ramcap.py")}
+                  (args.ckpt, __file__, _src("policy_runtime.py"), _src("model.py"),
+                   _src("collect_state.py"), _src("build_cell.py"), _src("conveyor_env.py"), _src("current.py"),
+                   _src("arm_ik.py"), _src("cam_variant.py"), _src("render_dataset.py"), _src("ramcap.py"))}
     if args.carry_ckpt:
-        run_hashes.update({p: sha256(p) for p in (args.carry_ckpt, "carry_policy.py")})
+        run_hashes.update({p: sha256(p) for p in (args.carry_ckpt, _src("carry_policy.py"))})
     if args.visual_pick or args.visual_place:
-        run_hashes['wrist_vision.py']=sha256('wrist_vision.py')
+        run_hashes[_src('wrist_vision.py')]=sha256(_src('wrist_vision.py'))
     # Each run has its own journal, available even if interrupted before the
     # final aggregate. Never confuse a partial run with a completed report.
     journal = out + ".episodes.jsonl"

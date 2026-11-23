@@ -14,6 +14,7 @@ import time
 from collections import deque
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "smartcell"))
 sys.path.insert(0, ROOT)
 os.chdir(ROOT)                       # the project uses repo-relative paths
 

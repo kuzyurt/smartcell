@@ -8,20 +8,20 @@ repository. The following third-party assets keep their own licences.
 | Asset | Source | Licence | What was changed |
 |---|---|---|---|
 | SO-101 robot | [`google-deepmind/mujoco_menagerie`](https://github.com/google-deepmind/mujoco_menagerie) `robotstudio_so101` | Apache-2.0 | unmodified, loaded from the local menagerie checkout |
-| Conveyor section | [`google-deepmind/mujoco`](https://github.com/google-deepmind/mujoco) `model/surfacevel/carousel.xml` | Apache-2.0 | cross-section adapted, tail lengthened 200 mm; upstream copy kept at `assets/_upstream_mujoco_carousel.xml` |
-| Work table | [`vikashplus/furniture_sim`](https://github.com/vikashplus/furniture_sim) `simpleTable` | Apache-2.0 | joints fixed; upstream copy kept at `assets/_upstream_simpleTable.xml`; licence text at `assets/LICENSE_furniture_sim.txt` |
+| Conveyor section | [`google-deepmind/mujoco`](https://github.com/google-deepmind/mujoco) `model/surfacevel/carousel.xml` | Apache-2.0 | cross-section adapted, tail lengthened 200 mm; upstream copy kept at `smartcell/assets/_upstream_mujoco_carousel.xml` |
+| Work table | [`vikashplus/furniture_sim`](https://github.com/vikashplus/furniture_sim) `simpleTable` | Apache-2.0 | joints fixed; upstream copy kept at `smartcell/assets/_upstream_simpleTable.xml`; licence text at `smartcell/assets/LICENSE_furniture_sim.txt` |
 
 The factory hall, conveyor line frame, textures and lighting rig are original
 work built in `factory_hall.py`, `line_frame.py` and `scene_look.py`.
 
 ## Blender set dressing
 
-`assets/blender_props/` contains 49 OBJ meshes exported from
+`smartcell/assets/blender_props/` contains 49 OBJ meshes exported from
 [Poly Haven](https://polyhaven.com/) models. Poly Haven assets are **CC0**.
 Only geometry and a flat linear RGBA colour sampled from the source material
 are included; no Poly Haven textures are redistributed. The meshes are loaded
 as visual-only geoms (`contype=0`, `conaffinity=0`) and never affect physics.
-See `assets/blender_props/PROVENANCE.md`.
+See `smartcell/assets/blender_props/PROVENANCE.md`.
 
 ## Python dependencies
 
