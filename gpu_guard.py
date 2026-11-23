@@ -26,6 +26,10 @@ import subprocess
 def pick_cuda(require_2060=True):
     import torch
     if not torch.cuda.is_available():
+        if os.environ.get("SMARTCELL_ALLOW_CPU", "0") == "1":
+            print("[gpu_guard] no CUDA device; running on CPU "
+                  "(SMARTCELL_ALLOW_CPU=1)")
+            return "cpu"
         raise RuntimeError(
             "torch.cuda.is_available() is False: dGPU (RTX 2060) not visible. "
             "Refusing to train/eval on CPU silently. Check drivers / "

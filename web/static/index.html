@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>smartcell — a robot arm that catches parts off a moving belt</title>
+<meta name="description" content="A SO-101 arm picks a part off a conveyor that never stops, using one wrist camera. Try the simulation yourself.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body id="top">
+<nav class="nav" id="nav">
+  <a class="logo" href="#top">SMARTCELL</a>
+  <ul>
+    <li><a href="#how" data-i18n="nav.how">How it works</a></li>
+    <li><a href="#smooth" data-i18n="nav.smooth">Smooth motion</a></li>
+    <li><a href="#play" data-i18n="nav.play">Play</a></li>
+    <li><a href="#results" data-i18n="nav.results">Results</a></li>
+    <li class="keep"><a class="btn-o" href="https://github.com/kuzyurt/smartcell">GitHub</a></li>
+    <li class="keep"><div class="lang"><button data-lang="en" class="on">EN</button><button data-lang="de">DE</button></div></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <img class="poster" src="media/hero_poster.jpg" alt="">
+  <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="media/hero_poster.jpg"><source src="media/hero.mp4" type="video/mp4"></video>
+  <div class="wrap hero-copy">
+    <p class="eyebrow" data-i18n="hero.eyebrow">SO-101 · MuJoCo · one wrist camera</p>
+    <h1 data-i18n="hero.title">An arm that catches parts off a belt that never stops.</h1>
+    <p class="lead" data-i18n="hero.lead">A frozen learned policy, a classical visual servo and a release primitive pick a 32 mm part from a running conveyor and place it in a tote. Now with motion that no longer shakes.</p>
+    <div class="cta"><a class="btn primary" href="#play" data-i18n="hero.cta">▶ Play the cell</a><a class="btn ghost" href="#smooth" data-i18n="hero.cta2">See the smoothing</a></div>
+  </div>
+  <div class="wrap" style="position:relative;z-index:2;padding:0">
+    <div class="stats" style="margin:0 28px">
+      <div><b>99.5 %</b><span data-i18n="hero.s1">placed on fresh seeds (200 trials)</span></div>
+      <div><b data-i18n="hero.s2t">One camera</b><span data-i18n="hero.s2">no simulator object state at run time</span></div>
+      <div><b id="heroCut">–</b><span data-i18n="hero.s3">less command jitter with smoothing</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <p class="kicker" data-i18n="how.k">How it works</p>
+    <h2 data-i18n="how.h">Three layers, one camera.</h2>
+    <p class="sub" data-i18n="how.sub">A learned policy does the broad motion, a classical servo does the last centimetres, and a proprioceptive primitive decides when to let go.</p>
+    <div class="grid g3">
+      <div class="card"><div class="num">01</div><h3 data-i18n="how.c1h">Frozen policy</h3><p data-i18n="how.c1">Reads 8 grayscale wrist frames (280 ms) plus 12 joint values and predicts an 8×6 action chunk at 25 Hz.</p></div>
+      <div class="card"><div class="num">02</div><h3 data-i18n="how.c2h">Visual servo</h3><p data-i18n="how.c2">Back-projects the part and tote onto the known work plane, leads the moving part and gates the close at predicted contact.</p></div>
+      <div class="card"><div class="num">03</div><h3 data-i18n="how.c3h">Release primitive</h3><p data-i18n="how.c3">Confirms a stalled close, a lift and a low descent before opening the jaws, so “touched the tote” never counts as a place.</p></div>
+    </div>
+    <div class="fig" style="margin-top:28px"><img src="media/architecture.svg" alt="Control architecture"></div>
+  </div>
+</section>
+
+<section id="smooth" class="alt">
+  <div class="wrap">
+    <p class="kicker" data-i18n="sm.k">The wobble</p>
+    <h2 data-i18n="sm.h">It worked, but it shook. Here is why.</h2>
+    <p class="sub" data-i18n="sm.sub">The policy emits one arm target every 40 ms. The simulator held each target constant and then jumped to the next one, so the position servo followed a staircase at 25 Hz. Interpolating inside each step removes the staircase without touching the policy.</p>
+    <div class="split">
+      <div class="vs">
+        <figure><video id="vOld" muted loop playsinline preload="auto"><source src="media/before.mp4" type="video/mp4"></video><figcaption><span class="tag warn" data-i18n="sm.before">BEFORE</span> <span data-i18n="sm.old">original command</span></figcaption></figure>
+        <figure><video id="vNew" muted loop playsinline preload="auto"><source src="media/after.mp4" type="video/mp4"></video><figcaption><span class="tag" data-i18n="sm.after">AFTER</span> <span data-i18n="sm.new">interpolated command</span></figcaption></figure>
+      </div>
+      <div class="card">
+        <h3 data-i18n="sm.mh">Measured on identical episodes</h3>
+        <div class="bars" id="bars"></div>
+        <p class="note" id="smNote"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="play" class="dark">
+  <div class="wrap">
+    <p class="kicker" data-i18n="pl.k">Play</p>
+    <h2 data-i18n="pl.h">Run the cell yourself.</h2>
+    <p class="sub" data-i18n="pl.sub">The simulation runs on the machine that started this page. Change the scene, the lighting, the tote position and the motion mode, switch the visual servo off, and fly the camera around the Blender-dressed hall.</p>
+    <div class="play">
+      <div>
+        <div class="screen" id="screen">
+          <img class="main" id="mainImg" alt="live simulation">
+          <div class="hud"><span class="chip" id="chipPhase">idle</span><span class="chip" id="chipFps"></span></div>
+          <div class="pip"><span>WRIST CAM</span><img id="wristImg" alt="wrist camera"></div>
+          <div class="overlay" id="overlay"><div style="font-size:20px;font-weight:650" data-i18n="pl.ready">Ready</div><button class="btn accent" id="bigStart" data-i18n="pl.start">▶ Start</button></div>
+        </div>
+        <div class="readout">
+          <div class="ro"><span data-i18n="pl.ep">Episode</span><b id="roEp">0</b></div>
+          <div class="ro"><span data-i18n="pl.picks">Picks</span><b id="roPick">0</b></div>
+          <div class="ro"><span data-i18n="pl.places">Places</span><b id="roPlace">0</b></div>
+          <div class="ro"><span data-i18n="pl.jit">Command jitter</span><b id="roJit">–</b></div>
+        </div>
+        <div class="log" id="log"></div>
+        <p class="hint" data-i18n="pl.hint">Orbit view: drag to rotate, scroll to zoom. Without a GPU the simulation runs slower than real time.</p>
+      </div>
+      <aside class="panel">
+        <div class="ctl"><h4 data-i18n="pl.scene">Scene</h4><div class="seg" data-key="scene"><button data-v="blender" class="on" data-i18n="pl.blender">Blender hall</button><button data-v="stock" data-i18n="pl.stock">Stock cell</button></div></div>
+        <div class="ctl"><h4 data-i18n="pl.cond">Condition</h4><div class="seg" data-key="condition"><button data-v="nominal" class="on">nominal</button><button data-v="tierB" data-i18n="pl.tierB">lighting</button><button data-v="boxX" data-i18n="pl.boxX">tote</button></div></div>
+        <div class="ctl"><h4 data-i18n="pl.motion">Motion</h4><div class="seg" data-key="smoothing"><button data-v="smooth" class="on" data-i18n="pl.smooth">smooth</button><button data-v="silky" data-i18n="pl.silky">silky</button><button data-v="off" data-i18n="pl.orig">original</button></div></div>
+        <div class="ctl"><label class="sw"><span data-i18n="pl.servo">Visual servo</span><input type="checkbox" id="servo" checked></label></div>
+        <div class="ctl"><h4 data-i18n="pl.cam">Camera</h4><div class="seg" data-key="camera"><button data-v="hall" class="on">hall</button><button data-v="preview">close</button><button data-v="overhead">top</button><button data-v="orbit">orbit</button></div></div>
+        <div class="ctl"><h4 data-i18n="pl.speed">Speed</h4><div class="seg" data-key="speed"><button data-v="0.5">½×</button><button data-v="1" class="on">1×</button><button data-v="2">2×</button><button data-v="4">4×</button></div></div>
+        <div class="ctl"><h4>Seed</h4><div class="row"><input type="number" id="seed" value="4242"><button class="mini" id="dice" title="random">🎲</button></div></div>
+        <div class="btns">
+          <button class="btn primary" id="btnStart" data-i18n="pl.start">▶ Start</button>
+          <button class="btn line" id="btnPause" data-i18n="pl.pause">Pause</button>
+          <button class="btn line" id="btnNext" data-i18n="pl.next">Next part</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <p class="kicker" data-i18n="rs.k">Results</p>
+    <h2 data-i18n="rs.h">Fresh seeds, frozen checkpoint.</h2>
+    <p class="sub" data-i18n="rs.sub">200 trials per condition. A place means the part was released, stayed in the tote and moved slower than 0.05 m/s for 0.4 s. The evaluation objects have zero overlap with the 2,302 training seeds.</p>
+    <table>
+      <tr><th data-i18n="rs.c">Condition</th><th>Pick</th><th>Place</th></tr>
+      <tr><td>nominal</td><td class="n">99.5 %</td><td class="n">99.0 %</td></tr>
+      <tr><td data-i18n="rs.tb">tierB — lighting, tint, mount jitter</td><td class="n">99.0 %</td><td class="n">97.5 %</td></tr>
+      <tr><td data-i18n="rs.bx">boxX — held-out tote corners</td><td class="n">99.5 %</td><td class="n">99.5 %</td></tr>
+      <tr><td data-i18n="rs.bl">Blender hall, zero-shot (200 trials)</td><td class="n">100 %</td><td class="n">99.5 %</td></tr>
+      <tr><td data-i18n="rs.no">Blender hall, visual servo off (control)</td><td class="n">86.0 %</td><td class="n">60.0 %</td></tr>
+    </table>
+    <p class="note"><span data-i18n="rs.note">Simulation only, one 32 mm part, one SO-101, one conveyor. The smoothing profile is new and evaluated separately; the numbers above are for the frozen original protocol.</span></p>
+  </div>
+</section>
+
+<section class="alt" id="run">
+  <div class="wrap split">
+    <div><p class="kicker" data-i18n="run.k">Run it</p><h2 data-i18n="run.h">One command.</h2><p class="sub" data-i18n="run.sub">Install the requirements once, then start this page. It opens in your browser and runs the simulation locally.</p></div>
+    <pre>pip install -r requirements.txt
+python web/server.py</pre>
+  </div>
+</section>
+
+<footer><div class="wrap fgrid"><div><b style="color:#fff;letter-spacing:.2em">SMARTCELL</b><br><span data-i18n="ft.t">A SO-101 conveyor pick-and-place research artifact.</span></div><div><a href="https://github.com/kuzyurt/smartcell">GitHub</a> · MIT</div></div></footer>
+<script src="app.js"></script>
+</body>
+</html>

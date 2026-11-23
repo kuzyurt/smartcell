@@ -4,3 +4,4 @@ numpy>=1.26,<3
 opencv-python>=4.9
 torch>=2.4,<3
 Pillow>=10
+gymnasium>=1.0
