@@ -6,7 +6,7 @@ const I18N = {
     "hero.title":"Ein Arm, der Teile von einem nie stehenden Band fängt.",
     "hero.lead":"Eine eingefrorene gelernte Policy, ein klassischer visueller Servo und ein Release-Primitiv greifen ein 32-mm-Teil vom laufenden Förderband und legen es in eine Kiste. Jetzt ohne Zittern.",
     "hero.cta":"▶ Zelle spielen","hero.cta2":"Glättung ansehen",
-    "hero.s1":"platziert auf neuen Seeds (200 Versuche)","hero.s2t":"Eine Kamera","hero.s2":"kein Simulator-Objektzustand zur Laufzeit","hero.s3":"weniger Befehls-Jitter mit Glättung",
+    "hero.s1":"platziert auf neuen Seeds (200 Versuche)","hero.s2t":"Eine Kamera","hero.s2":"kein Simulator-Objektzustand zur Laufzeit","hero.s3":"weniger Gelenk-Ruck mit ruhiger Bewegung",
     "how.k":"So funktioniert's","how.h":"Drei Ebenen, eine Kamera.","how.sub":"Eine gelernte Policy macht die grobe Bewegung, ein klassischer Servo die letzten Zentimeter, und ein propriozeptives Primitiv entscheidet, wann losgelassen wird.",
     "how.c1h":"Eingefrorene Policy","how.c1":"Liest 8 Graustufen-Bilder (280 ms) plus 12 Gelenkwerte und sagt einen 8×6-Aktions-Chunk bei 25 Hz voraus.",
     "how.c2h":"Visueller Servo","how.c2":"Projiziert Teil und Kiste auf die bekannte Arbeitsebene, führt dem bewegten Teil voraus und schließt am vorhergesagten Kontaktpunkt.",
@@ -16,7 +16,7 @@ const I18N = {
     "pl.k":"Spielen","pl.h":"Starte die Zelle selbst.","pl.sub":"Die Simulation läuft auf dem Rechner, der diese Seite gestartet hat. Ändere Szene, Licht, Kistenposition und Bewegungsmodus, schalte den visuellen Servo aus und fliege mit der Kamera durch die Blender-Halle.",
     "pl.ready":"Bereit","pl.start":"▶ Start","pl.pause":"Pause","pl.next":"Nächstes Teil","pl.ep":"Episode","pl.picks":"Greifen","pl.places":"Ablegen","pl.jit":"Befehls-Jitter",
     "pl.hint":"Orbit-Ansicht: ziehen zum Drehen, scrollen zum Zoomen. Ohne GPU läuft die Simulation langsamer als Echtzeit.",
-    "pl.scene":"Szene","pl.blender":"Blender-Halle","pl.stock":"Standardzelle","pl.cond":"Bedingung","pl.tierB":"Licht","pl.boxX":"Kiste","pl.motion":"Bewegung","pl.smooth":"ruhig","pl.orig":"original","pl.silky":"seidig","pl.servo":"Visueller Servo","pl.cam":"Kamera","pl.speed":"Tempo",
+    "pl.scene":"Szene","pl.blender":"Blender-Halle","pl.stock":"Standardzelle","pl.cond":"Bedingung","pl.tierB":"Licht","pl.boxX":"Kiste","pl.motion":"Bewegung","pl.smooth":"ruhig","pl.orig":"original","pl.servo":"Visueller Servo","pl.cam":"Kamera","pl.speed":"Tempo",
     "rs.k":"Ergebnisse","rs.h":"Neue Seeds, eingefrorener Checkpoint.","rs.sub":"200 Versuche pro Bedingung. Ablage heißt: Teil losgelassen, bleibt in der Kiste und bewegt sich 0,4 s lang langsamer als 0,05 m/s. Die Testobjekte überschneiden sich nicht mit den 2.302 Trainings-Seeds.",
     "rs.c":"Bedingung","rs.tb":"tierB — Licht, Tönung, Montage-Jitter","rs.bx":"boxX — Kistenecken außerhalb des Trainings","rs.bl":"Blender-Halle, Zero-Shot (200 Versuche)","rs.no":"Blender-Halle, visueller Servo aus (Kontrolle)",
     "rs.note":"Nur Simulation, ein 32-mm-Teil, ein SO-101, ein Förderband. Das Glättungsprofil ist neu und separat ausgewertet; die obigen Zahlen gelten für das eingefrorene Originalprotokoll.",
@@ -47,14 +47,14 @@ let SM = null;
 function renderBars() {
   const box = $("#bars"); if (!SM) return; const de = document.documentElement.lang === "de";
   const rows = [
-    [de ? "Jitter (Jerk)" : "Jerk", SM.original.rms_jerk, SM.smooth.rms_jerk],
+    [de ? "Ruck (Jerk)" : "Jerk", SM.original.rms_jerk, SM.smooth.rms_jerk],
+    [de ? "Beschleunigung" : "Acceleration", SM.original.rms_acc, SM.smooth.rms_acc],
     [de ? "Hochfrequenz" : "High-freq.", SM.original.hf_rms, SM.smooth.hf_rms],
-    [de ? "Richtungswechsel" : "Reversals", SM.original.reversals, SM.smooth.reversals],
   ];
   box.innerHTML = rows.map(([n, a, b]) => {
     const m = Math.max(a, b);
-    return `<div><div class="bar-row"><span>${n}</span><div class="bar"><i style="width:${a / m * 100}%"></i></div><span class="val">${a.toFixed(3)}</span></div>
-    <div class="bar-row"><span></span><div class="bar"><i class="good" style="width:${b / m * 100}%"></i></div><span class="val">${b.toFixed(3)}</span></div></div>`;
+    return `<div><div class="bar-row"><span>${n}</span><div class="bar"><i style="width:${a / m * 100}%"></i></div><span class="val">100 %</span></div>
+    <div class="bar-row"><span></span><div class="bar"><i class="good" style="width:${b / m * 100}%"></i></div><span class="val">${Math.round(b / a * 100)} %</span></div></div>`;
   }).join("");
   $("#smNote").textContent = (de ? "Rot: original · Grün: geglättet. " : "Red: original · green: smoothed. ") + SM.note;
   $("#heroCut").textContent = Math.round((1 - SM.smooth.rms_jerk / SM.original.rms_jerk) * 100) + " %";

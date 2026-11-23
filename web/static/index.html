@@ -31,11 +31,11 @@
     <p class="lead" data-i18n="hero.lead">A frozen learned policy, a classical visual servo and a release primitive pick a 32 mm part from a running conveyor and place it in a tote. Now with motion that no longer shakes.</p>
     <div class="cta"><a class="btn primary" href="#play" data-i18n="hero.cta">▶ Play the cell</a><a class="btn ghost" href="#smooth" data-i18n="hero.cta2">See the smoothing</a></div>
   </div>
-  <div class="wrap" style="position:relative;z-index:2;padding:0">
-    <div class="stats" style="margin:0 28px">
+  <div class="wrap" style="position:relative;z-index:2">
+    <div class="stats">
       <div><b>99.5 %</b><span data-i18n="hero.s1">placed on fresh seeds (200 trials)</span></div>
       <div><b data-i18n="hero.s2t">One camera</b><span data-i18n="hero.s2">no simulator object state at run time</span></div>
-      <div><b id="heroCut">–</b><span data-i18n="hero.s3">less command jitter with smoothing</span></div>
+      <div><b id="heroCut">–</b><span data-i18n="hero.s3">less joint jerk with smooth motion</span></div>
     </div>
   </div>
 </header>
@@ -98,7 +98,7 @@
       <aside class="panel">
         <div class="ctl"><h4 data-i18n="pl.scene">Scene</h4><div class="seg" data-key="scene"><button data-v="blender" class="on" data-i18n="pl.blender">Blender hall</button><button data-v="stock" data-i18n="pl.stock">Stock cell</button></div></div>
         <div class="ctl"><h4 data-i18n="pl.cond">Condition</h4><div class="seg" data-key="condition"><button data-v="nominal" class="on">nominal</button><button data-v="tierB" data-i18n="pl.tierB">lighting</button><button data-v="boxX" data-i18n="pl.boxX">tote</button></div></div>
-        <div class="ctl"><h4 data-i18n="pl.motion">Motion</h4><div class="seg" data-key="smoothing"><button data-v="smooth" class="on" data-i18n="pl.smooth">smooth</button><button data-v="silky" data-i18n="pl.silky">silky</button><button data-v="off" data-i18n="pl.orig">original</button></div></div>
+        <div class="ctl"><h4 data-i18n="pl.motion">Motion</h4><div class="seg" data-key="smoothing"><button data-v="smooth" class="on" data-i18n="pl.smooth">smooth</button><button data-v="off" data-i18n="pl.orig">original</button></div></div>
         <div class="ctl"><label class="sw"><span data-i18n="pl.servo">Visual servo</span><input type="checkbox" id="servo" checked></label></div>
         <div class="ctl"><h4 data-i18n="pl.cam">Camera</h4><div class="seg" data-key="camera"><button data-v="hall" class="on">hall</button><button data-v="preview">close</button><button data-v="overhead">top</button><button data-v="orbit">orbit</button></div></div>
         <div class="ctl"><h4 data-i18n="pl.speed">Speed</h4><div class="seg" data-key="speed"><button data-v="0.5">½×</button><button data-v="1" class="on">1×</button><button data-v="2">2×</button><button data-v="4">4×</button></div></div>

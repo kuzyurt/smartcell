@@ -107,7 +107,7 @@ def main():
             c.elevation = -21.0 + 4.0 * np.cos(k * np.pi)
             c.distance = 2.5 - 0.5 * k
         ok = record(eng, cell, prof, a.seed + 1, os.path.join(OUT, "hero.mp4"),
-                    (1920, 1080), None, drift, skip_wait=True,
+                    (1280, 720), None, drift, skip_wait=True,
                     poster=os.path.join(OUT, "hero_poster.jpg"))
         print("hero pick/place", ok[:2])
 

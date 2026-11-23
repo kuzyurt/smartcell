@@ -10,7 +10,7 @@
 
 `MuJoCo 3.14` · `25 Hz` · `one wrist camera` · `no object state` · `MIT`
 
-[Result](#the-result) · [How it works](#how-it-works) · [The hard part](#the-hard-part) · [Dressed cell](#zero-shot-in-a-dressed-cell) · [Data](#the-data) · [Run it](#run-it) · [Code map](#code-map)
+[Result](#the-result) · [How it works](#how-it-works) · [The hard part](#the-hard-part) · [Dressed cell](#zero-shot-in-a-dressed-cell) · [Data](#the-data) · [Smooth motion](#smooth-motion) · [Web demo](#web-demo) · [Run it](#run-it) · [Code map](#code-map)
 
 </div>
 
@@ -95,6 +95,27 @@ tests visual robustness, not new contact physics.
 
 Across all three active dressed conditions, the hybrid controller achieved **199/200 (99.5%)** completed placements. On the same 50 nominal seeds, it placed **49/50 (98.0%)**; with the RGB servo disabled, it placed **30/50 (60.0%)**. The servo is what absorbs the visual shift. Raw reports in [`reports/`](reports/).
 
+## Smooth motion
+
+The arm worked but visibly shook. The cause was not the policy: it emits one
+arm target per 40 ms, and the simulator held each target constant before
+jumping to the next, so the position servo followed a 25 Hz staircase.
+[`smoothing.py`](smoothing.py) interpolates the target inside each step.
+The policy, checkpoint and the hash-pinned evaluation files are unchanged;
+the validated protocol stays the default.
+
+| Same 8 episodes, actual joint angles at 200 Hz | Original | `smooth` |
+|---|---:|---:|
+| RMS jerk | 100 % | **43 %** |
+| RMS acceleration | 100 % | 55 % |
+| high-frequency residual | 100 % | 84 % |
+
+`smooth` placed **44/44** parts (20 nominal, 12 lighting, 12 tote) on a
+CPU-only run. That is a small sample next to the 200-trial protocol above and
+is not a replacement for it. A stronger variant that also low-pass filtered the
+command was calmer but placed only 16/20, because the added lag costs grasps,
+so it was dropped. Measurement code: [`tools/measure_smoothing.py`](tools/measure_smoothing.py).
+
 ## The data
 
 ![Sampled line conditions](media/dataset_variation.png)
@@ -119,6 +140,23 @@ lighting, part tint and camera-mount jitter.
 [MP4 version](media/dataset.mp4) · raw 128×128 wrist camera at 25 Hz, no
 interpolation or colour correction. The dataset is **not shipped**; the code
 and the running-line manifest are. See [`docs/dataset.md`](docs/dataset.md).
+
+## Web demo
+
+![Web demo](media/web_demo.png)
+
+A local page with the Blender hall, live policy rollouts and controls for
+scene, lighting, tote position, motion mode, visual servo, camera (including a
+draggable orbit view), speed and seed. The simulation runs on your machine;
+the browser only displays it.
+
+```bash
+pip install -r requirements.txt
+python web/server.py          # opens http://127.0.0.1:8800
+```
+
+With a GPU it runs near real time; on CPU only it is much slower
+(`SMARTCELL_ALLOW_CPU=1`). On headless Linux set `MUJOCO_GL=egl`.
 
 ## Run it
 
@@ -151,6 +189,8 @@ the published numbers, so they were not moved or rewritten for tidiness.
 | **Simulation** | `build_cell.py` · `conveyor_env.py` · `conveyor_drive.py` · `arm_ik.py` · `cam_variant.py` · `mjbox.py` |
 | **Scene** | `factory_hall.py` · `line_frame.py` · `scene_look.py` · `make_textures.py` · `blender_props.py` |
 | **Data** | `expert.py` · `demo_pick.py` · `collect_state.py` · `dagger_collect.py` · `collect_carry_corrections.py` · `render_dataset.py` · `build_cache.py` · `dataset.py` |
+| **Smooth motion** | `smoothing.py` |
+| **Web demo** | `web/` (server, engine, page) · `tools/` (media rendering, smoothness measurement) |
 | **Training** | `train.py` · `gpu_guard.py` · `ramcap.py` (memory cap) |
 
 | Folder | Contents |

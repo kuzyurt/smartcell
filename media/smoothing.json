@@ -1,0 +1,18 @@
+{
+ "original": {
+  "rms_jerk": 20764.01456983755,
+  "rms_acc": 113.28045364948673,
+  "hf_rms": 0.01969069217985425
+ },
+ "smooth": {
+  "rms_jerk": 8832.90765000849,
+  "rms_acc": 62.431791831563416,
+  "hf_rms": 0.016497596137372415
+ },
+ "note": "8 identical episodes, actual joint angles at 200 Hz. Validation of 'smooth': 44/44 places (20 nominal, 12 lighting, 12 tote).",
+ "validation": {
+  "nominal": "20/20",
+  "tierB": "12/12",
+  "boxX": "12/12"
+ }
+}

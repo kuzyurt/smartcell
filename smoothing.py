@@ -25,8 +25,6 @@ PROFILES = {
     "off": dict(ramp=0.0, park_r=0.0, park_db=0.02, ema=0.0),
     # interpolate each 40 ms target: no extra lag, about -57 % joint jerk
     "smooth": dict(ramp=1.0),
-    # additionally filter the command and latch the parked tremor: calmer, ~20 % slower
-    "silky": dict(ramp=1.0, park_r=0.1, ema=0.5),
 }
 
 _orig_sim = E.sim
