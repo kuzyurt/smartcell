@@ -1,142 +1,91 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="512" viewBox="0 0 1080 512" role="img" aria-labelledby="t d">
-  <title id="t">Pick and place results for the frozen smartcell controller</title>
-  <desc id="d">Two panels: 200 fresh seeds per stock-cell condition, and the zero-shot Blender-dressed scene. Bars show pick and place rates; whiskers show full Wilson 95% intervals.</desc>
-  <defs>
-    <style>
-      .bg { fill: #0d1117; }
-      .title { fill: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 19px; font-weight: 650; }
-      .sub { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12.5px; }
-      .panel { fill: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 13px; font-weight: 600; }
-      .tick { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.5px; font-weight: 500; }
-      .grp { fill: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11.5px; font-weight: 600; }
-      .subgrp { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10px; }
-      .val { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 600; }
-      .leg { fill: #c9d1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11.5px; }
-      .note { fill: #8b949e; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.8px; }
-      .grid { stroke: #21262d; stroke-width: 1; }
-      .grid-dash { stroke: #21262d; stroke-width: 1; stroke-dasharray: 2 4; }
-      .axis { stroke: #30363d; stroke-width: 1.1; }
-      .whisk { stroke: #f0f6fc; stroke-width: 1.15; stroke-opacity: .82; }
-    </style>
-  </defs>
-  <rect width="1080" height="512" class="bg"/>
-
-  <text x="40" y="38" class="title">Pick and place, frozen and zero-shot</text>
-  <text x="40" y="58" class="sub">policy_0041c.pt · 25 Hz · one wrist camera · bars are point estimates, whiskers are Wilson 95% intervals</text>
-  <text x="60" y="100" class="panel">(a) Stock MuJoCo cell — 200 fresh seeds per condition</text>
-  <line x1="60" y1="290.5" x2="530" y2="290.5" class="grid-dash"/>
-  <text x="52" y="294.1" class="tick" text-anchor="end">25%</text>
-  <line x1="60" y1="239.0" x2="530" y2="239.0" class="grid"/>
-  <text x="52" y="242.6" class="tick" text-anchor="end">50%</text>
-  <line x1="60" y1="187.5" x2="530" y2="187.5" class="grid-dash"/>
-  <text x="52" y="191.1" class="tick" text-anchor="end">75%</text>
-  <line x1="60" y1="136.0" x2="530" y2="136.0" class="grid"/>
-  <text x="52" y="139.6" class="tick" text-anchor="end">100%</text>
-  <line x1="60" y1="342" x2="530" y2="342" class="axis"/>
-  <text x="52" y="345.6" class="tick" text-anchor="end">0%</text>
-  <rect x="99.0" y="137.0" width="42" height="205.0" fill="#388bfd" rx="1.5"/>
-  <text x="120.0" y="131.5" class="val" fill="#79c0ff" text-anchor="middle">99.5</text>
-  <line x1="120.0" y1="136.2" x2="120.0" y2="141.8" class="whisk"/>
-  <line x1="116.6" y1="136.2" x2="123.4" y2="136.2" class="whisk"/>
-  <line x1="116.6" y1="141.8" x2="123.4" y2="141.8" class="whisk"/>
-  <rect x="151.0" y="138.1" width="42" height="203.9" fill="#f0883e" rx="1.5"/>
-  <text x="172.0" y="132.6" class="val" fill="#ffa657" text-anchor="middle">99.0</text>
-  <line x1="172.0" y1="136.6" x2="172.0" y2="143.4" class="whisk"/>
-  <line x1="168.6" y1="136.6" x2="175.4" y2="136.6" class="whisk"/>
-  <line x1="168.6" y1="143.4" x2="175.4" y2="143.4" class="whisk"/>
-  <text x="146.0" y="362" class="grp" text-anchor="middle">Nominal</text>
-  <rect x="248.0" y="138.1" width="42" height="203.9" fill="#388bfd" rx="1.5"/>
-  <text x="269.0" y="132.6" class="val" fill="#79c0ff" text-anchor="middle">99.0</text>
-  <line x1="269.0" y1="136.6" x2="269.0" y2="143.4" class="whisk"/>
-  <line x1="265.6" y1="136.6" x2="272.4" y2="136.6" class="whisk"/>
-  <line x1="265.6" y1="143.4" x2="272.4" y2="143.4" class="whisk"/>
-  <rect x="300.0" y="141.2" width="42" height="200.8" fill="#f0883e" rx="1.5"/>
-  <text x="321.0" y="135.7" class="val" fill="#ffa657" text-anchor="middle">97.5</text>
-  <line x1="321.0" y1="138.3" x2="321.0" y2="147.7" class="whisk"/>
-  <line x1="317.6" y1="138.3" x2="324.4" y2="138.3" class="whisk"/>
-  <line x1="317.6" y1="147.7" x2="324.4" y2="147.7" class="whisk"/>
-  <text x="295.0" y="362" class="grp" text-anchor="middle">Visual shift</text>
-  <text x="295.0" y="375" class="subgrp" text-anchor="middle">(tier B)</text>
-  <rect x="397.0" y="137.0" width="42" height="205.0" fill="#388bfd" rx="1.5"/>
-  <text x="418.0" y="131.5" class="val" fill="#79c0ff" text-anchor="middle">99.5</text>
-  <line x1="418.0" y1="136.2" x2="418.0" y2="141.8" class="whisk"/>
-  <line x1="414.6" y1="136.2" x2="421.4" y2="136.2" class="whisk"/>
-  <line x1="414.6" y1="141.8" x2="421.4" y2="141.8" class="whisk"/>
-  <rect x="449.0" y="137.0" width="42" height="205.0" fill="#f0883e" rx="1.5"/>
-  <text x="470.0" y="131.5" class="val" fill="#ffa657" text-anchor="middle">99.5</text>
-  <line x1="470.0" y1="136.2" x2="470.0" y2="141.8" class="whisk"/>
-  <line x1="466.6" y1="136.2" x2="473.4" y2="136.2" class="whisk"/>
-  <line x1="466.6" y1="141.8" x2="473.4" y2="141.8" class="whisk"/>
-  <text x="444.0" y="362" class="grp" text-anchor="middle">Held-out tote</text>
-  <text x="444.0" y="375" class="subgrp" text-anchor="middle">(box X)</text>
-  <text x="580" y="100" class="panel">(b) Blender-dressed — zero-shot, no retraining</text>
-  <line x1="580" y1="290.5" x2="1020" y2="290.5" class="grid-dash"/>
-  <text x="572" y="294.1" class="tick" text-anchor="end">25%</text>
-  <line x1="580" y1="239.0" x2="1020" y2="239.0" class="grid"/>
-  <text x="572" y="242.6" class="tick" text-anchor="end">50%</text>
-  <line x1="580" y1="187.5" x2="1020" y2="187.5" class="grid-dash"/>
-  <text x="572" y="191.1" class="tick" text-anchor="end">75%</text>
-  <line x1="580" y1="136.0" x2="1020" y2="136.0" class="grid"/>
-  <text x="572" y="139.6" class="tick" text-anchor="end">100%</text>
-  <line x1="580" y1="342" x2="1020" y2="342" class="axis"/>
-  <text x="572" y="345.6" class="tick" text-anchor="end">0%</text>
-  <rect x="612.0" y="136.0" width="32" height="206.0" fill="#388bfd" rx="1.5"/>
-  <text x="628.0" y="130.5" class="val" fill="#79c0ff" text-anchor="middle">100.0</text>
-  <line x1="628.0" y1="136.0" x2="628.0" y2="143.6" class="whisk"/>
-  <line x1="624.6" y1="136.0" x2="631.4" y2="136.0" class="whisk"/>
-  <line x1="624.6" y1="143.6" x2="631.4" y2="143.6" class="whisk"/>
-  <rect x="656.0" y="138.1" width="32" height="203.9" fill="#f0883e" rx="1.5"/>
-  <text x="672.0" y="132.6" class="val" fill="#ffa657" text-anchor="middle">99.0</text>
-  <line x1="672.0" y1="136.4" x2="672.0" y2="147.1" class="whisk"/>
-  <line x1="668.6" y1="136.4" x2="675.4" y2="136.4" class="whisk"/>
-  <line x1="668.6" y1="147.1" x2="675.4" y2="147.1" class="whisk"/>
-  <text x="650.0" y="362" class="grp" text-anchor="middle">Nominal</text>
-  <rect x="712.0" y="136.0" width="32" height="206.0" fill="#388bfd" rx="1.5"/>
-  <text x="728.0" y="130.5" class="val" fill="#79c0ff" text-anchor="middle">100.0</text>
-  <line x1="728.0" y1="136.0" x2="728.0" y2="150.6" class="whisk"/>
-  <line x1="724.6" y1="136.0" x2="731.4" y2="136.0" class="whisk"/>
-  <line x1="724.6" y1="150.6" x2="731.4" y2="150.6" class="whisk"/>
-  <rect x="756.0" y="136.0" width="32" height="206.0" fill="#f0883e" rx="1.5"/>
-  <text x="772.0" y="130.5" class="val" fill="#ffa657" text-anchor="middle">100.0</text>
-  <line x1="772.0" y1="136.0" x2="772.0" y2="150.6" class="whisk"/>
-  <line x1="768.6" y1="136.0" x2="775.4" y2="136.0" class="whisk"/>
-  <line x1="768.6" y1="150.6" x2="775.4" y2="150.6" class="whisk"/>
-  <text x="750.0" y="362" class="grp" text-anchor="middle">Visual shift</text>
-  <rect x="812.0" y="136.0" width="32" height="206.0" fill="#388bfd" rx="1.5"/>
-  <text x="828.0" y="130.5" class="val" fill="#79c0ff" text-anchor="middle">100.0</text>
-  <line x1="828.0" y1="136.0" x2="828.0" y2="150.6" class="whisk"/>
-  <line x1="824.6" y1="136.0" x2="831.4" y2="136.0" class="whisk"/>
-  <line x1="824.6" y1="150.6" x2="831.4" y2="150.6" class="whisk"/>
-  <rect x="856.0" y="136.0" width="32" height="206.0" fill="#f0883e" rx="1.5"/>
-  <text x="872.0" y="130.5" class="val" fill="#ffa657" text-anchor="middle">100.0</text>
-  <line x1="872.0" y1="136.0" x2="872.0" y2="150.6" class="whisk"/>
-  <line x1="868.6" y1="136.0" x2="875.4" y2="136.0" class="whisk"/>
-  <line x1="868.6" y1="150.6" x2="875.4" y2="150.6" class="whisk"/>
-  <text x="850.0" y="362" class="grp" text-anchor="middle">Held-out</text>
-  <text x="850.0" y="375" class="subgrp" text-anchor="middle">tote</text>
-  <rect x="912.0" y="164.8" width="32" height="177.2" fill="#388bfd" rx="1.5"/>
-  <text x="928.0" y="159.3" class="val" fill="#79c0ff" text-anchor="middle">86.0</text>
-  <line x1="928.0" y1="150.4" x2="928.0" y2="190.0" class="whisk"/>
-  <line x1="924.6" y1="150.4" x2="931.4" y2="150.4" class="whisk"/>
-  <line x1="924.6" y1="190.0" x2="931.4" y2="190.0" class="whisk"/>
-  <rect x="956.0" y="218.4" width="32" height="123.6" fill="#f0883e" rx="1.5"/>
-  <text x="972.0" y="212.9" class="val" fill="#ffa657" text-anchor="middle">60.0</text>
-  <line x1="972.0" y1="192.9" x2="972.0" y2="246.8" class="whisk"/>
-  <line x1="968.6" y1="192.9" x2="975.4" y2="192.9" class="whisk"/>
-  <line x1="968.6" y1="246.8" x2="975.4" y2="246.8" class="whisk"/>
-  <text x="950.0" y="362" class="grp" text-anchor="middle">Servo off</text>
-  <text x="950.0" y="375" class="subgrp" text-anchor="middle">(ablation)</text>
-  <!-- legend -->
-  <rect x="310" y="438" width="13" height="13" fill="#388bfd" rx="1.5"/>
-  <text x="330" y="448.8" class="leg">Pick</text>
-  <rect x="400" y="438" width="13" height="13" fill="#f0883e" rx="1.5"/>
-  <text x="420" y="448.8" class="leg">Place (released &amp; settled)</text>
-  <line x1="650" y1="439" x2="650" y2="450" class="whisk"/>
-  <line x1="646" y1="439" x2="654" y2="439" class="whisk"/>
-  <line x1="646" y1="450" x2="654" y2="450" class="whisk"/>
-  <text x="666" y="448.8" class="leg">Wilson 95% CI</text>
-
-  <!-- notes -->
-  <text x="60" y="474" class="note">Stock: 200 fresh seeds per condition. Dressed: 100 nominal, 50 tier B, 50 box X, 50 servo-off.</text>
-  <text x="60" y="490" class="note">Blender props are visual-only (contype=0). Servo-off reuses the same 50 nominal seeds; all other rows are fresh seeds.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="418" viewBox="0 0 1080 418" role="img" aria-label="Pick and place rates with 95 percent Wilson intervals for the stock cell and the Blender-dressed hall; switching the visual servo off drops placement to 60 percent">
+<title>Pick and place rates with 95 percent Wilson intervals for the stock cell and the Blender-dressed hall; switching the visual servo off drops placement to 60 percent</title>
+<style>
+:root{--ink:#1f2328;--line:#d1d9e0;--acc:#0b7a75;--on:#ffffff}
+@media (prefers-color-scheme:dark){:root{--ink:#e6edf3;--line:#3d444d;--acc:#3dbdb2;--on:#0d1117}}
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;fill:var(--ink);font-size:13px}
+.h{font-size:16px;font-weight:650}
+.l{font-size:12.5px}
+.t{font-size:12px;opacity:.7}
+.box{fill:none;stroke:var(--ink);stroke-width:1.25}
+.fill{fill:var(--acc);stroke:none}
+.on{fill:var(--on)}
+.ar{fill:none;stroke:var(--ink);stroke-width:1.5}
+.hair{stroke:var(--line);stroke-width:1;fill:none}
+.head{fill:var(--ink)}
+.ptp{stroke:var(--ink);stroke-width:2;fill:none}
+.pl{fill:var(--acc)}
+.ph{fill:var(--ink)}
+.dot{fill:var(--acc)}
+.cic{fill:var(--acc)}
+</style>
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="head" d="M1 1.5L8.5 5L1 8.5z"/></marker></defs>
+<text class="l" x="880" y="34" text-anchor="end" style="font-weight:600">Pick</text>
+<text class="l" x="960" y="34" text-anchor="end" style="font-weight:600">Place</text>
+<text class="l" x="1040" y="34" text-anchor="end" style="font-weight:600">Trials</text>
+<text class="h" x="20" y="72" style="font-size:14px">Stock cell</text>
+<text class="h" x="20" y="216" style="font-size:14px">Blender hall, no retraining</text>
+<path class="hair" d="M383.3333333333333 58V378"/>
+<text class="t" x="383.3333333333333" y="398" text-anchor="middle">50 %</text>
+<path class="hair" d="M591.6666666666667 58V378"/>
+<text class="t" x="591.6666666666667" y="398" text-anchor="middle">75 %</text>
+<path class="hair" d="M800.0 58V378"/>
+<text class="t" x="800.0" y="398" text-anchor="middle">100 %</text>
+<text x="38" y="111.5">nominal</text>
+<path class="ptp" d="M776.9 102.0H799.3" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="795.8" cy="102.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M770.2 112.0H797.7" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="791.7" cy="112.0" r="4.5"/>
+<text x="880" y="111.5" text-anchor="end">99.5</text>
+<text x="960" y="111.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">99.0</text>
+<text x="1040" y="111.5" text-anchor="end">200</text>
+<text x="38" y="145.5">lighting, tint, mount jitter</text>
+<path class="ptp" d="M770.2 136.0H797.7" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="791.7" cy="136.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M752.4 146.0H791.1" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="779.2" cy="146.0" r="4.5"/>
+<text x="880" y="145.5" text-anchor="end">99.0</text>
+<text x="960" y="145.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">97.5</text>
+<text x="1040" y="145.5" text-anchor="end">200</text>
+<text x="38" y="179.5">held-out tote corners</text>
+<path class="ptp" d="M776.9 170.0H799.3" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="795.8" cy="170.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M776.9 180.0H799.3" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="795.8" cy="180.0" r="4.5"/>
+<text x="880" y="179.5" text-anchor="end">99.5</text>
+<text x="960" y="179.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">99.5</text>
+<text x="1040" y="179.5" text-anchor="end">200</text>
+<text x="38" y="255.5">nominal</text>
+<path class="ptp" d="M769.2 246.0H800.0" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="800.0" cy="246.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M754.6 256.0H798.5" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="791.7" cy="256.0" r="4.5"/>
+<text x="880" y="255.5" text-anchor="end">100.0</text>
+<text x="960" y="255.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">99.0</text>
+<text x="1040" y="255.5" text-anchor="end">100</text>
+<text x="38" y="289.5">lighting, tint, mount jitter</text>
+<path class="ptp" d="M740.5 280.0H800.0" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="800.0" cy="280.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M740.5 290.0H800.0" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="800.0" cy="290.0" r="4.5"/>
+<text x="880" y="289.5" text-anchor="end">100.0</text>
+<text x="960" y="289.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">100.0</text>
+<text x="1040" y="289.5" text-anchor="end">50</text>
+<text x="38" y="323.5">held-out tote corners</text>
+<path class="ptp" d="M740.5 314.0H800.0" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="800.0" cy="314.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M740.5 324.0H800.0" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="800.0" cy="324.0" r="4.5"/>
+<text x="880" y="323.5" text-anchor="end">100.0</text>
+<text x="960" y="323.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">100.0</text>
+<text x="1040" y="323.5" text-anchor="end">50</text>
+<text x="38" y="357.5">visual servo switched off</text>
+<path class="ptp" d="M581.8 348.0H742.1" style="stroke:var(--ink);stroke-width:1.5"/>
+<circle cx="683.3" cy="348.0" r="4.5" style="fill:none;stroke:var(--ink);stroke-width:1.5"/>
+<path class="ptp" d="M351.5 358.0H569.9" style="stroke:var(--acc);stroke-width:1.5"/>
+<circle class="dot" cx="466.7" cy="358.0" r="4.5"/>
+<text x="880" y="357.5" text-anchor="end">86.0</text>
+<text x="960" y="357.5" text-anchor="end" style="font-weight:650;fill:var(--acc)">60.0</text>
+<text x="1040" y="357.5" text-anchor="end">50</text>
+<text class="l" x="300" y="34" style="fill:var(--ink)"><tspan>○ pick  </tspan><tspan style="fill:var(--acc);font-weight:650">● place</tspan><tspan>   with 95 % Wilson interval</tspan></text>
 </svg>
