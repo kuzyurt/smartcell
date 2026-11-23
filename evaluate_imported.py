@@ -3,7 +3,7 @@
 Physics is untouched: every imported geom is contype=0/conaffinity=0, and the
 robot, cubes, belt, tote and bin still come from build_cell.
 
-Run: python _eval_imported.py --ckpt ckpt/policy_0041e.pt --n 5 --conds nominal
+Run: python evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 5 --conds nominal
 """
 import runpy
 import sys

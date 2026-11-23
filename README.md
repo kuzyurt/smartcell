@@ -10,6 +10,8 @@
 
 `MuJoCo 3.14` · `25 Hz` · `one wrist camera` · `no object state` · `MIT`
 
+[Result](#the-result) · [How it works](#how-it-works) · [The hard part](#the-hard-part) · [Dressed cell](#zero-shot-in-a-dressed-cell) · [Data](#the-data) · [Run it](#run-it) · [Code map](#code-map)
+
 </div>
 
 ## The result
@@ -49,6 +51,8 @@ object state — only pixels, joints, forward kinematics and the commands it
 already sent. More in [`docs/design.md`](docs/design.md).
 
 ## The hard part
+
+![Training pipeline](media/pipeline.svg)
 
 The first working policy picked about **3%** of the time. The useful history
 is the list of things that were actually wrong:
@@ -134,19 +138,30 @@ python evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 20 --conds nominal
 python -m unittest discover -s tests -v
 ```
 
-## What is in the box
+## Code map
 
-| Path | |
+The code is a flat set of modules on purpose: the files listed in
+[`docs/provenance.md`](docs/provenance.md) are pinned by SHA-256 and produced
+the published numbers, so they were not moved or rewritten for tidiness.
+
+| Role | Files |
 |---|---|
-| `evaluate.py` | rollout, hybrid visual pick/place, conditions, seed streams |
-| `watch.py` | live viewer and policy-input montage |
-| `wrist_vision.py` | RGB wrist servo (pick + place geometry) |
-| `policy_runtime.py` | dwell, release primitive, placement monitor |
-| `build_cell.py` | robot, conveyor, table, hall, lighting |
-| `blender_props.py` | visual-only set dressing loader |
-| `ckpt/policy_0041c.pt` | the validated checkpoint |
+| **Run and inspect** | `evaluate.py` (rollouts, conditions, seed streams) · `evaluate_imported.py` (dressed cell) · `watch.py` (live viewer) |
+| **Controller** | `model.py` (policy net) · `wrist_vision.py` (RGB servo) · `policy_runtime.py` (dwell, release, placement monitor) · `carry_policy.py` · `current.py` (runtime profile) |
+| **Simulation** | `build_cell.py` · `conveyor_env.py` · `conveyor_drive.py` · `arm_ik.py` · `cam_variant.py` · `mjbox.py` |
+| **Scene** | `factory_hall.py` · `line_frame.py` · `scene_look.py` · `make_textures.py` · `blender_props.py` |
+| **Data** | `expert.py` · `demo_pick.py` · `collect_state.py` · `dagger_collect.py` · `collect_carry_corrections.py` · `render_dataset.py` · `build_cache.py` · `dataset.py` |
+| **Training** | `train.py` · `gpu_guard.py` · `ramcap.py` (memory cap) |
+
+| Folder | Contents |
+|---|---|
+| `ckpt/` | the validated checkpoint `policy_0041c.pt` |
+| `assets/` | vendored robot/table/conveyor XML, textures, 49 visual-only props |
 | `docs/` | validation, model card, dataset, design, provenance |
 | `reports/` | raw validation and benchmark JSON |
+| `media/` | GIFs, videos and figures used here |
+| `ds_0011/` | running-line manifest (the dataset itself is not shipped) |
+| `tests/` | contract tests for the runtime and the wrist servo |
 
 ## Scope
 
