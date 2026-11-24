@@ -236,6 +236,11 @@ class Engine:
             elif ph in ("wait", "handover"):
                 with self.lock:
                     self.stats.update(phase=ph, t=0.0)
+            if ph in ("decision", "handover"):
+                # no sim time passes at these boundaries: pacing or publishing
+                # here would freeze the arm for one 40 ms slot every decision
+                # (every 2nd entry), which reads as a shake
+                return
             # real-time pacing; the belt approach is fast-forwarded
             step = 0.04 / (speed * (4.0 if ph == "wait" else 1.0))
             now = time.perf_counter()
