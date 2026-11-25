@@ -10,7 +10,7 @@ import shutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIST = os.path.join(ROOT, "dist")
-MEDIA = ["hero.mp4", "hero_poster.jpg", "before.mp4", "after.mp4", "policy.mp4",
+MEDIA = ["hero.mp4", "hero_poster.jpg", "before.mp4", "after.mp4", "policy.mp4", "policy_poster.jpg",
          "smoothing.json", "architecture.svg"]
 
 HEADERS = """/*

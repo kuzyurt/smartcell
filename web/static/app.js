@@ -2,7 +2,6 @@ const I18N = {
   en: {},
   de: {
     "nav.how":"Funktionsweise","nav.smooth":"Ruhige Bewegung","nav.play":"Simulator","nav.results":"Ergebnisse",
-    "hero.lead":"Ein simulierter SO-101-Roboterarm nimmt Teile von einem laufenden Förderband und legt sie in eine Kiste. Er sieht die Szene nur über eine Kamera am Handgelenk und hat die Aufgabe aus Vorführungen gelernt.",
     "hero.cta":"Simulator","hero.cta2":"Glättung ansehen",
     "hero.s1":"der Teile in der Kiste abgelegt, 200 Testläufe in der Standardszene","hero.s2t":"1 Kamera","hero.s2":"keine Objektpositionen aus dem Simulator","hero.s3":"weniger Ruck in den Gelenken nach dem Glätten der Armbefehle",
     "how.h":"Funktionsweise",
