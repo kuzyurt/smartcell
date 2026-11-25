@@ -43,7 +43,7 @@ real line looks like, and what is therefore modelled:
                geometry (the plate's inner corner lands on the rail's inner
                face and the window is 7 mm above the belt).
 
-Geometry rules, both of them enforced by verify_cell.py sections 2 and 3:
+Geometry rules, both enforced by the geometry check:
 
   * NOTHING OVERLAPS.  Every profile here is decomposed as a PARTITION - beams
     into core + two ribs + slot bottom, legs into four plates - so neighbouring

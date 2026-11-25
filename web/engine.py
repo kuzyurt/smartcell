@@ -80,15 +80,18 @@ class Cell:
         self.visap = VisApply(m)
         self.mount = V.Mount(m)
         self.cam_id = {n: int(m.camera(n).id) for n in ("hall", "preview", "overhead")}
-        self.rend_ev = self._renderer(128, 128)       # the policy's own camera
+        self.rend_ev = self._renderer(128, 128, all_groups=True)   # the policy's own camera
         self.rend_main = self._renderer(MAIN_H, MAIN_W)
         self.rend_wrist = self._renderer(256, 256)
         self.free = mujoco.MjvCamera()
         mujoco.mjv_defaultFreeCamera(m, self.free)
 
-    def _renderer(self, h, w):
+    def _renderer(self, h, w, all_groups=False):
+        """all_groups=True matches the training renders, which include the
+        gripper's collision geoms (groups 3/4, drawn red). The display views
+        leave those out."""
         rd = mujoco.Renderer(self.r.model, height=h, width=w)
-        rd._scene_option.geomgroup[:] = [1] * 6
+        rd._scene_option.geomgroup[:] = [1] * 6 if all_groups else [1, 1, 1, 0, 0, 0]
         rd.scene.flags[mujoco.mjtRndFlag.mjRND_SHADOW] = 0
         return rd
 
@@ -199,7 +202,6 @@ class Engine:
             self.frame_seq += 1
 
     def _episode(self, cell, idx, cond, rng):
-        cfg = self.cfg
         vis = sample_vis(rng) if cond == "tierB" else None
         box = EV.BOX_X_CORNERS[idx % len(EV.BOX_X_CORNERS)] if cond == "boxX" else None
         t_wall = dict(last=time.perf_counter(), n=0, t0=time.perf_counter())

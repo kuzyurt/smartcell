@@ -48,14 +48,11 @@ import time
 import ramcap          # HARD 5 GB cap, see ramcap.py
 import numpy as np
 import mujoco
-from PIL import Image
 
-print("mujoco", mujoco.__version__)
 try:
     import torch
-    print("torch", torch.__version__)
-except Exception as e:                                    # pragma: no cover
-    print("torch not imported:", type(e).__name__)
+except Exception:                                         # pragma: no cover
+    torch = None
 
 import build_cell as C
 import cam_variant as V
@@ -157,7 +154,7 @@ def window_rows(t, qpos, cubes, active, stop, dt=DT):
     a stack: the model's only "static for 280 ms" training pattern was the
     pre-close park, so it read the settle stack as "parked -> close now" and
     drove to the tote with the grip shut at the FIRST decision (measured:
-    probe_eval0_25.py).  With the settle inside the window the same static
+    the 25 Hz eval check).  With the settle inside the window the same static
     stack is a training input whose ground truth is "hold open, hover", and
     the only difference from the park is what the IMAGE shows (the part 0.16 m
     away vs between the jaws) - which is the cue the policy is supposed to use.
@@ -198,9 +195,8 @@ def render_episode(env, mount, rend, visap, row, vis, rng, ds):
         # FROM ROW 0, so the episode begins at the WAIT POSE.
         #
         # window_rows starts at the row where the part reaches the index stop,
-        # which drops the whole belt wait -- the part of the episode the user
-        # actually specified, and the part where the arm is standing at "the
-        # main waiting spot".  The inspector showed a clip that began mid-pick
+        # which drops the whole belt wait, i.e. the part of the episode where
+        # the arm stands at the wait pose.  The inspector showed a clip that began mid-pick
         # and the policy never saw a single wait frame.  The wait is now
         # rendered and cached like everything else.
         #
@@ -226,7 +222,7 @@ def render_episode(env, mount, rend, visap, row, vis, rng, ds):
     mount.azim = V.DEFAULT["azim"] + vis["dazim"]
     env.reset(seed=row["seed"])
     # the episode's start pose.  reset() writes HOME, and these episodes begin
-    # at the user's wait pose, so without this the render replays a different
+    # at the configured wait pose, so without this the render replays a different
     # episode than the one on disk: measured `replay_dev 1.9e+00` on the
     # collector's own check when the start pose moved and this was missing.
     CS.install_wait_pose(env)
@@ -351,14 +347,12 @@ def main():
               f"lat max {out['latency'].max() * 1000:5.1f} ms", flush=True)
 
     # rewrite the manifest with the image fields
-    done = {r["ep_id"] for r in pick}
     tmp = os.path.join(args.ds, "manifest.jsonl.tmp")
     with open(tmp, "w") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
     os.replace(tmp, os.path.join(args.ds, "manifest.jsonl"))
 
-    fr = np.asarray(frames, float)
     per_ep = (tr + tren) / max(len(pick), 1)
     print(f"\nframes {n_img}  replay {tr:.1f}s  render {tren:.1f}s")
     print(f"mean render {tren / max(n_img, 1) * 1000:.2f} ms/frame  "

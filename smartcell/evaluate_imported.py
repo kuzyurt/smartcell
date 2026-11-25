@@ -6,7 +6,6 @@ robot, cubes, belt, tote and bin still come from build_cell.
 Run: python smartcell/evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 5 --conds nominal
 """
 import runpy
-import sys
 
 import build_cell as C
 import blender_props

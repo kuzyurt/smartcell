@@ -1,222 +1,214 @@
-<div align="center">
-
 # smartcell
 
-### still running
+A simulated SO-101 robot arm picks a 32 mm part off a conveyor that keeps
+running and places it in a box. The arm sees the scene through one camera on
+its wrist. A small neural network trained from demonstrations does most of the
+work, and a hand-written vision controller handles the final approach.
 
-**A SO-101 picks a 32 mm part off a conveyor that never stops — and places it in a tote.**
+[![The cell running](media/hero.gif)](media/cell_film.mp4)
 
-[![The cell, running](media/hero.gif)](media/cell_film.mp4)
+Project page with videos: https://smartcell-8cj.pages.dev (the interactive
+simulator runs locally, see [Running it](#running-it)).
 
-`MuJoCo 3.14` · `25 Hz` · `one wrist camera` · `no object state` · `MIT`
+Built with MuJoCo 3.14 and PyTorch. MIT licensed.
 
-[Result](#the-result) · [How it works](#how-it-works) · [The hard part](#the-hard-part) · [Dressed cell](#zero-shot-in-a-dressed-cell) · [Data](#the-data) · [Smooth motion](#smooth-motion) · [Web demo](#web-demo) · [Run it](#run-it) · [Code map](#code-map)
+## Results
 
-</div>
+Each condition was run 200 times with random seeds that were never used in
+training. The network and the controller were frozen before these seeds were
+drawn.
 
-## The result
-
-Fresh seeds, frozen checkpoint, **200 trials per condition**:
-
-| Condition | Pick | Place |
+| Condition | Picked | Placed |
 |---|---:|---:|
-| nominal | **99.5%** | **99.0%** |
-| tierB — lighting, tint, mount jitter | **99.0%** | **97.5%** |
-| boxX — held-out tote corners | **99.5%** | **99.5%** |
+| Default scene (`nominal`) | 99.5% | 99.0% |
+| Random lighting, part colour and camera mount (`tierB`) | 99.0% | 97.5% |
+| Box moved to positions outside the training range (`boxX`) | 99.5% | 99.5% |
 
-A *place* means the part was released, stayed inside the tote, and moved
-slower than 0.05 m/s for 0.4 s. Touching the tote does not count.
+A run counts as placed only if the part was released, stayed inside the box
+and moved slower than 0.05 m/s for 0.4 s. Touching the box is not enough.
 
-![Fresh-seed and dressed-scene results](media/results.svg)
+![Results](media/results.svg)
 
-The checkpoint and controller were frozen before the final seed stream. The
-400 evaluation objects have zero overlap with 2,302 training seeds. Full
-protocol, Wilson intervals and caveats: [`docs/validation.md`](docs/validation.md).
+The full protocol, confidence intervals and known weaknesses are in
+[`docs/validation.md`](docs/validation.md). The weakest number is the lighting
+condition: 97.5% placed, with a 95% Wilson lower bound of 94.3%.
 
 ## How it works
 
 ![Control architecture](media/architecture.svg)
 
-- **A frozen behaviour-cloning policy** reads 8 grayscale wrist frames
-  (280 ms of history) plus 12 proprio values, and predicts an 8×6 action
-  chunk. Two entries (80 ms) are executed before it looks again.
-- **A classical RGB wrist servo** back-projects the part and tote onto the
-  known work plane. It leads the moving part, gates the close at predicted
-  contact, and fits the tote before descending.
-- **A proprioceptive release primitive** confirms a stalled close, a lift, and
-  a low descent away from the belt before opening the jaws.
+The policy is a 0.98 M-parameter convolutional network. It receives the last
+eight grayscale wrist-camera frames (280 ms of history) and 12 joint values:
+six measured joint angles and the six targets that were last sent to the
+motors. It outputs the next eight arm and gripper targets at 25 Hz. Two of
+them (80 ms) are executed, then it looks again.
 
-The policy is frozen. The servo adds no learned parameters and no simulator
-object state — only pixels, joints, forward kinematics and the commands it
-already sent. More in [`docs/design.md`](docs/design.md).
+On the last few centimetres a classical vision controller corrects the
+policy. It finds the part and the box edge in the RGB image, projects them
+onto the known table plane, leads the moving part and decides when to close
+the jaws. A short rule-based step at the end opens the gripper only after the
+part is held, lifted and lowered into the box.
 
-## The hard part
+Neither the network nor the vision controller reads object positions from the
+simulator. They only use camera pixels, joint angles, forward kinematics and
+the commands already sent. Details in [`docs/design.md`](docs/design.md).
+
+## Getting it to work
 
 ![Training pipeline](media/pipeline.svg)
 
-The first working policy picked about **3%** of the time. The useful history
-is the list of things that were actually wrong:
+The first trained policy picked the part in about 3% of runs. Most of the
+improvement came from fixing the setup around the network:
 
-- **The old data described a different machine.** Episodes started at `HOME`,
-  the belt stopped at the index station, and "close" was a half-shut claw that
-  only looked closed because the servo stalled.
-- **The wrist camera clipped the gripper out of its own view.** The near plane
-  cut the jaws off. The policy could not see what it was holding.
-- **The policy had no sense of its own grip.** Feeding back `SOLL` (commanded
-  target) next to `IST` (measured joint) made the gripper tracking error
-  observable. A held part and an empty close became different inputs.
-- **The belt does not wait for a 200 ms chunk.** 25 Hz, eight-frame history and
-  two-entry execution (80 ms) was the difference between chasing and catching.
-- **The policy had to survive its own mistakes.** 948 DAgger correction
-  episodes, collected from states the policy actually visited, were added to
-  training. Validation and test stayed on the original expert split.
-- **A grasp is not a place.** The strict metric, a release primitive and a
-  tote-fit check turned "the part touched the tote" into "the part stayed
-  there".
+- The early demonstrations started from a different pose, stopped the belt at
+  the pick station and used a gripper command that only looked closed because
+  the servo stalled. The data was re-collected with a belt that never stops
+  and the real gripper limits.
+- The wrist camera's near clipping plane cut off the gripper jaws, so the
+  network could not see what it was holding. Correcting the camera setup
+  brought the jaws back into view.
+- Adding the last commanded targets to the input made the gripper's tracking
+  error visible to the network. A closed gripper holding a part and an empty
+  closed gripper now produce different inputs.
+- Running at 25 Hz with an eight-frame history and re-planning every 80 ms was
+  needed to catch a moving part. Longer open-loop chunks arrived too late.
+- 948 correction episodes were collected with DAgger from states the policy
+  actually reached and added to training. Validation and test data stayed on
+  the original expert episodes.
+- The success metric was tightened from "the part touched the box" to "the
+  part is released and stays in the box", and the release step and the box
+  detection were added to meet it.
 
-A lower-validation-loss continuation (`policy_0041f`) failed the rollout gate
-and was rejected. Validation loss alone is not a selection metric here.
+A later checkpoint (`policy_0041f`) had a lower validation loss but failed the
+rollout tests and was rejected. For this task, validation loss alone was not a
+reliable way to pick a model.
 
-## Zero-shot in a dressed cell
+## Furnished hall
 
-[![The Blender-dressed cell](media/blender_cell.jpg)](media/policy.mp4)
+[![The furnished hall](media/blender_cell.jpg)](media/policy.mp4)
 
-The same frozen controller, with **no retraining**, in the MuJoCo cell with 49
-Blender props imported as **visual-only** geometry (`contype=0`,
-`conaffinity=0`). Robot, belt, parts, tote and bin physics are untouched. This
-tests visual robustness, not new contact physics.
+The same frozen controller, without any retraining, was also run in a version
+of the cell filled with 49 props from Poly Haven. The props are visual only
+(`contype=0`, `conaffinity=0`), so the robot, belt, parts and box behave
+exactly as before. This checks how well the controller copes with a busier
+camera image.
 
-| Condition | Trials | Pick | Place | Place Wilson 95% |
+| Condition | Runs | Picked | Placed | Placed, 95% interval |
 |---|---:|---:|---:|---|
-| nominal | 100 | **100.0%** (100/100) | **99.0%** (99/100) | 94.6–99.8% |
-| tierB — lighting, tint, mount jitter | 50 | **100.0%** (50/50) | **100.0%** (50/50) | 92.9–100.0% |
-| boxX — held-out tote corners | 50 | **100.0%** (50/50) | **100.0%** (50/50) | 92.9–100.0% |
-| nominal, visual servo disabled (control) | 50 | 86.0% (43/50) | 60.0% (30/50) | 46.2–72.4% |
+| Default scene | 100 | 100/100 | 99/100 | 94.6–99.8% |
+| Random lighting, colour and camera mount | 50 | 50/50 | 50/50 | 92.9–100.0% |
+| Box moved | 50 | 50/50 | 50/50 | 92.9–100.0% |
+| Default scene, vision controller off | 50 | 43/50 | 30/50 | 46.2–72.4% |
 
-Across all three active dressed conditions, the hybrid controller achieved **199/200 (99.5%)** completed placements. On the same 50 nominal seeds, it placed **49/50 (98.0%)**; with the RGB servo disabled, it placed **30/50 (60.0%)**. The servo is what absorbs the visual shift. Raw reports in [`reports/`](reports/).
+With the vision controller on, 199 of 200 parts were placed. On the same 50
+seeds with it switched off, only 30 were placed, so the vision controller is
+what handles the change in scenery. Raw reports are in [`reports/`](reports/).
 
-## Smooth motion
+## Smoother motion
 
-The arm worked but visibly shook. The cause was not the policy: it emits one
-arm target per 40 ms, and the simulator held each target constant before
-jumping to the next, so the position servo followed a 25 Hz staircase.
-[`smoothing.py`](smoothing.py) interpolates the target inside each step.
-The policy, checkpoint and the hash-pinned evaluation files are unchanged;
-the validated protocol stays the default.
+The policy sends one arm target every 40 ms. Originally the simulator held
+each target constant until the next one arrived, so the position controllers
+followed a 25 Hz staircase and the arm visibly shook.
+[`smartcell/smoothing.py`](smartcell/smoothing.py) moves the target linearly
+from one value to the next within each step. The network, the checkpoint and
+the evaluation code are unchanged, and the original behaviour is still the
+default for the evaluation scripts.
 
-| Same 8 episodes, actual joint angles at 200 Hz | Original | `smooth` |
+| Same 8 episodes, joint angles sampled at 200 Hz | Original | Smoothed |
 |---|---:|---:|
-| RMS jerk | 100 % | **43 %** |
-| RMS acceleration | 100 % | 55 % |
-| high-frequency residual | 100 % | 84 % |
+| RMS jerk | 100% | 43% |
+| RMS acceleration | 100% | 55% |
+| High-frequency residual | 100% | 84% |
 
-`smooth` placed **44/44** parts (20 nominal, 12 lighting, 12 tote) on a
-CPU-only run. That is a small sample next to the 200-trial protocol above and
-is not a replacement for it. A stronger variant that also low-pass filtered the
-command was calmer but placed only 16/20, because the added lag costs grasps,
-so it was dropped. Measurement code: [`tools/measure_smoothing.py`](tools/measure_smoothing.py); per-episode results: [`reports/smoothing_validation_20261123.json`](reports/smoothing_validation_20261123.json).
+With smoothing, 44 of 44 test runs placed the part (20 default, 12 lighting,
+12 box moved). That is a much smaller test than the 200-run protocol above. A
+stronger version that also low-pass filtered the command looked calmer but
+placed only 16 of 20, because the extra lag made it miss grasps, so it was
+dropped. Measurement script: [`tools/measure_smoothing.py`](tools/measure_smoothing.py),
+per-episode results: [`reports/smoothing_validation_20261123.json`](reports/smoothing_validation_20261123.json).
 
-## The data
+## Training data
 
 ![Sampled line conditions](media/dataset_variation.png)
 
 | | |
 |---|---:|
-| training episodes | **1,191** |
-| — expert demonstrations | 243 |
-| — DAgger corrections | 948 |
-| training samples | **549,436** |
-| validation / test episodes | 30 / 30 |
-| unique training seeds | 2,302 across 42 manifests |
-| line speed | 0.068–0.092 m/s |
-| part yaw | full ±π |
-| tote offset | ±60 mm in x and y |
+| Training episodes | 1,191 (243 expert demonstrations, 948 DAgger corrections) |
+| Training samples | 549,436 |
+| Validation / test episodes | 30 / 30 |
+| Distinct training seeds | 2,302 |
+| Belt speed | 0.068–0.092 m/s |
+| Part rotation | any angle |
+| Box offset | ±60 mm in x and y |
 
-Every episode samples a new belt speed, part yaw, tote offset, wait pose,
-lighting, part tint and camera-mount jitter.
+Every episode draws a new belt speed, part rotation, box position, start pose,
+lighting, part colour and camera-mount offset.
 
-![One expert episode, wrist camera](media/dataset.gif)
+![One expert episode from the wrist camera](media/dataset.gif)
 
-[MP4 version](media/dataset.mp4) · raw 128×128 wrist camera at 25 Hz, no
-interpolation or colour correction. The dataset is **not shipped**; the code
-and the running-line manifest are. See [`docs/dataset.md`](docs/dataset.md).
+The clip above is the raw 128×128 wrist camera at 25 Hz ([MP4](media/dataset.mp4)).
+The dataset itself is tens of gigabytes and is not included. The code that
+generates it and the conveyor configuration (`ds_0011/manifest.jsonl`) are.
+See [`docs/dataset.md`](docs/dataset.md).
 
-## Web demo
-
-![Web demo](media/web_demo.png)
-
-A local page with the Blender hall, live policy rollouts and controls for
-scene, lighting, tote position, motion mode, visual servo, camera (including a
-draggable orbit view), speed and seed. The simulation runs on your machine;
-the browser only displays it.
-
-```bash
-pip install -r requirements.txt
-python web/server.py          # opens http://127.0.0.1:8800
-```
-
-The same page can be hosted statically, see [`docs/deploy.md`](docs/deploy.md). With a GPU the live version runs near real time; on CPU only it is much slower
-(`SMARTCELL_ALLOW_CPU=1`). On headless Linux set `MUJOCO_GL=egl`.
-
-## Run it
+## Running it
 
 ```bash
 pip install -r requirements.txt
 
-# 20 nominal trials in the stock cell
+# local web page with the live simulation (http://127.0.0.1:8800)
+python web/server.py
+
+# 20 evaluation runs in the default scene
 python smartcell/evaluate.py --ckpt ckpt/policy_0041c.pt --n 20
 
-# live viewer: overhead + wrist RGB + the exact tensor the policy sees
+# viewer: overhead camera, wrist camera and the exact input the network sees
 python smartcell/watch.py --ckpt ckpt/policy_0041c.pt
 
-# zero-shot in the Blender-dressed cell
+# the furnished hall
 python smartcell/evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 20 --conds nominal
 
-# contract tests
+# tests
 python -m unittest discover -s tests -v
 ```
 
-## Code map
+A GPU is recommended. Without one, set `SMARTCELL_ALLOW_CPU=1`; the simulation
+then runs well below real time. On headless Linux set `MUJOCO_GL=egl`. The web
+page can also be hosted as a static site, see [`docs/deploy.md`](docs/deploy.md).
 
-All Python code lives in [`smartcell/`](smartcell/) as flat modules, run from
-the repository root (`python smartcell/evaluate.py ...`). Files listed in
-[`docs/provenance.md`](docs/provenance.md) are pinned by SHA-256 and were moved
-without content changes, except one documented path fix in `evaluate.py`.
+![Web demo](media/web_demo.png)
 
-| Role | Files |
+## Code layout
+
+All Python modules are in [`smartcell/`](smartcell/) and are run from the
+repository root, for example `python smartcell/evaluate.py`.
+
+| Area | Files |
 |---|---|
-| **Run and inspect** | `evaluate.py` (rollouts, conditions, seed streams) · `evaluate_imported.py` (dressed cell) · `watch.py` (live viewer) |
-| **Controller** | `model.py` (policy net) · `wrist_vision.py` (RGB servo) · `policy_runtime.py` (dwell, release, placement monitor) · `carry_policy.py` · `current.py` (runtime profile) |
-| **Simulation** | `build_cell.py` · `conveyor_env.py` · `conveyor_drive.py` · `arm_ik.py` · `cam_variant.py` · `mjbox.py` |
-| **Scene** | `factory_hall.py` · `line_frame.py` · `scene_look.py` · `make_textures.py` · `blender_props.py` |
-| **Data** | `expert.py` · `demo_pick.py` · `collect_state.py` · `dagger_collect.py` · `collect_carry_corrections.py` · `render_dataset.py` · `build_cache.py` · `dataset.py` |
-| **Smooth motion** | `smoothing.py` (same folder) |
-| **Web demo** | `web/` (server, engine, page) · `tools/` (`measure_smoothing.py`, `build_site.py`) |
-| **Training** | `train.py` · `gpu_guard.py` · `ramcap.py` (memory cap) |
+| Evaluation and viewing | `evaluate.py`, `evaluate_imported.py`, `watch.py` |
+| Controller | `model.py` (network), `wrist_vision.py` (vision controller), `policy_runtime.py` (grasp, release and placement logic), `carry_policy.py`, `current.py` (runtime settings), `smoothing.py` |
+| Simulation | `build_cell.py`, `conveyor_env.py`, `conveyor_drive.py`, `arm_ik.py`, `cam_variant.py`, `mjbox.py` |
+| Scene | `factory_hall.py`, `line_frame.py`, `scene_look.py`, `make_textures.py`, `blender_props.py` |
+| Data collection | `expert.py`, `demo_pick.py`, `collect_state.py`, `dagger_collect.py`, `collect_carry_corrections.py`, `render_dataset.py`, `build_cache.py`, `dataset.py` |
+| Training | `train.py`, `gpu_guard.py`, `ramcap.py` (memory limit) |
 
-| Folder | Contents |
-|---|---|
-| `smartcell/` | all Python code (flat modules) and `assets/` (robot/table/conveyor XML, textures, 49 visual-only props) |
-| `web/` | local web demo: `server.py`, `engine.py`, `static/` page |
-| `tools/` | smoothness measurement and static-site build |
-| `ckpt/` | the validated checkpoint `policy_0041c.pt` |
-| `docs/` | validation, model card, dataset, design, provenance |
-| `reports/` | raw validation and benchmark JSON |
-| `media/` | GIFs, videos and figures used here |
-| `ds_0011/` | running-line manifest (the dataset itself is not shipped) |
-| `tests/` | contract tests for the runtime and the wrist servo |
+Other folders: `web/` (local web demo), `tools/` (smoothness measurement and
+static site build), `ckpt/` (the evaluated checkpoint), `docs/`, `reports/`
+(raw evaluation output), `media/`, `ds_0011/` (conveyor configuration) and
+`tests/`.
 
-## Scope
+The checkpoint and the evaluation files are pinned by SHA-256 in
+[`docs/provenance.md`](docs/provenance.md), so the published numbers can be
+traced to the exact files that produced them.
 
-This is a research artifact: **simulation, one 32 mm part, one SO-101, one
-conveyor**. It is not a hardware promise, a product, or a safety system. The
-visual servo assumes a calibrated camera and a known work plane.
+## Limitations
 
-- [Validation and caveats](docs/validation.md)
-- [Model card](docs/model-card.md)
-- [Dataset](docs/dataset.md)
-- [Design notes](docs/design.md)
-- [Provenance and hashes](docs/provenance.md)
-- [Third-party licences](THIRD_PARTY.md)
+Everything here is simulation: one part type, one arm, one conveyor layout.
+The vision controller assumes a calibrated camera and a known table height.
+There is no obstacle avoidance or safety layer, so none of this should be run
+on real hardware near people as it is.
 
-MIT licensed. If you use it, [`CITATION.cff`](CITATION.cff) is there.
+More detail: [validation](docs/validation.md), [model card](docs/model-card.md),
+[dataset](docs/dataset.md), [design notes](docs/design.md),
+[provenance](docs/provenance.md), [third-party licences](THIRD_PARTY.md).
+If you use this work, see [`CITATION.cff`](CITATION.cff).

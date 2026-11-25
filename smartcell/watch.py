@@ -22,17 +22,12 @@ import base64
 import io
 import json
 import os
-import socket
 import threading
 import time
 
 import numpy as np
 import mujoco
 import torch
-import torch.nn.functional as F
-
-print("mujoco", mujoco.__version__)
-print("torch  ", torch.__version__)
 
 from PIL import Image, ImageDraw, ImageFont
 

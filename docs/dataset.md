@@ -1,6 +1,6 @@
 # Dataset
 
-The dataset is **not shipped**. It is tens of gigabytes of rendered frames and
+The dataset is not shipped. It is tens of gigabytes of rendered frames and
 would make the repository useless to clone. What is shipped is the code that
 made it, the manifest that defines the running line, and the media below.
 
@@ -24,10 +24,10 @@ grip-tracking signal: a closed jaw that stalls on a part has a very different
 
 | | |
 |---|---:|
-| training episodes | **1,191** |
-| — expert demonstrations | 243 |
-| — DAgger corrections | 948 |
-| training samples | **549,436** |
+| training episodes | 1,191 |
+| of which expert demonstrations | 243 |
+| of which DAgger corrections | 948 |
+| training samples | 549,436 |
 | validation / test episodes | 30 / 30 |
 | unique training seeds | 2,302 across 42 manifests |
 | line speed | 0.068–0.092 m/s |
@@ -38,7 +38,7 @@ The 400 fresh evaluation objects in the final validation are disjoint from all
 recorded training and historical evaluation seeds. The audit is in
 [`reports/visual_both_v12_fresh_seed_audit_20261026.json`](../reports/visual_both_v12_fresh_seed_audit_20261026.json).
 
-## Variation, not one lucky cell
+## Variation
 
 ![Sampled line conditions](../media/dataset_variation.png)
 
@@ -46,9 +46,9 @@ Every episode samples a new belt speed, part yaw, tote offset, wait pose,
 lighting, part tint, and camera-mount jitter. The final controller was tested
 on three condition families:
 
-- **nominal** — stock cell, stock camera mount.
-- **tierB** — per-episode lighting, part tint/specular, and mount jitter.
-- **boxX** — held-out tote positions at three corners of the placement region.
+- `nominal`: default cell and camera mount.
+- `tierB`: lighting, part colour and camera-mount offset drawn per episode.
+- `boxX`: box placed at three corners outside the training range.
 
 ## One episode
 

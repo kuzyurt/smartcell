@@ -31,7 +31,6 @@ def analyse(q):
     k = np.ones(25) / 25.0                      # 125 ms moving average
     sm = np.stack([np.convolve(q[:, i], k, "same") for i in range(q.shape[1])], 1)
     hf = (q - sm)[25:-25]
-    sgn = np.sign(v[:, :])
     return dict(
         rms_acc=float(np.sqrt((a ** 2).sum(1).mean())),
         rms_jerk=float(np.sqrt((j ** 2).sum(1).mean())),

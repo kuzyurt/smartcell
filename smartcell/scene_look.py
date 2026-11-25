@@ -300,7 +300,7 @@ def _add_materials(spec):
     #
     # A material that carries an RGB texture IGNORES its rgba here (measured
     # twice on the compiled model, by masking each geom's pixels out of a
-    # 1920x1080 render via look_check.py): m_floor rendered 231.2/255 at
+    # 1920x1080 render): m_floor rendered 231.2/255 at
     # rgba 0.95 and 231.2 at rgba 0.47, and the m_alu family rendered 152
     # counts at three different values including rgba 0,0,0,1.  Scaling the
     # concrete TEXTURE by 0.5 moved those floor pixels to 117.6.  So for every

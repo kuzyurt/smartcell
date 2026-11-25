@@ -1,6 +1,6 @@
 """Phase 2: collect the state dataset `ds_0001/` with a randomized expert.
 
-Measured pre-flight (assets/PROVENANCE.md, `check_determinism.py`): the env
+Measured before collection: the env
 randomizes NOTHING - `reset(seed)` produced byte-identical episodes for seeds
 0 and 7.  So randomization lives HERE, not in the env.  Each episode samples a
 vector and applies it through a thin wrapper around the verified expert
@@ -55,12 +55,10 @@ import ramcap          # 5 GB cap, see ramcap.py
 import numpy as np
 import mujoco
 
-print("mujoco", mujoco.__version__)
 try:
     import torch
-    print("torch", torch.__version__)
-except Exception as e:                                    # pragma: no cover
-    print("torch not imported:", type(e).__name__)
+except Exception:                                         # pragma: no cover
+    torch = None
 
 import build_cell as C
 import conveyor_env
@@ -91,8 +89,7 @@ def apply_stop(vec):
 
 # Per-episode tote position.  The tote sat at ONE spot in every demo of
 # ds_0001/0002/0003, so the policy could carry to a memorised pixel instead of
-# looking for the box (user call: move the box so the policy has to use its
-# camera).  Per EPISODE, not per run: one fixed spot per run still lets the
+# looking for the box.  Moving the box forces the policy to use its camera.  Per EPISODE, not per run: one fixed spot per run still lets the
 # policy memorise it.  Same runtime-patch pattern as apply_stop:
 #   * the nine tote geoms are named WORLD geoms (mjbox.box sets geom.name), so
 #     model.geom_pos + mj_forward moves the box;
@@ -104,7 +101,7 @@ def apply_stop(vec):
 TOTE_HOME_XY = np.array(C.TOTE_XY, dtype=float)
 TOTE_HOME_X = tuple(C.TOTE_X)      # nominals: apply_tote must never compound
 TOTE_HOME_Y = tuple(C.TOTE_Y)
-# Envelope measured with probe_tote_off.py (15-offset grid + boundary sweep):
+# Envelope measured on a 15-offset grid plus a boundary sweep:
 # x is free to +-70 mm (drop err 8-21 mm everywhere), +y is walled by the
 # arm's reachability near the robot base - dy >= +30 mm sends the IK into its
 # reseed-degenerate branch (solves 80-95 vs 128+, 3 vs 5 reseeds) and the part
@@ -228,7 +225,7 @@ def _face_yaw(part_yaw, rng):
     its `yaw` 3-vector, and the jaws must close ALONG a face normal of the
     square: for part_yaw = 0 that is exactly the demo's (0, 1, 0).
 
-    Measured (diag_align.py): EXACT alignment places 16/16 across all yaws;
+    Measured: EXACT alignment places 16/16 across all yaws;
     +-0.03 rad of jaw jitter drops to ~75-83%, all in mid-carry slip.  The
     sampler therefore keeps alignment exact and lets part_yaw vary which
     face is grasped - the diversity channel is the part, not the jaws.
@@ -242,7 +239,7 @@ def _face_yaw(part_yaw, rng):
 def sample_vector(seed):
     """The randomization vector, inside the measured-stable envelope.
 
-    Envelope choices, all from diag_align.py (full-episode placed rate):
+    Envelope choices, all measured as full-episode placed rate:
       jaw-to-face alignment EXACT  (jitter 0.03 rad -> 75-83% placed)
       aim jitter sigma 1 mm        (2 mm -> 92%, 5 mm -> 67%, all carry slip)
       grip_shut 0.020 +- 1 mm      (smoke's +3 mm looser squeeze co-sinned)
@@ -314,7 +311,7 @@ BELT_NARROW_VAR = True
 """True: per-episode belt U[0.068,0.092] around the 0.08 nominal (new way).
 
 Narrow and sensible: +-15% keeps every episode inside the arm's proven
-budget (probe_belt_speed: 0.12 misses 2/24, 0.14 misses 3/24 with 8 catches).
+budget (measured: 0.12 misses 2/24, 0.14 misses 3/24 with 8 catches).
 The old U[0.6,1.4]x reached 0.13 at nominal 0.08 - past where the arm drops.
 False restores BELT_FIXED / --belt-jitter behaviour for exact reproduction.
 Set by --belt-narrow-var / --belt-fixed (re-applied in workers: spawn)."""
@@ -378,7 +375,7 @@ the part has not moved again by the time it lands.
 WAIT_LEAD_S = 0.9
 """Break the wait this long BEFORE the part reaches the station.
 
-Measured (probe_lead_time.py): the approach leg - wait pose to hover above the
+Measured: the approach leg - wait pose to hover above the
 part, IK plus its 0.15 s settle - took 0.68 s, and 0.86 s on the seeds whose
 episodes went on to fail.  The wait used to break the instant the part passed
 the stop, which makes "late" - the arm arriving after the part has left the
@@ -422,7 +419,7 @@ dataset only. Read at call time by episode_stable_wait."""
 CATCH_ITERS = 8
 """How many times the chase may re-aim before the jaws close anyway.
 
-Measured (probe_lead_time.py): a converged chase costs 0.08-0.22 s per
+Measured: a converged chase costs 0.08-0.22 s per
 correction, and with only 3 the episode miss rate was 2/24 at 0.12 m/s and
 3/24 at 0.14 - every miss "late": the arm arrived after the part had passed
 the window and ran out of corrections while catching up.  The correction is
@@ -471,7 +468,7 @@ SNAP = None
 
 
 def snap(env, idx, tag):
-    """Optional geometry trace, set by probe_belt_speed through SNAP."""
+    """Optional geometry trace, enabled through SNAP."""
     if SNAP is not None:
         SNAP(env, idx, tag)
 
@@ -492,8 +489,8 @@ RUNNING_LINE = False
 
 The env's own indexing stop (conveyor_env._conveyor_logic zeroing
 geom_surfacevel while a part waits at X_STOP) is what made the old demos
-stationary-target demos.  The user wants a line that always runs - a real
-conveyor does not stop for the robot - at a speed the robot can still take
+stationary-target demos.  The target setup is a line that always runs, as a
+real conveyor does not stop for the robot, at a speed the robot can still take
 every box off.  RUNNING_LINE makes RandEnv re-assert the sampled speed every
 physics step, which overrides the hold; the pick waypoints then have to LEAD
 the part (see episode_stable_wait step 3).
@@ -510,7 +507,7 @@ None (the default, and what ds_0001..ds_0006 used) parks the arm OVER THE STOP,
 because the wrist camera aims at the grasp site and that is what puts the lane
 in shot while the arm waits.
 
-The joint-space wait pose the user picked, [-1.440, -1.465, 0.300, 1.657,
+The joint-space wait pose, [-1.440, -1.465, 0.300, 1.657,
 -1.449] (ds_0007 onwards), holds for 40.7% of the episode and was checked for
 lane visibility WITH THE PHYSICS STEPPED: the angle from the wrist camera's
 optical axis to the stop is 4.4 deg, to the grasp site 21.4 deg, against a
@@ -644,17 +641,16 @@ def episode_stable_wait(env, seed, cfg=E.FAST, log=False, hook=None, stats=None)
     # prefers.  Measured on ds_0006 ep 0-2 that left the arm up to 115.3 deg
     # from the start pose on a single joint (wrist_roll ended at 2.3054 against
     # 0.4084) - the tip was in the right place and the arm was folded into a
-    # different pose, which is what the user reported as "it goes to another
-    # position instead of the original position".
+    # different pose: visibly not the position it started from.
     #
     # It is NOT captured from data.qpos at entry: the collector reuses one env
     # across episodes and never calls reset() per episode (worker_main only
     # re-samples env.vec), so qpos at entry is the PREVIOUS episode's end pose
     # - measured [0,0,0,0,0] on episode 0 of a fresh worker - and returning to
     # that would send the arm to all-zero, which is not home either.
-    # ...unless the user gave an explicit joint-space WAIT pose, in which case
-    # THAT is the pose the episode starts in and must also end in (the user's
-    # requirement: "end position should be same as the start position").  HOME
+    # ...unless an explicit joint-space WAIT pose is given, in which case
+    # THAT is the pose the episode starts in and must also end in (start and
+    # end position must be the same).  HOME
     # is what reset() writes, so it is only correct when the episode really
     # does begin at home - which is not the case with --wait-joints.
     # per-episode start pose: the jittered wait_joints travel in the vector
@@ -695,17 +691,12 @@ def episode_stable_wait(env, seed, cfg=E.FAST, log=False, hook=None, stats=None)
         _bow = [0.0, 0.0]
     _chase_rng = np.random.default_rng((int(seed) ^ 0xC4A5E) & 0xFFFFFFFF)
     env.reset(seed=seed)
-    if install_wait_pose(env):
-        # THE EPISODE STARTS AT THE WAIT POSE, not at HOME.
-        #
-        # reset() writes HOME into qpos, so the recorded t=0 used to be HOME and
-        # the wait pose only arrived after a 2 s drive: the user's requirement
-        # is that the episode begins and ends in the same place, "the main
-        # waiting spot", and the inspector's first frame has to BE that spot.
-        # The helper re-snaps row0 too -- states_array writes row0 as the t=0
-        # row, so leaving it at HOME would put a HOME row at the front of the
-        # log of an episode that starts at the wait pose.
-        r = env.real
+    # The episode starts at the wait pose, not at HOME.  reset() writes HOME
+    # into qpos, so the recorded t=0 used to be HOME and the wait pose only
+    # arrived after a 2 s drive.  The episode has to begin and end at the wait
+    # pose, and the first recorded frame has to show that pose.  The helper
+    # also re-snaps row0, because states_array writes row0 as the t=0 row.
+    install_wait_pose(env)
     if stats is None:
         stats = dict(ik_s=0.0, solves=0, sim_s=0.0, steps=0, reseeds=0)
     sim_ = env._sim_t
@@ -804,7 +795,7 @@ def episode_stable_wait(env, seed, cfg=E.FAST, log=False, hook=None, stats=None)
         # The close stays AFTER the chase.  Closing during it - the jaws can
         # only stall on the part once inside the +-17 mm capture band, so it
         # sounds strictly safer - was measured WORSE: 18/24 at 0.12 m/s
-        # against 21/24 with the close after, same seeds (probe_belt_speed).
+        # against 21/24 with the close after, same seeds.
         # A closed jaw then carries the part with every further chase
         # correction while the belt drags it back, and that fight costs more
         # than the capture wins.
@@ -941,8 +932,8 @@ def apply_line_config(line):
     part arriving at the indexing stop, or being handled -- the surfacevel read
     0 and the elif deliberately did NOT re-assert, so the line stayed stopped.
     That is the OLD stopping line, and replays recorded on a running one missed
-    the cube: the user saw the belt halt as the arm reached the part and the
-    jaws close on empty air, because the cube was no longer where the chase
+    the cube: the belt halted as the arm reached the part and the jaws closed
+    on empty air, because the cube was no longer where the chase
     had aimed.
 
     Reads the episode's own record rather than a constant, so a dataset
@@ -977,7 +968,7 @@ def install_wait_pose(env):
     """Put the arm at the episode's START POSE, which is the wait pose.
 
     Every replayer has to call this or it replays a DIFFERENT episode.  The
-    collector now begins each episode at the user's wait pose instead of HOME,
+    collector now begins each episode at the configured wait pose instead of HOME,
     and `RandEnv.reset` still writes HOME into qpos -- so a replayer that only
     resets starts the tape 1.9 rad away from where it was recorded (measured:
     `replay_dev 1.9e+00` where it had been 1.9e-07) and the rendered frames
@@ -993,11 +984,9 @@ def install_wait_pose(env):
         return False
     r = env.real
     # the clip bounds come from the MODEL, not from r._arm_lo/_arm_hi: those are
-    # set by each caller (collect_state, render_dataset, check_camera,
-    # cell_view, bench_render_moving) and the bench does not set them at all, so
-    # relying on them raised "'ConveyorPickEnv' object has no attribute
-    # '_arm_lo'" from arm_bench.load_episode.  A helper that only works if the
-    # caller happened to prepare the env is a trap.
+    # set by each caller, and a caller that forgets them gets
+    # "'ConveyorPickEnv' object has no attribute '_arm_lo'".  Reading the model
+    # keeps this helper independent of the caller.
     lo = r.model.actuator_ctrlrange[r._arm_aid, 0]
     hi = r.model.actuator_ctrlrange[r._arm_aid, 1]
     env._arm_lo, env._arm_hi = lo, hi      # __setattr__ forwards to the real env
@@ -1031,8 +1020,7 @@ def full_close(env, grip):
     does the stopping.
 
     It has to be here, in the command stream, and not in a viewer: patching it
-    at display time (arm_bench._grip_cmd) made the bench and the dataset show
-    different claws, and patching it only in the render would make the pixels
+    at display time made the viewer and the dataset show different claws, and patching it only in the render would make the pixels
     disagree with the recorded actions.  Measuring the outcome cannot see the
     difference -- with a part between the jaws the force limit stops the fingers
     in the same place either way -- but the DATA has to say what the robot was
@@ -1064,7 +1052,7 @@ def _patched_solve(ik, w, q, top_down, restarts, outer, iters):
     return q, err, tilt, time.perf_counter() - t0
 
 
-AIM_RING_M = 0.0136            # jaw centring, measured (probe_close.py)
+AIM_RING_M = 0.0136            # jaw centring, measured
 AIM_CLOS_M = 0.00185
 # Grasp depth (Phase-7 hypothesis, FALSIFIED at n = 50 - kept for the record,
 # the constant below is back to 0): the descent target is moved this far BELOW
@@ -1074,7 +1062,7 @@ AIM_CLOS_M = 0.00185
 # band is only about [-5, +10] mm around the part's centre.  Targeting 10 mm
 # deep moves the whole demonstrated trajectory - and with it the policy's own
 # early close - to dz = +6..+15 mm instead of +16..+25 mm.  At this depth the
-# expert places 4/4 (probe_close.py --zoff 10) with a clean 32 mm pinch, the
+# expert places 4/4 (10 mm z offset) with a clean 32 mm pinch, the
 # blade's contact band straddles the part's centre of mass (a more stable
 # carry), and the lowest nub still clears the belt by 3.5 mm.
 # GRASP_DZ_M = 0.010   # FALSIFIED at n = 50 (PROVENANCE "deeper close")
@@ -1087,7 +1075,7 @@ def jaw_center_xy(jy_vec):
 
     The `grasp` site (build_cell) sits 13.6 mm off the jaw-tip midpoint along
     the ring axis, so aiming the site at the part's centre leaves the jaws
-    that far off centre.  Measured with probe_close.py (before this fix):
+    that far off centre.  Measured before this fix:
     the blades only clipped the part's +ring corner and the expert's aim
     envelope was 0-3.5 mm - at +4 mm the close SHOVED the part 12 mm out of
     the jaws instead of pinching it (gap closed to 29.3 mm, part left on the
@@ -1138,7 +1126,6 @@ def make_hook(buf):
     def hook(env):
         r = env.real
         d = r.data
-        m = r.model
         ctrl = d.ctrl[r._arm_aid]
         grip = float(d.ctrl[r._grip_aid])
         buf["t"].append(r._sim_t)

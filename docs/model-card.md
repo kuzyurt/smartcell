@@ -7,8 +7,8 @@ conveyor. It is one half of a hybrid controller: the policy produces nominal
 motion, and a classical RGB wrist servo plus a proprioceptive release
 primitive correct the final centimetres.
 
-This is a research artifact. It is not a product, a safety system, or a claim
-about hardware.
+This is a research project in simulation. It has not been tested on hardware
+and is not suitable for production or safety-relevant use.
 
 ## Architecture
 
@@ -34,7 +34,7 @@ No simulator object pose, cube state or tote state enters the policy.
 ## Output
 
 An `8 × 6` action chunk at 25 Hz: five arm targets and one gripper target,
-normalised to `[-1, 1]`. The evaluator executes **2 entries (80 ms)** before
+normalised to `[-1, 1]`. The evaluator executes 2 entries (80 ms) before
 re-observing.
 
 ## Training
@@ -94,7 +94,6 @@ caveats are in [`validation.md`](validation.md).
 
 ## Safety and ethics
 
-The controller has no obstacle avoidance, force limiting beyond the actuator
-limits, or human-detection layer. Do not run it on hardware near people. The
-repository is published to document a research result, not to enable
-unattended operation.
+The controller has no obstacle avoidance, no force limiting beyond the
+actuator limits and no detection of people. It should not be run on hardware
+near people or left running unattended.

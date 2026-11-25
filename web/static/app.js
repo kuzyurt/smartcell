@@ -1,25 +1,25 @@
 const I18N = {
   en: {},
   de: {
-    "nav.how":"So funktioniert's","nav.smooth":"Ruhige Bewegung","nav.play":"Simulator","nav.results":"Ergebnisse",
+    "nav.how":"Funktionsweise","nav.smooth":"Ruhige Bewegung","nav.play":"Simulator","nav.results":"Ergebnisse",
+    "hero.lead":"Ein simulierter SO-101-Roboterarm nimmt Teile von einem laufenden Förderband und legt sie in eine Kiste. Er sieht die Szene nur über eine Kamera am Handgelenk und hat die Aufgabe aus Vorführungen gelernt.",
     "hero.cta":"Simulator","hero.cta2":"Glättung ansehen",
-    "hero.s1":"platziert auf neuen Seeds (200 Versuche)","hero.s2t":"Eine Kamera","hero.s2":"kein Simulator-Objektzustand zur Laufzeit","hero.s3":"weniger Gelenk-Ruck mit ruhiger Bewegung",
-    "how.k":"So funktioniert's","how.h":"Drei Ebenen, eine Kamera.","how.sub":"Eine gelernte Policy macht die grobe Bewegung, ein klassischer Servo die letzten Zentimeter, und ein propriozeptives Primitiv entscheidet, wann losgelassen wird.",
-    "how.c1h":"Eingefrorene Policy","how.c1":"Liest 8 Graustufen-Bilder (280 ms) plus 12 Gelenkwerte und sagt einen 8×6-Aktions-Chunk bei 25 Hz voraus.",
-    "how.c2h":"Visueller Servo","how.c2":"Projiziert Teil und Kiste auf die bekannte Arbeitsebene, führt dem bewegten Teil voraus und schließt am vorhergesagten Kontaktpunkt.",
-    "how.c3h":"Release-Primitiv","how.c3":"Bestätigt festgehaltenes Teil, Anheben und tiefes Absenken, bevor die Backen öffnen. „Kiste berührt“ zählt nie als Ablage.",
-    "sm.k":"Das Wackeln","sm.h":"Es funktionierte, aber es zitterte. Darum.","sm.sub":"Die Policy gibt alle 40 ms ein Arm-Ziel aus. Der Simulator hielt jedes Ziel konstant und sprang dann zum nächsten, der Positionsregler folgte also einer Treppe mit 25 Hz. Interpolation innerhalb jedes Schritts entfernt die Treppe, ohne die Policy anzufassen.",
-    "sm.before":"VORHER","sm.after":"NACHHER","sm.old":"Original-Befehl","sm.new":"interpolierter Befehl","sm.mh":"Gemessen auf identischen Episoden",
-    "pl.k":"Simulator","pl.h":"Starte die Zelle selbst.","pl.sub":"Die Simulation läuft auf dem Rechner, der diese Seite gestartet hat. Ändere Szene, Licht, Kistenposition und Bewegungsmodus, schalte den visuellen Servo aus und fliege mit der Kamera durch die Blender-Halle.",
-    "pl.ready":"Bereit","pl.start":"▶ Start","pl.pause":"Pause","pl.next":"Nächstes Teil","pl.ep":"Episode","pl.picks":"Greifen","pl.places":"Ablegen","pl.jit":"Befehls-Jitter",
+    "hero.s1":"der Teile in der Kiste abgelegt, 200 Testläufe in der Standardszene","hero.s2t":"1 Kamera","hero.s2":"keine Objektpositionen aus dem Simulator","hero.s3":"weniger Ruck in den Gelenken nach dem Glätten der Armbefehle",
+    "how.h":"Funktionsweise",
+    "how.p1":"Ein kleines neuronales Netz, trainiert mit Vorführungen, steuert den Arm. Alle 80 ms sieht es sich die letzten acht Bilder der Handgelenkkamera und die Gelenkwinkel an und plant die nächsten Ziele für Arm und Greifer.",
+    "how.p2":"Auf den letzten Zentimetern übernimmt ein von Hand geschriebener Bildregler. Er findet Teil und Kiste im Kamerabild und korrigiert den Arm, damit die Backen am fahrenden Teil schließen. Der Greifer öffnet erst, wenn das Teil gehalten, angehoben und in die Kiste abgesenkt wurde.",
+    "sm.h":"Ruhigere Armbewegung","sm.sub":"Das Netz schickt alle 40 ms ein neues Armziel. Ursprünglich blieb jedes Ziel bis zum nächsten fest stehen, die Motoren folgten also einer Treppe und der Arm zitterte. Jetzt läuft das Ziel innerhalb jedes Schritts gleichmäßig zum nächsten Wert. Das Netz selbst ist unverändert.",
+    "sm.before":"VORHER","sm.after":"NACHHER","sm.old":"ursprünglicher Befehl, 4× Zeitlupe","sm.new":"interpolierter Befehl, 4× Zeitlupe","sm.mh":"Gemessen auf identischen Episoden",
+    "pl.h":"Simulator","pl.sub":"Die Simulation läuft auf dem Rechner, der diese Seite gestartet hat. Du kannst Szene, Licht, Kistenposition und Bewegungsmodus ändern, den Bildregler abschalten und die Kamera frei durch die Halle bewegen.",
+    "pl.ready":"Bereit","pl.start":"Start","pl.pause":"Pause","pl.next":"Nächstes Teil","pl.ep":"Episode","pl.picks":"Gegriffen","pl.places":"Abgelegt","pl.jit":"Befehls-Jitter",
     "pl.hint":"Orbit-Ansicht: ziehen zum Drehen, scrollen zum Zoomen. Ohne GPU läuft die Simulation langsamer als Echtzeit.",
-    "pl.scene":"Szene","pl.blender":"Blender-Halle","pl.stock":"Standardzelle","pl.cond":"Bedingung","pl.tierB":"Licht","pl.boxX":"Kiste","pl.motion":"Bewegung","pl.smooth":"ruhig","pl.orig":"original","pl.servo":"Visueller Servo","pl.cam":"Kamera","pl.speed":"Tempo",
-    "rs.k":"Ergebnisse","rs.h":"Neue Seeds, eingefrorener Checkpoint.","rs.sub":"200 Versuche pro Bedingung. Ablage heißt: Teil losgelassen, bleibt in der Kiste und bewegt sich 0,4 s lang langsamer als 0,05 m/s. Die Testobjekte überschneiden sich nicht mit den 2.302 Trainings-Seeds.",
-    "rs.c":"Bedingung","rs.tb":"tierB — Licht, Tönung, Montage-Jitter","rs.bx":"boxX — Kistenecken außerhalb des Trainings","rs.bl":"Blender-Halle, Zero-Shot (200 Versuche)","rs.no":"Blender-Halle, visueller Servo aus (Kontrolle)",
-    "rs.note":"Nur Simulation, ein 32-mm-Teil, ein SO-101, ein Förderband. Das Glättungsprofil ist neu und separat ausgewertet; die obigen Zahlen gelten für das eingefrorene Originalprotokoll.",
-    "run.k":"Starten","run.h":"Ein Befehl.","run.sub":"Einmal die Requirements installieren, dann diese Seite starten. Sie öffnet sich im Browser und simuliert lokal.",
-    "of.h":"Auf deinem Rechner starten","of.p":"Diese Seite ist eine statische Kopie. Die Live-Simulation mit allen Einstellungen aus dem Video läuft lokal mit einem Befehl.",
-    "ft.t":"Ein SO-101-Förderband-Pick-and-Place-Forschungsartefakt."
+    "pl.scene":"Szene","pl.blender":"Blender-Halle","pl.stock":"Standardzelle","pl.cond":"Bedingung","pl.nominal":"Standard","pl.tierB":"Licht","pl.boxX":"Kiste versetzt","pl.motion":"Bewegung","pl.smooth":"geglättet","pl.orig":"original","pl.servo":"Bildregler","pl.cam":"Kamera","pl.speed":"Tempo","pl.rand":"zufällig",
+    "rs.h":"Ergebnisse","rs.sub":"Jede Bedingung lief 200-mal mit Zufalls-Seeds, die im Training nie vorkamen, und das Netz wurde zwischen den Läufen nicht verändert. Als abgelegt zählt ein Lauf, wenn das Teil losgelassen wurde, in der Kiste liegt und zur Ruhe gekommen ist.",
+    "rs.c":"Bedingung","rs.pick":"Gegriffen","rs.place":"Abgelegt","rs.nom":"Standardszene","rs.tb":"Zufälliges Licht, Teilfarbe und Kamerahalterung","rs.bx":"Kiste an Positionen, die im Training nicht vorkamen","rs.bl":"Eingerichtete Halle, im Training nie gesehen","rs.no":"Eingerichtete Halle, Bildregler aus (50 Läufe)",
+    "rs.note":"Alle Zahlen stammen aus der Simulation mit einer Teileart und einem Förderband-Aufbau. Sie wurden vor der Bewegungsglättung gemessen; die Glättung wurde separat in 44 Läufen geprüft, alle abgelegt.",
+    "run.h":"Lokal starten","run.sub":"Requirements installieren, dann den Server starten. Er öffnet diese Seite im Browser mit der Live-Simulation.",
+    "of.h":"Auf deinem Rechner starten","of.p":"Diese Seite ist eine statische Kopie, das Video ist also eine Aufnahme. Die interaktive Version läuft auf deinem eigenen Rechner:",
+    "ft.t":"SO-101 Pick-and-Place am Förderband in MuJoCo."
   }
 };
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -40,7 +40,7 @@ $$(".lang button").forEach(b => b.onclick = () => setLang(b.dataset.lang));
 const nav = $("#nav");
 addEventListener("scroll", () => nav.classList.toggle("solid", scrollY > innerHeight * .6), { passive: true });
 
-/* ---- smoothing figures (data/smoothing.json written by tools/measure_smoothing.py) ---- */
+/* ---- smoothing figures (media/smoothing.json, written by tools/measure_smoothing.py) ---- */
 let SM = null;
 function renderBars() {
   const box = $("#bars"); if (!SM) return; const de = document.documentElement.lang === "de";
@@ -54,7 +54,7 @@ function renderBars() {
     return `<div><div class="bar-row"><span>${n}</span><div class="bar"><i style="width:${a / m * 100}%"></i></div><span class="val">100 %</span></div>
     <div class="bar-row"><span></span><div class="bar"><i class="good" style="width:${b / m * 100}%"></i></div><span class="val">${Math.round(b / a * 100)} %</span></div></div>`;
   }).join("");
-  $("#smNote").textContent = (de ? "Rot: original · Grün: geglättet. " : "Red: original · green: smoothed. ") + SM.note;
+  $("#smNote").textContent = de ? "Rot: ursprünglicher Befehl, grün: geglättet. Dieselben 8 Episoden, Gelenkwinkel mit 200 Hz gemessen. Mit Glättung wurden 44 von 44 Testläufen abgelegt." : "Red: original command, green: smoothed. Same 8 episodes, joint angles sampled at 200 Hz. With smoothing, 44 of 44 test runs placed the part.";
   $("#heroCut").textContent = Math.round((1 - SM.smooth.rms_jerk / SM.original.rms_jerk) * 100) + " %";
 }
 fetch("media/smoothing.json").then(r => r.ok ? r.json() : null).then(j => { SM = j; renderBars(); }).catch(() => {});
@@ -93,8 +93,8 @@ function render(st) {
   $("#roJit").textContent = run.running && s.phase === "policy" ? (s.jitter * 100).toFixed(1) : "–";
   $("#chipPhase").textContent = run.paused ? "paused" : s.phase; $("#chipFps").textContent = s.fps ? s.fps + " fps · " + st.info.device : st.info.device;
   $("#overlay").hidden = run.running;
-  $("#btnStart").textContent = run.running ? (document.documentElement.lang === "de" ? "↻ Neustart" : "↻ Restart") : (document.documentElement.lang === "de" ? "▶ Start" : "▶ Start");
-  $("#btnPause").textContent = run.paused ? "Resume" : (document.documentElement.lang === "de" ? "Pause" : "Pause");
+  $("#btnStart").textContent = run.running ? (document.documentElement.lang === "de" ? "Neustart" : "Restart") : "Start";
+  $("#btnPause").textContent = run.paused ? (document.documentElement.lang === "de" ? "Weiter" : "Resume") : "Pause";
   $("#screen").classList.toggle("orbit", st.cfg.camera === "orbit");
   $("#log").innerHTML = s.log.map(l => `<span class="dot ${l.place ? "ok" : "bad"}" title="episode ${l.ep}: pick ${l.pick}, place ${l.place}">${l.place ? "✓" : "✗"}</span>`).join("");
 }
@@ -117,8 +117,8 @@ function offlineMode() {
   polling = false;
   const sub = $("#play .sub");
   sub.dataset.i18n = "of.sub";
-  EN["of.sub"] = "A recorded run in the Blender-dressed hall. Scene, lighting, tote position, motion mode, visual servo and camera are all adjustable in the live version, which you start locally.";
-  I18N.de["of.sub"] = "Ein aufgezeichneter Lauf in der Blender-Halle. Szene, Licht, Kistenposition, Bewegungsmodus, visueller Servo und Kamera sind in der Live-Version einstellbar, die du lokal startest.";
+  EN["of.sub"] = "A recorded run in the furnished hall, with the wrist camera in the corner. In the live version, which runs on your own computer, the scene, lighting, box position, motion mode, vision controller and camera can all be changed.";
+  I18N.de["of.sub"] = "Ein aufgezeichneter Lauf in der eingerichteten Halle, unten rechts das Bild der Handgelenkkamera. In der Live-Version auf deinem eigenen Rechner lassen sich Szene, Licht, Kistenposition, Bewegungsmodus, Bildregler und Kamera einstellen.";
   const play = $(".play");
   play.replaceChildren($("#offline").content.cloneNode(true));
   $$("[data-i18n]", play).forEach(el => { EN[el.dataset.i18n] = EN[el.dataset.i18n] || el.innerHTML; });

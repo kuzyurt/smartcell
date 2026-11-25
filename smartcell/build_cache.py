@@ -1,7 +1,7 @@
 """Cache builder: imgs/*.npz + ds episode npz -> cache/ep_XXXXXX.npz.
 
 The original builder is gone from the tree, so this one is written from the
-alignment that probe_cache_align.py could measure and is VALIDATED against the
+alignment that can be measured and is VALIDATED against the
 surviving cache: `--verify` builds the four episodes in the 10 Hz grid
 (fps 10, entry 0.05 s) from ds_0001 and prints the difference against
 cache_10hz/ instead of writing anything.  Same code then builds the 25 Hz
@@ -41,8 +41,6 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-print("torch", torch.__version__)
-
 import collect_state as CS       # normalised_actions + the jaw-centring patch
 import current
 
@@ -61,7 +59,7 @@ def build_ep(env, ds, ep, fps, entry, out_dir=None, verify_dir=None):
     zi = np.load(os.path.join(ds, "imgs", f"ep_{ep:06d}_img.npz"))
     z = np.load(os.path.join(ds, f"ep_{ep:06d}.npz"))
     imgs, img_t = zi["img"], zi["img_t"].astype(np.float64)
-    # --fps is not decorative (Act 19): the obs grid comes from the frames'
+    # --fps matters: the obs grid comes from the frames'
     # own img_t, so assert the frames really are at that rate instead of
     # silently building a differently-spaced grid.
     if len(img_t) > 1:

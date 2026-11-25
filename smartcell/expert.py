@@ -143,7 +143,6 @@ def episode(env, seed=0, cfg=FAST, log=True, hook=None, stats=None):
         stats["sim_s"] += time.perf_counter() - t0
         stats["steps"] += 1
 
-    t0 = time.perf_counter()
     # the one full search of the episode: it fixes the branch everything else
     # tracks.  Every later move is single-seed.
     move_to(env, (HOVER_X, C.BELT_Y, APPROACH_Z), GRIP_OPEN, settle=0.1,

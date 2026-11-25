@@ -9,11 +9,8 @@ Run:  python train.py [--epochs 40] [--batch 256]
 import argparse
 import time
 
-import numpy as np
 import torch
 import torch.nn as nn
-
-print("mujoco (train.py) torch", torch.__version__)
 
 import ramcap
 from model import Policy
@@ -115,8 +112,7 @@ def main():
                     help="save every epoch to <out>.e<epoch>.pt so the best "
                          "checkpoint can be selected by PICK/PLACE rate "
                          "(evaluate.py --n 24 quick gate), not by val loss. "
-                         "Val loss is a proxy; pick+place is the metric. "
-                         "See select_best.py.")
+                         "Val loss is a proxy; pick+place is the metric.")
     args = ap.parse_args()
 
     ramcap.install()
@@ -241,8 +237,8 @@ def main():
                         # inspector on :8766 was showing policy_0005_s12
                         # (trained on ds_0005: the fabricated camera mount and
                         # the line that STOPPED at the station) next to ds_0007
-                        # frames, and the user read the policy's failure to
-                        # grasp as a broken example.
+                        # frames, so the policy's failure to grasp looked like
+                        # a broken example.
                         "ds": args.ds,
                         "extra": ([f"{d}+{c}" for d, c in extra]
                                   if extra else None)}, args.out)
@@ -275,7 +271,7 @@ def main():
           "img_ch, qdim")
     print("NOTE: pick+place rate outranks val loss. Run evaluate.py --n 24 "
           "quick gate on --keep-all epochs (or top-3 val epochs) and pick "
-          "with select_best.py (place, then pick, then val).")
+          "by place rate, then pick rate, then val loss.")
 
 
 if __name__ == "__main__":

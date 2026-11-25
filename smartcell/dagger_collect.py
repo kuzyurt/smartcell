@@ -1,9 +1,9 @@
 """DAgger corrections: the expert labels the states the POLICY creates.
 
-WHY (measured, Act 15/16 of assets/PROVENANCE.md):
-  The closed loop drifts off the recorded wait pose (camera feedback loop,
-  probe_wobble_source.py) and lands in the SOLL-IST "dead band" at the chase
-  transition (probe_gap_location.py).  Both are states that occur NOWHERE in
+Why (measured):
+  The closed loop drifts off the recorded wait pose (camera feedback loop)
+  and lands in the SOLL-IST "dead band" at the chase
+  transition.  Both are states that occur NOWHERE in
   ds_0010, so the model improvises there: wobble at the wait, retreat at the
   chase.  Noise augmentation cannot guarantee coverage of the states the
   policy itself produces.  DAgger does, by construction: visit the state, ask
@@ -38,8 +38,8 @@ WINDOWS (episode-relative seconds): two wait walks, one dash/chase walk with
   one return walk.  A window landing in another phase is harmless: the labels
   are the expert's own commands, valid in every phase.
 
-  ROUND 2 (v6) retargeted from the measured v5 failures (trace_v5.json,
-  evaluate.py --trace, probe_failure_timing.py), not from the round-1 guesses:      * the close is commanded on schedule (~9.5 s) in EVERY rollout, but the
+  ROUND 2 (v6) retargeted from the measured v5 failures (evaluate.py
+  --trace), not from the round-1 guesses:      * the close is commanded on schedule (~9.5 s) in EVERY rollout, but the
       site trails the part by 48-78 mm in x when it fires - the jaws shut in
       the air while the arm is still chasing (grasp succeeds only when the
       still-running servo snags the part ~0.6 s later).  The walk must reach
@@ -47,14 +47,14 @@ WINDOWS (episode-relative seconds): two wait walks, one dash/chase walk with
       gap that survives the close breaks the grasp, truncates the episode and
       deletes the carry labels - the late-chase window therefore ENDS before
       the close (t1<=10.2 s, close ~10.2-10.6 s).
-      MEASURED WRONG in hindsight (probe_d2_windows.py): the intended
+      MEASURED WRONG in hindsight: the intended
       "latch off at the close" compared grip <= 0.0, but the expert's close
       command is GRIP_SHUT = 0.02 > 0, so the latch NEVER fired (d2's
       carry/descent walks ran at full bound through the close), and the walk
       sat on 1.9% of the pre-close chunk rows (gap up to 0.374 rad) with the
       whole final approach displaced (tcp->part median 27.3 mm vs 15.9 mm
       walk-free) - the "close while not at the part" supervision that v6
-      learned as close-on-air (0/72 picks, see Act 18).
+      learned as close-on-air (0/72 picks).
     * after the grasp the carry wastes ~3 s going the WRONG way (+x with the
       part in the jaws) before turning to the tote, then hovers over the tote
       at LIFT_Z and never descends to release within the 20 s horizon.  The
@@ -62,7 +62,7 @@ WINDOWS (episode-relative seconds): two wait walks, one dash/chase walk with
       walk is enlarged (14.6-17.8 s), so the off-manifold carry/descent states
       get expert labels (descend and release) too.
   Round-1 windows are otherwise unchanged: the wait-wobble fix measurably
-  worked (probe_wobble_source.py on v5: ist_drift 0.034 rad vs v3's 0.103).
+  worked (v5: ist_drift 0.034 rad vs v3's 0.103).
 
   ROUND 3 (v7) fixes the measured round-2 regression:
     * pre-close walks (W1-W4) FREEZE at the expert's final grasp descent
@@ -168,7 +168,7 @@ class WalkHook:
 
         From here to the close, every 0.32 s label chunk contains the close
         command: walking those rows teaches "close while not at the part".
-        Measured (probe_d2_windows.py): d2's pre-close chunk rows carry walk
+        Measured: d2's pre-close chunk rows carry walk
         gaps up to 0.374 rad and a displaced approach (tcp->part median
         27.3 mm vs 15.9 mm walk-free) - and v6 (trained on d2) closes on air
         22-62 mm from the part.  Freeze the pre-close walks from this move.
@@ -244,7 +244,7 @@ def schedule(rng, walk_version=2):
     step = random-walk step per 40 ms grid tick, bound = clamp around the
     expert's own target.  The dash window uses bigger steps on purpose: a
     faster walk leaves the stiff servo lagging 0.1-0.3 rad behind, which is
-    exactly the SOLL-IST gap band the policy's lunge dies in (Act 15).
+    exactly the SOLL-IST gap band the policy's lunge dies in.
 
     v2 (round 2) retargets the late windows at the measured v5 failures: a
     late-chase walk that reaches up to the expert's close, a carry walk over

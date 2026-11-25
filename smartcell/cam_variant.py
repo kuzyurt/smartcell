@@ -41,7 +41,7 @@ to the jaw-separation axis - so the lens looks in between the fingers instead of
 through one of them.
 
 Measured part coverage (fraction of frame, hide-and-diff, 32 mm part at the
-site; see check_camera.py --sweep):
+site):
 
     standoff \\ fovy     50     45     40     35     30
       120 mm         .000   .000   .000   .000   .000
@@ -78,7 +78,7 @@ GRIP_BODY = "gripper"
 PART_M = 0.032                     # C.CUBE, the part this view has to resolve
 
 # Phase 0 spec, as parameters, with the two measured deviations applied.
-# azim 180, not 0.  Re-derived by probe_mount_sweep.py once the near-plane bug
+# azim 180, not 0.  Re-derived with a mount sweep once the near-plane bug
 # below was fixed - see the note on apply_clip_fix.  With the gripper actually
 # rendered, tilting toward the gripper's +Y (azim 0) puts the palm and the
 # finger roots across the line of sight to the part: measured part coverage
@@ -106,17 +106,17 @@ def apply_clip_fix(model):
     the gripper was BEING DISCARDED in every render - including every frame of
     ds_0001..ds_0004.
 
-    Measured (probe_near_plane.py): a 32 mm part parked on the optical axis,
+    Measured: a 32 mm part parked on the optical axis,
     provably inside the frustum, rendered 0 px at 60, 80 and 100 mm and 1336 px
     at 130 mm.  The observed cliff between 100 and 130 mm matches the predicted
     122.6 mm exactly.
 
-    Consequence that forced a mount change too (probe_near_fix.py): with the
+    Consequence that forced a mount change too: with the
     plane fixed the part's coverage at the grasp frame falls 15.2% -> 1.2%,
     because the 15.2% was the camera seeing the part THROUGH a gripper that was
     not being drawn.  So the standoff table in this module's docstring was
     measured against a scene containing no gripper and the mount had to be
-    re-derived (probe_mount_sweep.py); see DEFAULT above.
+    re-derived; see DEFAULT above.
 
     Values are expressed as fractions of the extent because that is the unit
     MuJoCo wants: 2 mm near / 25 m far.  A far plane of 25 m still clears the
@@ -221,7 +221,7 @@ class Mount:
         # FABRICATED mount (back=0.150, deg=40, azim=180, fovy=35) while the
         # arm bench showed the model's real camera, so the bench and the
         # training images disagreed about what the robot sees.  Measured from
-        # the user's own requested wait pose, the declared mount looks 4.4 deg
+        # the configured wait pose, the declared mount looks 4.4 deg
         # off the pick station against a 30.5 deg half-fov; the derived one is a
         # different camera entirely, 156.6 mm away in the gripper frame.
         self.stock = bool(stock)
@@ -331,9 +331,8 @@ def strip_scene_markers(renderer):
 
     WHAT THIS IS FOR - the pink ball
     ---------------------------------
-    The user saw a magenta ball sitting in the middle of the wrist camera's
-    view and called it a rendering artifact.  It was one, and it was not a
-    ball: `mjv_updateScene` appends, after the model's own geoms, a small
+    A magenta ball showed up in the middle of the wrist camera's view.  It is
+    a rendering artifact: `mjv_updateScene` appends, after the model's own geoms, a small
     sphere per light as a visualisation marker.  This cell's lights are all
     directionless point lights 3+ m up, far outside the frustum - but the
     marker for light 2 is placed along the camera axis and lands 67 mm in

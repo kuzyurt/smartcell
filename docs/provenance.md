@@ -1,8 +1,8 @@
 # Provenance
 
-This repository is a curated export of a private research tree, not a
-reconstruction from memory. The checkpoint, controller and reports below are
-the exact artifacts that produced the published numbers.
+This repository was exported from a private development tree. The
+checkpoint, controller and reports listed below are the exact files that
+produced the published numbers.
 
 ## Frozen artifacts
 
@@ -21,7 +21,7 @@ LF file with `\n` replaced by `\r\n`.
 | `smartcell/build_cell.py` | `71cb07cbb05cdac9839bb03983cec3cd58de06b4152d7c63522f763c746e89fb` | `ecc3be6c606e0a5ac4908864f819fb5f70b2c450d2f1a3fbc5c0488a2ce40e61` |
 | `smartcell/conveyor_env.py` | `16ad77b01bd411e36dcc3eda2d14e41367e3cc63f66695ec28630124f45b3ab3` | `7d209aaeefc33c28278b5305228d1cb59dfddc9dc40e2ebe04441c75cbf99664` |
 
-**One deliberate change.** When the code moved into `smartcell/`, `evaluate.py`
+One deliberate change. When the code moved into `smartcell/`, `evaluate.py`
 was edited in exactly one place: the list of source files it hashes into each
 report now resolves them next to the file instead of the working directory.
 No numerical code changed. The original, as run, is `git show b0b747a:evaluate.py`
@@ -47,13 +47,13 @@ The controller hash and checkpoint hash in
 
 The validated checkpoint was trained on:
 
-- `ds_0011` + `cache_0011` — 243 expert demonstrations, 25 Hz, running line;
-- 12 DAgger rounds (`ds_0011_d16` … `ds_0011_d27`) — 692 correction episodes,
+- `ds_0011` + `cache_0011`: 243 expert demonstrations, 25 Hz, running line;
+- 12 DAgger rounds (`ds_0011_d16` … `ds_0011_d27`): 692 correction episodes,
   train split only;
-- two visual-domain rounds (`ds_0016_look`, `ds_0017_look`) — 256 additional
+- two visual-domain rounds (`ds_0016_look`, `ds_0017_look`): 256 additional
   correction episodes, for 948 corrections in total.
 
-Final split: **1,191 train / 30 validation / 30 test episodes**, 549,436 train
+Final split: 1,191 train / 30 validation / 30 test episodes, 549,436 train
 samples. The dataset itself is not shipped; `ds_0011/manifest.jsonl` is kept
 so `evaluate.py --ds ds_0011` can read the running-line configuration.
 
@@ -79,5 +79,5 @@ training seeds and 280 historical evaluation seeds. The audit is
 | `reports/visual_default_regression_20261026.json` | 12-trial default-profile regression |
 | `reports/blender_zero_shot_20261031_*.json` | zero-shot benchmark in the dressed scene |
 
-The development tree had no Git history. This repository is the export; the
-hashes above are the authority, not a commit message.
+The development tree had no Git history. To check that a file matches what
+was evaluated, compare its SHA-256 with the table above.

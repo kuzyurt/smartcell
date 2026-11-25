@@ -69,7 +69,7 @@ def make_handler(engine):
             if path.startswith("/media/"):          # shared with the README
                 base, path = os.path.join(ROOT, "media"), path[len("/media"):]
             full = os.path.normpath(os.path.join(base, path.lstrip("/")))
-            if not full.startswith(base) or not os.path.isfile(full):
+            if not full.startswith(base + os.sep) or not os.path.isfile(full):
                 return self._send(404, b"not found", "text/plain")
             ctype = mimetypes.guess_type(full)[0] or "application/octet-stream"
             with open(full, "rb") as fh:

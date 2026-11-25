@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>smartcell — a robot arm that catches parts off a moving belt</title>
-<meta name="description" content="A SO-101 arm picks a part off a conveyor that never stops, using one wrist camera. Try the simulation yourself.">
+<title>smartcell: SO-101 arm picking parts off a running conveyor</title>
+<meta name="description" content="A simulated SO-101 robot arm picks parts off a running conveyor and places them in a box, using one wrist camera.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body id="top">
@@ -23,43 +23,39 @@
 </nav>
 
 <header class="hero">
-  <img class="poster" src="media/hero_poster.jpg" alt="">
-  <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="media/hero_poster.jpg"><source src="media/hero.mp4" type="video/mp4"></video>
+  <img class="poster" src="media/hero_poster.jpg?v=2" alt="">
+  <video id="heroVideo" autoplay muted loop playsinline preload="auto" poster="media/hero_poster.jpg?v=2"><source src="media/hero.mp4?v=2" type="video/mp4"></video>
   <div class="wrap hero-copy">
+    <h1>smartcell</h1>
+    <p class="lead" data-i18n="hero.lead">A simulated SO-101 robot arm picks parts off a conveyor that keeps running and places them in a box. It sees the scene through a single camera on its wrist and learned the task from demonstrations.</p>
     <div class="cta"><a class="btn primary" href="#play" data-i18n="hero.cta">Simulator</a><a class="btn ghost" href="#smooth" data-i18n="hero.cta2">See the smoothing</a></div>
   </div>
   <div class="wrap" style="position:relative;z-index:2">
     <div class="stats">
-      <div><b>99.5 %</b><span data-i18n="hero.s1">placed on fresh seeds (200 trials)</span></div>
-      <div><b data-i18n="hero.s2t">One camera</b><span data-i18n="hero.s2">no simulator object state at run time</span></div>
-      <div><b id="heroCut">–</b><span data-i18n="hero.s3">less joint jerk with smooth motion</span></div>
+      <div><b>99.0 %</b><span data-i18n="hero.s1">of parts placed in the box, 200 test runs in the default scene</span></div>
+      <div><b data-i18n="hero.s2t">1 camera</b><span data-i18n="hero.s2">no object positions are read from the simulator</span></div>
+      <div><b id="heroCut">57 %</b><span data-i18n="hero.s3">less joint jerk after smoothing the arm commands</span></div>
     </div>
   </div>
 </header>
 
 <section id="how">
   <div class="wrap">
-    <p class="kicker" data-i18n="how.k">How it works</p>
-    <h2 data-i18n="how.h">Three layers, one camera.</h2>
-    <p class="sub" data-i18n="how.sub">A learned policy does the broad motion, a classical servo does the last centimetres, and a proprioceptive primitive decides when to let go.</p>
-    <div class="grid g3">
-      <div class="card"><div class="num">01</div><h3 data-i18n="how.c1h">Frozen policy</h3><p data-i18n="how.c1">Reads 8 grayscale wrist frames (280 ms) plus 12 joint values and predicts an 8×6 action chunk at 25 Hz.</p></div>
-      <div class="card"><div class="num">02</div><h3 data-i18n="how.c2h">Visual servo</h3><p data-i18n="how.c2">Back-projects the part and tote onto the known work plane, leads the moving part and gates the close at predicted contact.</p></div>
-      <div class="card"><div class="num">03</div><h3 data-i18n="how.c3h">Release primitive</h3><p data-i18n="how.c3">Confirms a stalled close, a lift and a low descent before opening the jaws, so “touched the tote” never counts as a place.</p></div>
-    </div>
+    <h2 data-i18n="how.h">How it works</h2>
+    <p class="sub" data-i18n="how.p1">A small neural network, trained on demonstrations, drives the arm. Every 80 ms it looks at the last eight frames from the wrist camera and at the joint angles, and plans the next arm and gripper targets.</p>
+    <p class="sub" data-i18n="how.p2">For the last few centimetres a hand-written vision controller takes over. It finds the part and the box in the camera image and corrects the arm so the jaws close on the moving part. The gripper only opens once the part is held, lifted and lowered into the box.</p>
     <div class="fig" style="margin-top:28px"><img src="media/architecture.svg" alt="Control architecture"></div>
   </div>
 </section>
 
 <section id="smooth" class="alt">
   <div class="wrap">
-    <p class="kicker" data-i18n="sm.k">The wobble</p>
-    <h2 data-i18n="sm.h">It worked, but it shook. Here is why.</h2>
-    <p class="sub" data-i18n="sm.sub">The policy emits one arm target every 40 ms. The simulator held each target constant and then jumped to the next one, so the position servo followed a staircase at 25 Hz. Interpolating inside each step removes the staircase without touching the policy.</p>
+    <h2 data-i18n="sm.h">Smoother arm motion</h2>
+    <p class="sub" data-i18n="sm.sub">The network sends a new arm target every 40 ms. Originally each target was held fixed until the next one arrived, so the motors followed a staircase and the arm shook. The target now moves in a straight line from one value to the next within each step. The network itself is unchanged.</p>
     <div class="split">
       <div class="vs">
-        <figure><video id="vOld" muted loop playsinline preload="auto"><source src="media/before.mp4" type="video/mp4"></video><figcaption><span class="tag warn" data-i18n="sm.before">BEFORE</span> <span data-i18n="sm.old">original command</span></figcaption></figure>
-        <figure><video id="vNew" muted loop playsinline preload="auto"><source src="media/after.mp4" type="video/mp4"></video><figcaption><span class="tag" data-i18n="sm.after">AFTER</span> <span data-i18n="sm.new">interpolated command</span></figcaption></figure>
+        <figure><video id="vOld" muted loop playsinline preload="auto"><source src="media/before.mp4?v=2" type="video/mp4"></video><figcaption><span class="tag warn" data-i18n="sm.before">BEFORE</span> <span data-i18n="sm.old">original command, 4× slow motion</span></figcaption></figure>
+        <figure><video id="vNew" muted loop playsinline preload="auto"><source src="media/after.mp4?v=2" type="video/mp4"></video><figcaption><span class="tag" data-i18n="sm.after">AFTER</span> <span data-i18n="sm.new">interpolated command, 4× slow motion</span></figcaption></figure>
       </div>
       <div class="card">
         <h3 data-i18n="sm.mh">Measured on identical episodes</h3>
@@ -72,16 +68,15 @@
 
 <section id="play" class="dark">
   <div class="wrap">
-    <p class="kicker" data-i18n="pl.k">Simulator</p>
-    <h2 data-i18n="pl.h">Run the cell yourself.</h2>
-    <p class="sub" data-i18n="pl.sub">The simulation runs on the machine that started this page. Change the scene, the lighting, the tote position and the motion mode, switch the visual servo off, and fly the camera around the Blender-dressed hall.</p>
+    <h2 data-i18n="pl.h">Simulator</h2>
+    <p class="sub" data-i18n="pl.sub">The simulation runs on the computer that started this page. You can change the scene, the lighting, the box position and the motion mode, turn the vision controller off and move the camera around the hall.</p>
     <div class="play">
       <div>
         <div class="screen" id="screen">
           <img class="main" id="mainImg" alt="live simulation">
           <div class="hud"><span class="chip" id="chipPhase">idle</span><span class="chip" id="chipFps"></span></div>
           <div class="pip"><span>WRIST CAM</span><img id="wristImg" alt="wrist camera"></div>
-          <div class="overlay" id="overlay"><div style="font-size:20px;font-weight:650" data-i18n="pl.ready">Ready</div><button class="btn accent" id="bigStart" data-i18n="pl.start">▶ Start</button></div>
+          <div class="overlay" id="overlay"><div style="font-size:20px;font-weight:650" data-i18n="pl.ready">Ready</div><button class="btn accent" id="bigStart" data-i18n="pl.start">Start</button></div>
         </div>
         <div class="readout">
           <div class="ro"><span data-i18n="pl.ep">Episode</span><b id="roEp">0</b></div>
@@ -94,14 +89,14 @@
       </div>
       <aside class="panel">
         <div class="ctl"><h4 data-i18n="pl.scene">Scene</h4><div class="seg" data-key="scene"><button data-v="blender" class="on" data-i18n="pl.blender">Blender hall</button><button data-v="stock" data-i18n="pl.stock">Stock cell</button></div></div>
-        <div class="ctl"><h4 data-i18n="pl.cond">Condition</h4><div class="seg" data-key="condition"><button data-v="nominal" class="on">nominal</button><button data-v="tierB" data-i18n="pl.tierB">lighting</button><button data-v="boxX" data-i18n="pl.boxX">tote</button></div></div>
+        <div class="ctl"><h4 data-i18n="pl.cond">Condition</h4><div class="seg" data-key="condition"><button data-v="nominal" class="on" data-i18n="pl.nominal">default</button><button data-v="tierB" data-i18n="pl.tierB">lighting</button><button data-v="boxX" data-i18n="pl.boxX">box moved</button></div></div>
         <div class="ctl"><h4 data-i18n="pl.motion">Motion</h4><div class="seg" data-key="smoothing"><button data-v="smooth" class="on" data-i18n="pl.smooth">smooth</button><button data-v="off" data-i18n="pl.orig">original</button></div></div>
-        <div class="ctl"><label class="sw"><span data-i18n="pl.servo">Visual servo</span><input type="checkbox" id="servo" checked></label></div>
+        <div class="ctl"><label class="sw"><span data-i18n="pl.servo">Vision controller</span><input type="checkbox" id="servo" checked></label></div>
         <div class="ctl"><h4 data-i18n="pl.cam">Camera</h4><div class="seg" data-key="camera"><button data-v="hall" class="on">hall</button><button data-v="preview">close</button><button data-v="overhead">top</button><button data-v="orbit">orbit</button></div></div>
         <div class="ctl"><h4 data-i18n="pl.speed">Speed</h4><div class="seg" data-key="speed"><button data-v="0.5">½×</button><button data-v="1" class="on">1×</button><button data-v="2">2×</button><button data-v="4">4×</button></div></div>
-        <div class="ctl"><h4>Seed</h4><div class="row"><input type="number" id="seed" value="4242"><button class="mini" id="dice" title="random">🎲</button></div></div>
+        <div class="ctl"><h4>Seed</h4><div class="row"><input type="number" id="seed" value="4242"><button class="mini" id="dice" data-i18n="pl.rand">random</button></div></div>
         <div class="btns">
-          <button class="btn primary" id="btnStart" data-i18n="pl.start">▶ Start</button>
+          <button class="btn primary" id="btnStart" data-i18n="pl.start">Start</button>
           <button class="btn line" id="btnPause" data-i18n="pl.pause">Pause</button>
           <button class="btn line" id="btnNext" data-i18n="pl.next">Next part</button>
         </div>
@@ -112,35 +107,34 @@
 
 <section id="results">
   <div class="wrap">
-    <p class="kicker" data-i18n="rs.k">Results</p>
-    <h2 data-i18n="rs.h">Fresh seeds, frozen checkpoint.</h2>
-    <p class="sub" data-i18n="rs.sub">200 trials per condition. A place means the part was released, stayed in the tote and moved slower than 0.05 m/s for 0.4 s. The evaluation objects have zero overlap with the 2,302 training seeds.</p>
+    <h2 data-i18n="rs.h">Results</h2>
+    <p class="sub" data-i18n="rs.sub">Each condition was run 200 times with random seeds that were never used in training, and the network was not changed between runs. A run counts as placed when the part has been released, lies inside the box and has come to rest.</p>
     <table>
-      <tr><th data-i18n="rs.c">Condition</th><th>Pick</th><th>Place</th></tr>
-      <tr><td>nominal</td><td class="n">99.5 %</td><td class="n">99.0 %</td></tr>
-      <tr><td data-i18n="rs.tb">tierB — lighting, tint, mount jitter</td><td class="n">99.0 %</td><td class="n">97.5 %</td></tr>
-      <tr><td data-i18n="rs.bx">boxX — held-out tote corners</td><td class="n">99.5 %</td><td class="n">99.5 %</td></tr>
-      <tr><td data-i18n="rs.bl">Blender hall, zero-shot (200 trials)</td><td class="n">100 %</td><td class="n">99.5 %</td></tr>
-      <tr><td data-i18n="rs.no">Blender hall, visual servo off (control)</td><td class="n">86.0 %</td><td class="n">60.0 %</td></tr>
+      <tr><th data-i18n="rs.c">Condition</th><th data-i18n="rs.pick">Picked</th><th data-i18n="rs.place">Placed</th></tr>
+      <tr><td data-i18n="rs.nom">Default scene</td><td class="n">99.5 %</td><td class="n">99.0 %</td></tr>
+      <tr><td data-i18n="rs.tb">Random lighting, part colour and camera mount</td><td class="n">99.0 %</td><td class="n">97.5 %</td></tr>
+      <tr><td data-i18n="rs.bx">Box moved to positions not seen in training</td><td class="n">99.5 %</td><td class="n">99.5 %</td></tr>
+      <tr><td data-i18n="rs.bl">Furnished hall, not seen in training</td><td class="n">100 %</td><td class="n">99.5 %</td></tr>
+      <tr><td data-i18n="rs.no">Furnished hall, vision controller off (50 runs)</td><td class="n">86.0 %</td><td class="n">60.0 %</td></tr>
     </table>
-    <p class="note"><span data-i18n="rs.note">Simulation only, one 32 mm part, one SO-101, one conveyor. The smoothing profile is new and evaluated separately; the numbers above are for the frozen original protocol.</span></p>
+    <p class="note"><span data-i18n="rs.note">All numbers come from simulation with a single part type and conveyor layout. They were measured before the motion smoothing was added; the smoothing was checked separately on 44 runs, all of them placed.</span></p>
   </div>
 </section>
 
 <section class="alt" id="run">
   <div class="wrap split">
-    <div><p class="kicker" data-i18n="run.k">Run it</p><h2 data-i18n="run.h">One command.</h2><p class="sub" data-i18n="run.sub">Install the requirements once, then start this page. It opens in your browser and runs the simulation locally.</p></div>
+    <div><h2 data-i18n="run.h">Run it locally</h2><p class="sub" data-i18n="run.sub">Install the requirements, then start the server. It opens this page in your browser with the live simulation.</p></div>
     <pre>pip install -r requirements.txt
 python web/server.py</pre>
   </div>
 </section>
 
-<footer><div class="wrap fgrid"><div><b style="color:#fff;letter-spacing:.2em">SMARTCELL</b><br><span data-i18n="ft.t">A SO-101 conveyor pick-and-place research artifact.</span></div><div><a href="https://github.com/kuzyurt/smartcell">GitHub</a> · MIT</div></div></footer>
+<footer><div class="wrap fgrid"><div><b style="color:#fff;letter-spacing:.2em">SMARTCELL</b><br><span data-i18n="ft.t">SO-101 conveyor pick-and-place in MuJoCo.</span></div><div><a href="https://github.com/kuzyurt/smartcell">GitHub</a> · MIT</div></div></footer>
 <template id="offline">
-  <div class="screen"><video src="media/policy.mp4" poster="media/hero_poster.jpg" autoplay muted loop playsinline controls></video></div>
+  <div class="screen"><video src="media/policy.mp4" poster="media/hero_poster.jpg?v=2" autoplay muted loop playsinline controls></video></div>
   <aside class="panel">
     <h4 data-i18n="of.h">Run it on your computer</h4>
-    <p style="margin:0 0 14px;color:#b9c9ce;font-size:15px" data-i18n="of.p">This page is a static copy. The live simulation, with every setting in the video, runs locally in one command.</p>
+    <p style="margin:0 0 14px;color:#b9c9ce;font-size:15px" data-i18n="of.p">This page is a static copy, so the video is a recording. The interactive version runs on your own computer:</p>
     <pre>git clone https://github.com/kuzyurt/smartcell
 cd smartcell
 pip install -r requirements.txt

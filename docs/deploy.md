@@ -18,7 +18,7 @@ Cloudflare Pages cannot run the simulation.
 | Build output directory | `dist` |
 
 The build copies `web/static/` and the few files it needs from `media/`
-(about 11 MB) into `dist/` and adds a `_headers` file. It uses only the
+(about 15 MB) into `dist/` and adds a `_headers` file. It uses only the
 Python standard library, so no install step is needed.
 
 ## Or upload by hand

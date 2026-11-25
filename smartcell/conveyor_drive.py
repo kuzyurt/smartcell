@@ -15,14 +15,14 @@ conveyor_drive.FRAME_OUT (0.370) - the frame got 50 mm thicker when the flat
 outboard with it.  The x coordinates (GX0/GX1/MX) are unchanged: only the mount
 plane moved.
 
-FOUR RULES, all of them learned from verify_cell.py failing:
+Four rules, each enforced by the cell geometry check:
 
 1. EVERY geom created here is VISUAL ONLY - contype = conaffinity = 0.  It
-   cannot collide, so it cannot perturb the physics that verify_cell.py and
+   cannot collide, so it cannot perturb the physics that the geometry check and
    demo_pick.py gate on.  The moving belt, the picking pose and the part pool
    are untouched by anything in this file.
 
-2. NOTHING IS BURIED INSIDE ANOTHER PART.  verify_cell.py section 2 fails on
+2. NOTHING IS BURIED INSIDE ANOTHER PART.  The geometry check fails on
    any static pair closer than -0.5 mm, so a bolt cannot have a shank that
    disappears into the plate it passes through, and a motor fin cannot start
    inside the motor barrel.  Detail butts against the surfaces it is bolted

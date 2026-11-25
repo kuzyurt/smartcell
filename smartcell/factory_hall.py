@@ -11,14 +11,13 @@ and - just as important - the shell is CLOSED:
            -> roof deck on the purlins
            -> lamps hung from the deck on rods
 
-Every part rests on the part below it - verify_cell.py checks exactly that
+Every part rests on the part below it, and the geometry check tests exactly that
 with mj_geomDistance.  Walls, dado band and window band are SEGMENTED at the
 columns: a full-length band would run straight through them (and the verifier
 reports it as an interpenetration).  Segmentation also gives the facade its
 bays, which is what stops a big wall reading as a grey plane.
 """
 import mujoco
-import numpy as np
 
 from mjbox import box as _box, col  # noqa: F401  (shared geometry helpers)
 

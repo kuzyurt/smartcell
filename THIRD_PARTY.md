@@ -7,7 +7,7 @@ repository. The following third-party assets keep their own licences.
 
 | Asset | Source | Licence | What was changed |
 |---|---|---|---|
-| SO-101 robot | [`google-deepmind/mujoco_menagerie`](https://github.com/google-deepmind/mujoco_menagerie) `robotstudio_so101` | Apache-2.0 | unmodified, loaded from the local menagerie checkout |
+| SO-101 robot | [`google-deepmind/mujoco_menagerie`](https://github.com/google-deepmind/mujoco_menagerie) `robotstudio_so101` | Apache-2.0 | unmodified, loaded from the `mujoco-menagerie` package |
 | Conveyor section | [`google-deepmind/mujoco`](https://github.com/google-deepmind/mujoco) `model/surfacevel/carousel.xml` | Apache-2.0 | cross-section adapted, tail lengthened 200 mm; upstream copy kept at `smartcell/assets/_upstream_mujoco_carousel.xml` |
 | Work table | [`vikashplus/furniture_sim`](https://github.com/vikashplus/furniture_sim) `simpleTable` | Apache-2.0 | joints fixed; upstream copy kept at `smartcell/assets/_upstream_simpleTable.xml`; licence text at `smartcell/assets/LICENSE_furniture_sim.txt` |
 
@@ -33,5 +33,6 @@ See `smartcell/assets/blender_props/PROVENANCE.md`.
 | [NumPy](https://github.com/numpy/numpy) | BSD-3-Clause |
 | [OpenCV](https://github.com/opencv/opencv) | Apache-2.0 |
 | [Pillow](https://github.com/python-pillow/Pillow) | HPND |
+| [Gymnasium](https://github.com/Farama-Foundation/Gymnasium) | MIT |
 
 Dependency licences apply to those packages, not to this repository.

@@ -307,7 +307,7 @@ def guard(tag=""):
 def job_usage():
     """(used_gb, peak_gb, cap_gb) for the WHOLE job = process tree.
 
-    This is the number that matters and the one the user can check: the
+    This is the number that matters and the one that can be checked: the
     per-process RSS of the parent says nothing about six spawned workers.
     """
     if _capped is None or not _IS_WIN or not _capped[1]:

@@ -29,3 +29,8 @@ Thumbs.db
 # build output and local working files
 dist/
 _scratch/
+
+# local tooling
+.wrangler/
+sitebuild/
+.claude/

@@ -13,8 +13,6 @@ import os
 import numpy as np
 import torch
 
-print("torch", torch.__version__)
-
 RES = 96
 D_RES = 96              # grid_sample coordinate grid for the wrist-view rotation
 # manifold width, set by train.py --aug-sigma / --aug-rot-deg
@@ -37,11 +35,11 @@ P_DESC = 0.0            # fraction drawn from pre-release descent rows
                         # 15/20 place failures on 0033 hover over the tote.
                         # 0.0 = off (default recipe).
 DESC_ROWS = 32          # window before the release edge (rows at 25 Hz)
-# Act 19 audit: AUG_SIGMA_MOVING (0.09) and AUG_SPEED_K (0.6) USED to live
+# Audit: AUG_SIGMA_MOVING (0.09) and AUG_SPEED_K (0.6) USED to live
 # here and were printed every epoch as "+-0.09 rad on rows that move" while
 # NOTHING in the code applied them - every model v3..v7 trained with uniform
 # +-aug_sigma.  They are deleted rather than implemented: the feature is
-# unproven (Act 14 credits it for a model that still scored 0 picks), and a
+# unproven (it was credited for a model that still scored 0 picks), and a
 # constant that only decorates a log line is how this codebase lies to itself.
 STACK = 3               # frames per sample -> (STACK-1)*GRID_MS of history
 CHUNK = 8
@@ -52,7 +50,7 @@ GRID_S = GRID_MS / 1000.0
 def set_stack(n):
     """Phase 6/7: history length in frames (frames are GRID_MS apart).
 
-    At 10 Hz probe_phase.py measured the expert's pre-close park at median
+    At 10 Hz the expert's pre-close park at median
     300 ms; 8 frames of 100 ms spanned it in every episode, which is why the
     Phase-6 model used 8.  At 25 Hz the same 8 frames span 280 ms - the park
     region is no longer fully observable from the stack alone, and it does not
@@ -322,7 +320,7 @@ class BCDataset(torch.utils.data.Dataset):
         self.desc_p = float(desc_p)
         # DAgger-lite gap scaling: in the rollout SOLL is the policy's OWN last
         # command fed back, which moves the SOLL-IST gap into bands the expert
-        # never visits (probe_gap_location.py: expert gap is 0 on wait rows,
+        # never visits (measured: expert gap is 0 on wait rows,
         # 1.3-2.3 rad for the 6 transition rows, then <=0.2; the band 0.3-1.2
         # never occurs and is exactly where the policy's lunge dies).  Scaling
         # the row's OWN gap by U(0, aug_gap_k) covers every band with the row's
@@ -331,7 +329,7 @@ class BCDataset(torch.utils.data.Dataset):
         # Deterministic enumeration for non-augmented sets (val/test): the
         # random row sampler made the val loss a fresh Monte-Carlo draw on
         # every pass, and the best-val checkpoint star is decided on it - noisy
-        # model selection (Act 19 audit).  _flat covers every valid row exactly
+        # model selection.  _flat covers every valid row exactly
         # once, so the val loss is deterministic and comparable across epochs
         # and runs.  Training keeps the phase-pool sampler (by design).
         self._flat = None
@@ -370,7 +368,7 @@ class BCDataset(torch.utils.data.Dataset):
             dx, dy = np.random.randint(-4, 5, 2)
             # pad + crop, NOT np.roll: roll wraps the opposite edge's pixels
             # into view (a table corner cannot materialise in the sky), edge
-            # replication is the honest shift (Act 19).  Same shift direction
+            # replication is the honest shift.  Same shift direction
             # as roll, so the rotation grid's fx/fy compensation below is
             # unchanged.
             if dx or dy:
@@ -500,7 +498,7 @@ def make_loaders(ds, cache_dir, batch=256, workers=0, stack=None, extra=None):
           f"episodes: train {len(tr.eps)}  val {len(va.eps)}  "
           f"test {len(te.eps)}  samples: train {len(tr)}  val {len(va)}")
     # Worker budget.  Count only what a worker holds PRIVATELY: with
-    # cache_frames.py's shared memmap the 1.18 GB of frames are page-cache
+    # a shared memmap the 1.18 GB of frames are page-cache
     # backed and shared, and what is left per worker is the proprio/chunk
     # arrays (~27 MB for 243 episodes).  Without the memmap each worker also
     # pays the full image array, which is what froze the machine.
@@ -523,7 +521,7 @@ def make_loaders(ds, cache_dir, batch=256, workers=0, stack=None, extra=None):
     print(f"loader: {workers} worker(s) of {per_worker / 2**30:.3f} GB each "
           f"({'shared frame memmap' if shared else 'per-worker image copies'}"
           f", cap {ramcap.CAP_GB:.1f} GB)")
-    # val runs IN-PROCESS (Act 19): the hardcoded num_workers=1 spawned a
+    # val runs IN-PROCESS: the hardcoded num_workers=1 spawned a
     # worker per epoch, bypassing the RAM-cap worker policy above - under
     # memory pressure that spawn is the one that dies first.
     return (torch.utils.data.DataLoader(tr, batch_size=batch, shuffle=True,num_workers=workers, drop_last=True,
