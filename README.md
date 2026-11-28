@@ -172,9 +172,10 @@ python smartcell/evaluate_imported.py --ckpt ckpt/policy_0041c.pt --n 20 --conds
 python -m unittest discover -s tests -v
 ```
 
-A GPU is recommended. Without one, set `SMARTCELL_ALLOW_CPU=1`; the simulation
-then runs well below real time. On headless Linux set `MUJOCO_GL=egl`. The web
-page can also be hosted as a static site, see [`docs/deploy.md`](docs/deploy.md).
+A GPU is recommended. On CUDA GPUs other than an RTX 2060, set
+`SMARTCELL_ALLOW_ANY_GPU=1`. Without a GPU, set `SMARTCELL_ALLOW_CPU=1`; the
+simulation then runs well below real time. On headless Linux set `MUJOCO_GL=egl`.
+The web page can also be hosted as a static site, see [`docs/deploy.md`](docs/deploy.md).
 
 ![Web demo](media/web_demo.png)
 

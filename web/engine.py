@@ -53,21 +53,6 @@ def _dressed_build():
     return model
 
 
-def _cpu_compat():
-    """evaluate.rollout moves its input to the literal device "cuda:0".
-
-    That file is hash-pinned (docs/provenance.md), so on machines without a
-    GPU we remap the device at the tensor level instead of editing it.
-    """
-    orig = torch.Tensor.to
-
-    def to(self, *a, **k):
-        a = tuple("cpu" if isinstance(x, str) and x.startswith("cuda") else x for x in a)
-        return orig(self, *a, **k)
-
-    torch.Tensor.to = to
-
-
 class Cell:
     """One compiled scene with its env and renderers."""
 
@@ -101,8 +86,6 @@ class Engine:
         ckpt = ckpt or os.path.join(ROOT, current.CKPT)
         ds = ds or os.path.join(ROOT, current.DS)
         self.dev = gpu_guard.pick_cuda()
-        if str(self.dev) == "cpu":
-            _cpu_compat()
         ck = torch.load(ckpt, weights_only=True, map_location=self.dev)
         self.stack = int(ck.get("stack", EV.STACK))
         self.qdim = int(ck.get("qdim", 6))

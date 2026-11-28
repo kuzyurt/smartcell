@@ -13,9 +13,9 @@ The montage is four things side by side, so the gap between "the cell" and
   4. the sampled stack    every frame the network actually reads at this
                           decision, including its independent frame latency
 
-Run:  python watch.py
-      python watch.py --ckpt ckpt/policy_25hz_s12.pt --condition tierB
-      python watch.py --episodes 3 --save frames/
+Run:  python smartcell/watch.py
+      python smartcell/watch.py --ckpt ckpt/policy_0041c.pt --condition tierB
+      python smartcell/watch.py --episodes 3 --save frames/
 """
 import argparse
 import base64
@@ -167,7 +167,7 @@ class Viewer:
 
         import gpu_guard
         dev = gpu_guard.pick_cuda()
-        ck = torch.load(args.ckpt, weights_only=True)
+        ck = torch.load(args.ckpt, weights_only=True, map_location=dev)
         self.stack = int(ck.get("stack", EV.STACK))
         # qdim from the ckpt: 6 for pre-SOLL checkpoints, 12 for IST||SOLL ones
         self.qdim = int(ck.get("qdim", 6))
@@ -371,7 +371,7 @@ class Viewer:
 
 # --------------------------------------------------------------------------
 PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
-<title>smartbot - policy live view</title>
+<title>smartcell - policy live view</title>
 <style>
  :root{--bg:#0e1014;--fg:#e8ecf0;--dim:#889;--acc:#ffba3c;--good:#5adc8c;--bad:#ff6060}
  *{box-sizing:border-box}
@@ -394,7 +394,7 @@ PAGE = r"""<!doctype html><html><head><meta charset="utf-8">
  #rst{margin-left:10px;background:#232833;color:var(--fg);border:1px solid #3a4250;border-radius:5px;padding:3px 12px;font:12px Consolas,monospace;cursor:pointer}
  #rst:hover{background:#2f3642;border-color:var(--acc)}
 </style></head><body>
-<h1 id="h">smartbot &mdash; live policy</h1>
+<h1 id="h">smartcell &mdash; live policy</h1>
 <div class="sub" id="sub">connecting... <button id="rst" onclick="fetch('/restart')" title="abort this episode and start a fresh one">&#8635; restart episode</button></div>
 <div id="wrap">
  <img id="pic" alt="waiting">
@@ -439,7 +439,7 @@ function poll(){
  fetch('/state',{cache:'no-store'}).then(r=>r.json()).then(d=>{
   if(!d.status){$('sub').textContent='waiting for the first frame...';return setTimeout(poll,300);}
   $('sub').textContent=d.ck+'   |   '+(d.wall!==null?d.wall.toFixed(2)+' s of wall clock so far':'');
-  $('h').textContent='smartbot — live policy';
+  $('h').textContent='smartcell — live policy';
   if(d.img) $('pic').src='data:image/jpeg;base64,'+d.img;
   $('t').textContent=d.t.toFixed(2)+' s';
   $('gap').textContent=d.gap.toFixed(1)+' mm';

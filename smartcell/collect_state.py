@@ -35,9 +35,9 @@ episodes are recorded in the manifest and their npz is not written.
 
 Workers resumable via the manifest: an attempt id already present is skipped.
 
-Run:  python collect_state.py --smoke          1 worker, 3 episodes, verified
-      python collect_state.py                  4 workers, 300 episodes
-      python collect_state.py --target 3000    Phase 6 scale
+Run:  python smartcell/collect_state.py --smoke          1 worker, 3 episodes, verified
+      python smartcell/collect_state.py                  4 workers, 300 episodes
+      python smartcell/collect_state.py --target 3000    Phase 6 scale
 """
 import argparse
 import hashlib

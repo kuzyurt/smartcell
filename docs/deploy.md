@@ -18,7 +18,7 @@ Cloudflare Pages cannot run the simulation.
 | Build output directory | `dist` |
 
 The build copies `web/static/` and the few files it needs from `media/`
-(about 15 MB) into `dist/` and adds a `_headers` file. It uses only the
+(about 19.4 MB) into `dist/` and adds a `_headers` file. It uses only the
 Python standard library, so no install step is needed.
 
 ## Or upload by hand
@@ -32,5 +32,6 @@ npx wrangler pages deploy dist --project-name smartcell
 
 - Individual files must stay under 25 MiB on Pages; the largest is `hero.mp4`.
 - The language switch (EN/DE) and all content are client side.
-- The browser logs one `404 /api/state` on the static site. That request is
-  how the page detects that there is no simulation server.
+- Without a `404.html`, Cloudflare Pages serves `index.html` (`HTTP 200`,
+  `text/html`) for `/api/state` as its SPA fallback. `app.js` detects the
+  non-JSON response and switches to static recorded-video mode.

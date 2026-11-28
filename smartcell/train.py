@@ -4,7 +4,7 @@ Loss: Huber (delta=1) on all 8 x 6 chunk entries.  Optimizer AdamW, cosine
 schedule, AMP on the 2060.  Val = same loss on held-out episodes.  Checkpoint
 is selected on val loss, and the test split is never touched here.
 
-Run:  python train.py [--epochs 40] [--batch 256]
+Run:  python smartcell/train.py [--epochs 40] [--batch 256]
 """
 import argparse
 import time

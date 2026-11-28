@@ -88,9 +88,9 @@ are unchanged. No retraining, fine-tuning or threshold changes.
 | Condition | Trials | Picks | Pick rate | Pick Wilson 95% | Places | Place rate | Place Wilson 95% | Median place |
 |---|---:|---:|---:|---|---:|---:|---|---:|
 | nominal, dressed | 100 | 100 | 100.0% | 96.3–100.0% | 99 | 99.0% | 94.6–99.8% | 13.56 s |
-| tierB, dressed | 50 | 50 | 100.0% | 92.9–100.0% | 50 | 100.0% | 92.9–100.0% | 13.64 s |
-| boxX, dressed | 50 | 50 | 100.0% | 92.9–100.0% | 50 | 100.0% | 92.9–100.0% | 13.52 s |
-| nominal, dressed, visual off | 50 | 43 | 86.0% | 73.8–93.0% | 30 | 60.0% | 46.2–72.4% | 13.80 s |
+| tierB, dressed | 50 | 50 | 100.0% | 92.9–100.0% | 50 | 100.0% | 92.9–100.0% | 13.62 s |
+| boxX, dressed | 50 | 50 | 100.0% | 92.9–100.0% | 50 | 100.0% | 92.9–100.0% | 13.48 s |
+| nominal, dressed, visual off | 50 | 43 | 86.0% | 73.8–93.0% | 30 | 60.0% | 46.2–72.4% | 13.78 s |
 
 Seed base `31102601`, fresh stream. Source reports in `reports/blender_zero_shot_20261031_*.json`.
 

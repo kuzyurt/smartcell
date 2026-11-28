@@ -6,30 +6,39 @@ produced the published numbers.
 
 ## Frozen artifacts
 
-The hashes below were recorded on Windows, where the files have CRLF line
-endings. This repository stores LF. Both are listed; the CRLF column is the
-LF file with `\n` replaced by `\r\n`.
+This repository stores LF line endings. When the published evaluations ran on
+Windows, three files (`evaluate.py`, `build_cell.py`, `conveyor_env.py`) had
+CRLF line endings while the remaining Python modules had LF. Both columns are
+listed below; the CRLF column is the LF file with `\n` replaced by `\r\n`.
 
-| Artifact | SHA-256 as run (CRLF) | SHA-256 in this repo (LF) |
+| Artifact | SHA-256 (CRLF) | SHA-256 in this repo (LF) |
 |---|---|---|
 | `ckpt/policy_0041c.pt` (binary) | `9d5430c20649bc3029e896b2d96976367c9dd0cc7faa4629c73ec91e24b87dad` | same |
-| `smartcell/wrist_vision.py` (RGB servo) | `0a0296eb42a999b2662592d3980ea0833a8d7aeb568104b81dc13083b052c4b6` | `0a0296eb42a999b2662592d3980ea0833a8d7aeb568104b81dc13083b052c4b6` |
-| `smartcell/evaluate.py` | `b1f241ab682c47094870bb24f1fbf11417ef06de34c657f11564eb53aaa3bd8a` (original, see note) | `2f39bafaac90623c233fbb90ab231665b8516a2da8face41934ab52bfbdee2ea` |
-| `smartcell/current.py` (runtime profile) | `816f5c6438b3ec8c16e1a817fc5dcf3bb1ec50f7c063b1b4bd8178929e925f1b` | `816f5c6438b3ec8c16e1a817fc5dcf3bb1ec50f7c063b1b4bd8178929e925f1b` |
-| `smartcell/model.py` | `9b4f2f4eb60bf78295c725fbaa1831ee155e168bbc389cfe6772f61198bc0a97` | `9b4f2f4eb60bf78295c725fbaa1831ee155e168bbc389cfe6772f61198bc0a97` |
-| `smartcell/policy_runtime.py` | `edcd03134a79bea69d94cdbb3420721463703cbd7998fe928ad78a4b32c4c2ee` | `edcd03134a79bea69d94cdbb3420721463703cbd7998fe928ad78a4b32c4c2ee` |
+| `smartcell/wrist_vision.py` (RGB servo) | `31d476a5fa577d65ff9e30497338ff390b4101f39cd2e660c262703515c5babb` | `0a0296eb42a999b2662592d3980ea0833a8d7aeb568104b81dc13083b052c4b6` |
+| `smartcell/evaluate.py` | `b1f241ab682c47094870bb24f1fbf11417ef06de34c657f11564eb53aaa3bd8a` (original, see note) | `64d7c06375be648be18990375114e1eb39fc153a9fc162e15353b9acc489d6b6` |
+| `smartcell/current.py` (runtime profile) | `d6eb29a57bf0eca3fd7b982207b82242af2e67ac132f028461ef93b4d086ee3e` | `816f5c6438b3ec8c16e1a817fc5dcf3bb1ec50f7c063b1b4bd8178929e925f1b` |
+| `smartcell/model.py` | `9c4a4ee7ca57b0350e364b7817ca9566a245e3700586204c0913cabdc3786c34` | `9b4f2f4eb60bf78295c725fbaa1831ee155e168bbc389cfe6772f61198bc0a97` |
+| `smartcell/policy_runtime.py` | `0e9cfdebccbd64869c511805a135193b0dea0d4ba526f0851ff7061ad1ffe22a` | `edcd03134a79bea69d94cdbb3420721463703cbd7998fe928ad78a4b32c4c2ee` |
 | `smartcell/build_cell.py` | `71cb07cbb05cdac9839bb03983cec3cd58de06b4152d7c63522f763c746e89fb` | `ecc3be6c606e0a5ac4908864f819fb5f70b2c450d2f1a3fbc5c0488a2ce40e61` |
 | `smartcell/conveyor_env.py` | `16ad77b01bd411e36dcc3eda2d14e41367e3cc63f66695ec28630124f45b3ab3` | `7d209aaeefc33c28278b5305228d1cb59dfddc9dc40e2ebe04441c75cbf99664` |
 
-One deliberate change. When the code moved into `smartcell/`, `evaluate.py`
-was edited in exactly one place: the list of source files it hashes into each
-report now resolves them next to the file instead of the working directory.
-No numerical code changed. The original, as run, is `git show b0b747a:evaluate.py`
-(its CRLF hash is the one in the table). A fixed-seed run before and after the
-move gave identical seeds and pick/place times.
+Non-numerical changes to `evaluate.py`. After the published runs,
+`smartcell/evaluate.py` was edited only for packaging and portability: resolving
+its source-hash paths relative to `__file__` when moved into `smartcell/`,
+updating its docstring command, and loading/running checkpoints on the selected
+device (`map_location` and model device instead of hardcoded `"cuda:0"`) so
+`SMARTCELL_ALLOW_CPU=1` works. No numerical or control logic changed. The
+original, as run in the regression and dressed-scene benchmarks, is
+`git show b0b747a:evaluate.py` (CRLF hash `b1f241ab...`).
 
-The controller hash and checkpoint hash in
-`reports/visual_both_v12_final_validation_20261026.json` refer to the original files.
+The controller hash (`wrist_vision.py`, LF) and checkpoint hash in
+`reports/visual_both_v12_final_validation_20261026.json` match the table above.
+The `2026-10-26` fresh-seed runs preceded the release-note comment update in
+`smartcell/current.py` (`a80de49e...`) and minor pre-release edits in
+`evaluate.py` (`2c9bd481...` / `9cdde75d...`), while the `2026-10-26` regression
+and `2026-10-31` dressed-scene reports match `b0b747a` (`wrist_vision.py`,
+`current.py`, `model.py`, `policy_runtime.py` as LF; `evaluate.py`,
+`build_cell.py`, `conveyor_env.py` as CRLF).
 
 ## Environment used for the published runs
 

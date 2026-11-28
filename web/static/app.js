@@ -62,7 +62,7 @@ const vOld = $("#vOld"), vNew = $("#vNew");
 new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { vOld.currentTime = vNew.currentTime = 0; vOld.play().catch(() => {}); vNew.play().catch(() => {}); } else { vOld.pause(); vNew.pause(); } }), { threshold: .4 }).observe($(".vs"));
 
 /* ---- play ---- */
-const api = (p, b) => fetch(p, b ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(b) } : undefined).then(r => r.json());
+const api = (p, b) => fetch(p, b ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(b) } : undefined).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
 let S = null, live = false;
 const cfgPost = o => api("/api/config", o).then(render).catch(() => {});
 $$(".seg").forEach(seg => seg.onclick = e => {
@@ -97,7 +97,7 @@ function render(st) {
   $("#screen").classList.toggle("orbit", st.cfg.camera === "orbit");
   $("#log").innerHTML = s.log.map(l => `<span class="dot ${l.place ? "ok" : "bad"}" title="episode ${l.ep}: pick ${l.pick}, place ${l.place}">${l.place ? "✓" : "✗"}</span>`).join("");
 }
-async function poll() { if (!polling) return; try { render(await api("/api/state")); } catch (e) {} setTimeout(poll, 400); }
+async function poll() { if (!polling) return; try { render(await api("/api/state")); } catch (e) {} if (polling) setTimeout(poll, 400); }
 
 /* orbit camera: drag + wheel */
 (() => {
@@ -114,6 +114,12 @@ setLang(store.get("lang") === "de" ? "de" : "en");
 let polling = true;
 function offlineMode() {
   polling = false;
+  EN["nav.play"] = "Demo";
+  I18N.de["nav.play"] = "Demo";
+  EN["hero.cta"] = "Watch demo";
+  I18N.de["hero.cta"] = "Demo ansehen";
+  EN["pl.h"] = "Recorded demo";
+  I18N.de["pl.h"] = "Aufgezeichnete Demo";
   const sub = $("#play .sub");
   sub.dataset.i18n = "of.sub";
   EN["of.sub"] = "A recorded run in the furnished hall, with the wrist camera in the corner. In the live version, which runs on your own computer, the scene, lighting, box position, motion mode, vision controller and camera can all be changed.";
@@ -123,5 +129,4 @@ function offlineMode() {
   $$("[data-i18n]", play).forEach(el => { EN[el.dataset.i18n] = EN[el.dataset.i18n] || el.innerHTML; });
   setLang(document.documentElement.lang);
 }
-api("/api/state").then(st => { render(st); connect(); }).catch(offlineMode);
-poll();
+api("/api/state").then(st => { render(st); connect(); setTimeout(poll, 400); }).catch(offlineMode);

@@ -79,7 +79,7 @@ FAILED EPISODES ARE KEPT: the (state, expert label) pairs are valid regardless
   of task outcome, and a failed grasp is exactly the recovery situation that
   is missing from ds_0010.
 
-Run:  python dagger_collect.py --n 64 --out ds_0010_d1
+Run:  python smartcell/dagger_collect.py --n 64 --out ds_0010_d1
 """
 import argparse
 import hashlib

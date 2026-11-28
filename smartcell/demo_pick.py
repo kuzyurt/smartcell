@@ -6,7 +6,7 @@ lifts, carries it to the tote on the table and releases it.  Every waypoint is
 solved with arm_ik and tracked by the model's own position actuators; the belt
 is the official surfacevel conveyor, so the part is genuinely transported.
 
-Run:  python demo_pick.py
+Run:  python smartcell/demo_pick.py
 """
 import mujoco
 import numpy as np

@@ -29,8 +29,8 @@ Definition of cache row j (obs time t_j = img_t[j]):
              the observation, i.e. the first action the policy should apply.
   t, lat, ep  obs times, per-frame latency, episode id.
 
-Run:  python build_cache.py --ds ds_0001 --fps 10 --entry 0.05 --verify
-      python build_cache.py --ds ds_0002 --fps 25 --entry 0.04 --out cache
+Run:  python smartcell/build_cache.py --ds ds_0001 --fps 10 --entry 0.05 --verify
+      python smartcell/build_cache.py --ds ds_0002 --fps 25 --entry 0.04 --out cache
 """
 import argparse
 import os

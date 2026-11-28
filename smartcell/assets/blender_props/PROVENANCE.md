@@ -1,7 +1,7 @@
 # Blender prop provenance
 
 These 49 OBJ meshes are the visual set dressing used by the zero-shot
-benchmark (`evaluate_imported.py`). They were exported from
+benchmark (`smartcell/evaluate_imported.py`). They were exported from
 [Poly Haven](https://polyhaven.com/) models, which are released under **CC0**.
 
 The source models include: `Barrel_01`, `barrel_03`, `cardboard_box_01`,
@@ -17,6 +17,6 @@ MuJoCo). `manifest.json` records the mesh, flat linear RGBA colour and source
 material name. No textures, HDRIs or other Poly Haven files are
 redistributed.
 
-`blender_props.py` loads every mesh with `contype=0` and `conaffinity=0`, so
+`smartcell/blender_props.py` loads every mesh with `contype=0` and `conaffinity=0`, so
 the props are invisible to the physics engine. They change what the wrist
 camera sees, not how the cell behaves.

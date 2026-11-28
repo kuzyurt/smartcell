@@ -10,7 +10,7 @@ Default place requires release and 0.4s settled in the tote. Use
 --place-settle-s 0 for the historical tote-entry metric. Development episode
 stream base is 4242; use a new --seed-base for independent confirmation.
 
-Run:  python evaluate.py --ckpt ckpt/policy.pt [--n 50]
+Run:  python smartcell/evaluate.py --ckpt ckpt/policy_0041c.pt [--n 50]
 """
 import argparse
 import hashlib
@@ -175,6 +175,7 @@ def rollout(env, model, mount, rend, visap, vis, rng, stack=STACK, trace=None,
     results are unchanged by construction.
     """
     lrng = lrng if lrng is not None else rng
+    dev = next((p.device for p in model.parameters()), torch.device("cpu"))
     r = env.real
     # eval vector = the collector's sampler (jaw yaw, aim jitter, hover dz,
     # grip depth), belt nominal.  The expert's IK branch choice depends on
@@ -333,7 +334,7 @@ def rollout(env, model, mount, rend, visap, vis, rng, stack=STACK, trace=None,
                 if place_vision is not None:
                     place_vision.observe(rgb,vq,vg,vt-t0,release_ctl.lifted,
                                          release_ctl.released_at is not None)
-            img = torch.stack([hist[i] for i in sel])[None].to("cuda:0")
+            img = torch.stack([hist[i] for i in sel])[None].to(dev)
             # proprio = IST || SOLL, built in the SAME order as dataset.py.
             # SOLL is `data.ctrl` read directly: expert.sim and this loop both
             # write their command there and hold it for the step, so ctrl IS
@@ -347,7 +348,7 @@ def rollout(env, model, mount, rend, visap, vis, rng, stack=STACK, trace=None,
                 q6 = np.concatenate([ist, soll])
             else:
                 q6 = ist
-            q = torch.from_numpy(q6.astype(np.float32))[None].to("cuda:0")
+            q = torch.from_numpy(q6.astype(np.float32))[None].to(dev)
             with torch.no_grad():
                 if CARRY_HEAD is not None and release_ctl.lifted and release_ctl.released_at is None:
                     from carry_policy import carry_features
@@ -703,7 +704,7 @@ def main():
 
     import gpu_guard
     dev = gpu_guard.pick_cuda()
-    ck = torch.load(args.ckpt, weights_only=True)
+    ck = torch.load(args.ckpt, weights_only=True, map_location=dev)
     stack = int(ck.get("stack", STACK))
     print(f"history: {stack} frames = {(stack - 1) * 40} ms lookback at 25 Hz"
           f"  exec {EXEC} x 40 ms = {EXEC * 40} ms open loop")

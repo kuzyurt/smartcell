@@ -21,8 +21,8 @@ arrival error and the grasp/placed outcome are checked, so a fast path that
 silently degrades the motion fails loudly instead of quietly poisoning the
 dataset.
 
-Run:  python expert.py            time one episode and verify it still works
-      python expert.py --slow     the same episode via demo_pick's settings
+Run:  python smartcell/expert.py            time one episode and verify it still works
+      python smartcell/expert.py --slow     the same episode via demo_pick's settings
 """
 import argparse
 import time

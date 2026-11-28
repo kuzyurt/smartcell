@@ -37,8 +37,8 @@ Renders IN PLACE into --ds, rewriting that dataset's manifest: to re-render
 without disturbing the old frames, copy the npz + manifest into a new dir
 first (that is how ds_0005 was made from ds_0004's physics).
 
-Run:  python render_dataset.py --n 24        the verification sample
-      python render_dataset.py --all         the full ds_0001
+Run:  python smartcell/render_dataset.py --n 24        the verification sample
+      python smartcell/render_dataset.py --all         the full ds_0001
 """
 import argparse
 import json

@@ -8,7 +8,9 @@ abstract: >-
   servo and a proprioceptive release primitive. Includes a zero-shot
   benchmark in a Blender-dressed scene.
 authors:
-  - family-names: "kuzyurt"
+  - alias: "kuzyurt"
+repository-code: "https://github.com/kuzyurt/smartcell"
+url: "https://smartcell-8cj.pages.dev/"
 version: "1.0.0"
 date-released: "2026-10-31"
 license: MIT

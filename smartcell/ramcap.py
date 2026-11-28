@@ -1,4 +1,4 @@
-"""HARD RAM cap for the smartbot tools.  Default 5 GB, enforced by the OS.
+"""HARD RAM cap for the smartcell tools.  Default 5 GB, enforced by the OS.
 
 v1 OF THIS FILE WAS NOT A CAP.  It read the RSS, warned, and trimmed the
 working set - which does nothing to stop a process from allocating 7 GB and
@@ -35,8 +35,8 @@ WHAT IT DOES
 No psutil, no new dependency: Windows goes through psapi, everything else
 through /proc/self/statm.
 
-Run:  SMARTCELL_RAM_CAP_GB=5 python train.py ...
-      python ramcap.py          # report the cap and this process's RSS
+Run:  SMARTCELL_RAM_CAP_GB=5 python smartcell/train.py ...
+      python smartcell/ramcap.py          # report the cap and this process's RSS
 """
 import ctypes
 import gc

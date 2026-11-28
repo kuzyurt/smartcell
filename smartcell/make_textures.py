@@ -48,7 +48,7 @@ read as white plastic at 146 where the hall wall measures 142) and chequer()
 (0.66 -> 0.36, base pads at 173 were the brightest thing in the frame).  A new
 texture's default level is therefore a look decision, not a detail.
 
-Run:  python make_textures.py      (writes into assets/tex/, ~4 s)
+Run:  python smartcell/make_textures.py      (writes into smartcell/assets/tex/, ~4 s)
 """
 import os
 

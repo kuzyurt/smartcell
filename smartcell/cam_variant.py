@@ -63,7 +63,7 @@ Two forced deviations from the Phase 0 spec, both measured rather than assumed:
     15% target is a factor of 1.85, inside the 2x stop-and-report threshold, so
     the phase proceeds with the deviation stated rather than silently.
 
-Run:  python cam_variant.py
+Run:  python smartcell/cam_variant.py
 """
 import numpy as np
 import mujoco
